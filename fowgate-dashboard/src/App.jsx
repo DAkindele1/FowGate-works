@@ -11,7 +11,7 @@ function App() {
   return (
     <div className="h-screen flex">
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar activeItem="messages" />
 
       {/* Chat List */}
       <ChatList

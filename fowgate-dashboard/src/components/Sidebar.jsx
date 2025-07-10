@@ -1,12 +1,12 @@
 import React from 'react';
-import { FiUser, FiMessageSquare } from 'react-icons/fi';
+import { FiMessageSquare } from 'react-icons/fi';
 import DashboardIcon from './DashboardIcon';
 import FowgateSymbol from '../assets/fowgate_symbol.png';
 import UserIcon from '../assets/user.png';
 
-export default function Sidebar() {
+export default function Sidebar({ activeItem = "dashboard" }) {
   return (
-    <div className="overflow-hidden rounded-tl-[10px] rounded-bl-[10px] relative w-[250px] h-[960px] bg-gradient-to-br from-[#292929] to-[#111111] bg-[linear-gradient(86.17707255448016deg, #292929 0.00%, #111111 99.99%)]">
+    <div className="w-[250px] h-[960px] overflow-hidden rounded-tl-[10px] rounded-bl-[10px] bg-gradient-to-br from-[#292929] to-[#111111]">
       <div className="flex flex-col h-full">
         {/* Logo */}
         <div className="mt-8 ml-8 mb-6">
@@ -27,22 +27,43 @@ export default function Sidebar() {
           </small>
           <ul className="space-y-2">
             {/* Dashboard */}
-            <li className="flex items-center gap-2 py-2 cursor-pointer group relative">
-              <DashboardIcon className="w-[20px] h-[20px] text-[#9d9d9d] group-hover:text-white" />
-              <span className="text-[#9d9d9d] text-sm font-normal group-hover:text-white">
-                Dashboard
-              </span>
+            <li className="relative cursor-pointer group w-full">
+              {activeItem === "dashboard" && (
+                <>
+                  <div className="absolute inset-0 bg-[#BDBDBD] z-0" />
+                  <div className="absolute top-0 left-0 h-full w-1 bg-white z-10" />
+                </>
+              )}
+              <div className={`flex items-center gap-2 py-2 px-4 relative z-20 ${
+                activeItem === "dashboard"
+                  ? "text-black"
+                  : "text-[#9d9d9d] hover:text-white"
+              }`}>
+                <DashboardIcon className={`w-[20px] h-[20px] ${activeItem === "dashboard" ? "text-black" : "group-hover:text-white"}`} />
+                <span className="text-sm font-normal">Dashboard</span>
+              </div>
             </li>
+
             {/* My Account */}
-            <li className="flex items-center gap-2 py-2 cursor-pointer group relative">
-              <img
-                src={UserIcon}
-                alt="User"
-                className="w-[20px] h-[20px] object-contain"
-              />
-              <span className="text-gray-300 text-sm font-normal group-hover:text-white">
-                My Account
-              </span>
+            <li className="relative cursor-pointer group w-full">
+              {activeItem === "account" && (
+                <>
+                  <div className="absolute inset-0 bg-[#BDBDBD] z-0" />
+                  <div className="absolute top-0 left-0 h-full w-1 bg-white z-10" />
+                </>
+              )}
+              <div className={`flex items-center gap-2 py-2 px-4 relative z-20 ${
+                activeItem === "account"
+                  ? "text-black"
+                  : "text-gray-300 hover:text-white"
+              }`}>
+                <img
+                  src={UserIcon}
+                  alt="User"
+                  className="w-[20px] h-[20px] object-contain"
+                />
+                <span className="text-sm font-normal">My Account</span>
+              </div>
             </li>
           </ul>
         </div>
@@ -57,11 +78,21 @@ export default function Sidebar() {
           </small>
           <ul className="space-y-2">
             {/* Messages */}
-            <li className="flex items-center gap-2 py-2 cursor-pointer group relative">
-              <FiMessageSquare className="w-[20px] h-[20px] text-gray-300 group-hover:text-white" />
-              <span className="text-gray-300 text-sm font-normal group-hover:text-white">
-                Messages
-              </span>
+            <li className="relative cursor-pointer group w-full">
+              {activeItem === "messages" && (
+                <>
+                  <div className="absolute inset-0 bg-[#BDBDBD] z-0" />
+                  <div className="absolute top-0 left-0 h-full w-1 bg-white z-10" />
+                </>
+              )}
+              <div className={`flex items-center gap-2 py-2 px-4 relative z-20 ${
+                activeItem === "messages"
+                  ? "text-black"
+                  : "text-gray-300 hover:text-white"
+              }`}>
+                <FiMessageSquare className={`w-[20px] h-[20px] ${activeItem === "messages" ? "text-black" : "group-hover:text-white"}`} />
+                <span className="text-sm font-normal">Messages</span>
+              </div>
             </li>
           </ul>
         </div>
