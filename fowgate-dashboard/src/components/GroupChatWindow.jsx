@@ -59,9 +59,10 @@ export default function GroupChatWindow({ chat, onClose }) {
       <div
         className={`max-w-xs p-3 rounded-lg text-sm shadow ${
           isUser
-            ? 'bg-green-500 text-white rounded-br-none'
+            ? 'text-white rounded-br-none'
             : 'bg-white text-gray-900 rounded-bl-none'
         }`}
+        style={isUser ? { backgroundColor: '#34A853' } : {}}
       >
         {!isUser && (
           <p className="text-xs font-semibold mb-1 text-gray-600">{msg.sender}</p>
