@@ -9,32 +9,33 @@ function App() {
   const [selectedChat, setSelectedChat] = useState(mockChats[0]);
 
   return (
-    <div className="flex w-full h-full">
-      {/* Sidebar */}
-      <Sidebar activeItem="messages" />
+    <div className="bg-white p-[32px_30px] min-h-screen w-full box-border">
+      <div className="flex w-full h-full rounded-[12px] overflow-hidden">
+        {/* Sidebar */}
+        <Sidebar activeItem="messages" />
 
-      {/* Chat List */}
-      <ChatList
-        chats={mockChats}
-        selectedId={selectedChat?.id}
-        onSelect={setSelectedChat}
-      />
+        {/* Chat List */}
+        <ChatList
+          chats={mockChats}
+          selectedId={selectedChat?.id}
+          onSelect={setSelectedChat}
+        />
 
-{selectedChat ? (
-  selectedChat.members.length > 2 ? (
-    <GroupChatWindow chat={selectedChat} onClose={() => setSelectedChat(null)} />
-  ) : (
-    <ChatWindow chat={selectedChat} onClose={() => setSelectedChat(null)} />
-  )
-) : (
-  <div className="flex-1 flex items-center justify-center bg-white text-gray-400">
-    Select a chat to begin
-  </div>
-)}
-
+        {/* Chat Window */}
+        {selectedChat ? (
+          selectedChat.members.length > 2 ? (
+            <GroupChatWindow chat={selectedChat} onClose={() => setSelectedChat(null)} />
+          ) : (
+            <ChatWindow chat={selectedChat} onClose={() => setSelectedChat(null)} />
+          )
+        ) : (
+          <div className="flex-1 flex items-center justify-center bg-white text-gray-400">
+            Select a chat to begin
+          </div>
+        )}
+      </div>
     </div>
   );
 }
-
 
 export default App;

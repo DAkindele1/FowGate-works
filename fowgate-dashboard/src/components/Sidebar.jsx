@@ -1,8 +1,8 @@
-import React from 'react';
-import { FiMessageSquare } from 'react-icons/fi';
 import DashboardIcon from './DashboardIcon';
 import FowgateSymbol from '../assets/fowgate_symbol.png';
 import UserIcon from '../assets/user.png';
+import MessageIcon from '../assets/message.png';
+import Line from '../assets/line.png';
 
 export default function Sidebar({ activeItem = "dashboard" }) {
   return (
@@ -17,8 +17,11 @@ export default function Sidebar({ activeItem = "dashboard" }) {
           />
         </div>
 
-        {/* Divider */}
-        <div className="w-[80%] h-px bg-white/30 ml-8 mb-4" />
+        <img
+         src={Line}
+         alt="Line Decoration"
+         className="ml-8 mb-4 w-[80%] h-auto object-contain"
+        />
 
         {/* GENERAL Section */}
         <div className="ml-8 relative">
@@ -68,8 +71,11 @@ export default function Sidebar({ activeItem = "dashboard" }) {
           </ul>
         </div>
 
-        {/* Divider */}
-        <div className="w-[80%] h-px bg-white/30 ml-8 my-4" />
+        <img
+         src={Line}
+         alt="Line Decoration"
+         className="ml-8 mb-4 w-[80%] h-auto object-contain"
+        />
 
         {/* COLLABORATION Section */}
         <div className="ml-8 relative">
@@ -90,7 +96,11 @@ export default function Sidebar({ activeItem = "dashboard" }) {
                   ? "text-gray-300"
                   : "text-gray-300 hover:text-white"
               }`}>
-                <FiMessageSquare className={`w-[20px] h-[20px] ${activeItem === "messages" ? "text-[FFFFFF]" : "group-hover:text-white"}`} />
+              <img
+                src={MessageIcon}
+                alt="Messages"
+                className="w-[20px] h-[20px] object-contain"
+              />
                 <span className="text-sm font-normal">Messages</span>
               </div>
             </li>
