@@ -9,7 +9,7 @@ function App() {
   const [selectedChat, setSelectedChat] = useState(mockChats[0]);
 
   return (
-    <div className="h-screen flex">
+    <div className="flex w-full h-full">
       {/* Sidebar */}
       <Sidebar activeItem="messages" />
 
@@ -35,5 +35,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

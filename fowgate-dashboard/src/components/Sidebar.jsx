@@ -27,34 +27,34 @@ export default function Sidebar({ activeItem = "dashboard" }) {
           </small>
           <ul className="space-y-2">
             {/* Dashboard */}
-            <li className="relative cursor-pointer group w-full">
+            <li className="relative cursor-pointer group w-full h-[40px]">
               {activeItem === "dashboard" && (
                 <>
-                  <div className="absolute inset-0 bg-[#BDBDBD] z-0" />
-                  <div className="absolute top-0 left-0 h-full w-1 bg-white z-10" />
+                  <div className="absolute inset-0 z-0 bg-[#2F2F2F]" />
+                  <div className="absolute top-0 left-0 w-1 h-full z-10 bg-white" />
                 </>
               )}
               <div className={`flex items-center gap-2 py-2 px-4 relative z-20 ${
                 activeItem === "dashboard"
-                  ? "text-black"
+                  ? "text-[#9d9d9d]"
                   : "text-[#9d9d9d] hover:text-white"
               }`}>
-                <DashboardIcon className={`w-[20px] h-[20px] ${activeItem === "dashboard" ? "text-black" : "group-hover:text-white"}`} />
+                <DashboardIcon className={`w-[20px] h-[20px] ${activeItem === "text-[#9d9d9d]" ? "text-black" : "group-hover:text-white"}`} />
                 <span className="text-sm font-normal">Dashboard</span>
               </div>
             </li>
 
             {/* My Account */}
-            <li className="relative cursor-pointer group w-full">
+            <li className="relative cursor-pointer group w-full h-[40px]">
               {activeItem === "account" && (
                 <>
-                  <div className="absolute inset-0 bg-[#BDBDBD] z-0" />
-                  <div className="absolute top-0 left-0 h-full w-1 bg-white z-10" />
+                  <div className="absolute inset-0 z-0 bg-[#2F2F2F]" />
+                  <div className="absolute top-0 left-0 w-1 h-full z-10 bg-white" />
                 </>
               )}
               <div className={`flex items-center gap-2 py-2 px-4 relative z-20 ${
                 activeItem === "account"
-                  ? "text-black"
+                  ? "text-gray-300"
                   : "text-gray-300 hover:text-white"
               }`}>
                 <img
@@ -78,19 +78,19 @@ export default function Sidebar({ activeItem = "dashboard" }) {
           </small>
           <ul className="space-y-2">
             {/* Messages */}
-            <li className="relative cursor-pointer group w-full">
+            <li className="relative cursor-pointer group w-full h-[40px]">
               {activeItem === "messages" && (
                 <>
-                  <div className="absolute inset-0 bg-[#BDBDBD] z-0" />
-                  <div className="absolute top-0 left-0 h-full w-1 bg-white z-10" />
+                  <div className="absolute inset-0 z-0 bg-[#2F2F2F]" />
+                  <div className="absolute top-0 left-0 w-[4px] h-full z-10 bg-white" />
                 </>
               )}
               <div className={`flex items-center gap-2 py-2 px-4 relative z-20 ${
                 activeItem === "messages"
-                  ? "text-black"
+                  ? "text-gray-300"
                   : "text-gray-300 hover:text-white"
               }`}>
-                <FiMessageSquare className={`w-[20px] h-[20px] ${activeItem === "messages" ? "text-black" : "group-hover:text-white"}`} />
+                <FiMessageSquare className={`w-[20px] h-[20px] ${activeItem === "messages" ? "text-[FFFFFF]" : "group-hover:text-white"}`} />
                 <span className="text-sm font-normal">Messages</span>
               </div>
             </li>
