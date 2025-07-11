@@ -1,7 +1,7 @@
 import DashboardIcon from './DashboardIcon';
 import FowgateSymbol from '../assets/fowgate_symbol.png';
-import UserIcon from '../assets/user.png';
-import MessageIcon from '../assets/message.png';
+import userIcon from '../assets/user.svg';
+import messageIcon from '../assets/message.svg';
 import Line from '../assets/line.png';
 
 export default function Sidebar({ activeItem = "dashboard" }) {
@@ -60,11 +60,11 @@ export default function Sidebar({ activeItem = "dashboard" }) {
                   ? "text-gray-300"
                   : "text-gray-300 hover:text-white"
               }`}>
-                <img
-                  src={UserIcon}
-                  alt="User"
-                  className="w-[20px] h-[20px] object-contain"
-                />
+               <img
+                src={userIcon}
+               alt="User"
+               className="w-[20px] h-[20px] object-contain"
+               />
                 <span className="text-sm font-normal">My Account</span>
               </div>
             </li>
@@ -97,11 +97,11 @@ export default function Sidebar({ activeItem = "dashboard" }) {
                   : "text-gray-300 hover:text-white"
               }`}>
               <img
-                src={MessageIcon}
-                alt="Messages"
-                className="w-[20px] h-[20px] object-contain"
-              />
-                <span className="text-sm font-normal">Messages</span>
+               src={messageIcon}
+               alt="Messages"
+               className="w-[20px] h-[20px] object-contain"
+               />
+               <span className="text-sm font-normal">Messages</span>
               </div>
             </li>
           </ul>
