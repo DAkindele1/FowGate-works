@@ -114,7 +114,11 @@ export default function GroupChatWindow({ chat, onClose }) {
                     </span>
                   )}
                 </div>
-                <p>{msg.text}</p>
+                <p
+                className={`font-rubik text-[14px] leading-[140%] tracking-[0] ${
+                isUser
+                ? 'font-[300] text-white'
+                : 'font-[300] text-[#292929]'}`}>{msg.text}</p>
               </div>
 
               {isUser && (

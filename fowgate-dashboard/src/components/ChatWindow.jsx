@@ -63,7 +63,11 @@ export default function ChatWindow({ chat, onClose }) {
                   : 'bg-white text-gray-900 rounded-bl-none'
               }`}
             >
-              <p>{msg.text}</p>
+              <p
+    className={`font-rubik text-[14px] leading-[140%] tracking-[0] ${
+    msg.sender === 'You'
+      ? 'font-[300] text-white'    
+      : 'font-[300] text-[#292929]'}`}>{msg.text}</p>
               <div className="text-[10px] mt-1 text-right text-[707070]">{msg.time}</div>
             </div>
           </div>
