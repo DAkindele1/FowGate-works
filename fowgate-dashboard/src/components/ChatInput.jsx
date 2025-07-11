@@ -9,7 +9,6 @@ export default function ChatInput() {
 
   const handleSend = () => {
     if (!message.trim()) return;
-    // send logic here
     setMessage('');
   };
 
@@ -36,7 +35,7 @@ export default function ChatInput() {
         </button>
       </div>
 
-      {/* Send Button (54x54 px) */}
+      {/* Send Button*/}
       <button
         onClick={handleSend}
         className="ml-3 w-[54px] h-[54px] flex items-center justify-center hover:opacity-80 transition"
