@@ -15,7 +15,7 @@ export default function ChatInput() {
 
   return (
     <div className="flex items-center px-4 py-3 bg-white border-t">
-      {/* Message Bar (54px height) */}
+      {/* Message Bar*/}
       <div className="flex items-center h-[54px] flex-1 bg-gray-100 rounded-full px-4">
         <input
           type="text"
@@ -26,12 +26,12 @@ export default function ChatInput() {
         />
 
         {/* Emoji */}
-        <button type="button" className="ml-2 w-5 h-5 hover:opacity-80 transition">
+        <button type="button" className="ml-2 w-[24px] h-[24px] hover:opacity-80 transition">
           <img src={emojiIcon} alt="Emoji" className="w-full h-full object-contain" />
         </button>
 
         {/* Attachment */}
-        <button type="button" className="ml-2 w-5 h-5 hover:opacity-80 transition">
+        <button type="button" className="ml-2 w-[24px] h-[24px] hover:opacity-80 transition">
           <img src={attachmentIcon} alt="Attach" className="w-full h-full object-contain" />
         </button>
       </div>
