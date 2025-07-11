@@ -32,7 +32,7 @@ export default function ChatList({ chats, onSelect, selectedId }) {
     key={chat.id}
     className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
       chat.id === selectedId
-        ? 'bg-green-100 border-l-4 border-green-500'
+        ? 'bg-[#E8EFF9] text-white'
         : 'hover:bg-gray-100'
     }`}
     onClick={() => onSelect(chat)}
