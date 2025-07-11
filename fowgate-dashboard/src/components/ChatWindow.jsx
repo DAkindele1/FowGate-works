@@ -50,7 +50,7 @@ export default function ChatWindow({ chat, onClose }) {
 </div>
 
       {/* Messages */}
-      <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4">
+      <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4 font-rubik text-[14px]">
         {chat.messages.map((msg, idx) => (
           <div key={idx} className={`flex ${msg.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
             <div

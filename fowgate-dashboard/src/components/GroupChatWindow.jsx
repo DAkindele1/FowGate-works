@@ -39,7 +39,7 @@ export default function GroupChatWindow({ chat, onClose }) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4">
+      <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4 font-rubik text-[14px]">
 {chat.messages.map((msg, idx) => {
   const isUser = msg.sender === 'You';
   const avatarUrl = isUser
@@ -63,20 +63,24 @@ export default function GroupChatWindow({ chat, onClose }) {
       )}
 
       {/* Message Bubble */}
-      <div
-        className={`max-w-xs p-3 rounded-lg text-sm shadow ${
-          isUser
-            ? 'bg-green-500 text-white rounded-br-none'
-            : 'bg-white text-gray-900 rounded-bl-none'
-        }`}
-      >
-        {!isUser && (
-          <p className="text-xs font-semibold mb-1 text-gray-600">{msg.sender}</p>
-        )}
-        <p>{msg.text}</p>
-        <div className="text-[10px] mt-1 text-right text-gray-500">{msg.time}</div>
-      </div>
+<div
+  className={`max-w-xs p-3 rounded-lg text-sm shadow ${
+    isUser
+      ? 'bg-green-500 text-white rounded-br-none'
+      : 'bg-white text-gray-900 rounded-bl-none'
+  }`}
+>
+  {/* Time + Sender Name in one line */}
+  <div className="flex justify-between items-center text-[10px] mb-1">
+    {!isUser && (
+      <span className="font-semibold text-gray-600 text-xs">{msg.sender}</span>
+    )}
+    <span className="text-gray-500">{msg.time}</span>
+  </div>
 
+  {/* Message Text */}
+  <p>{msg.text}</p>
+</div>
       {/* User's avatar (after message) */}
       {isUser && (
         <img
