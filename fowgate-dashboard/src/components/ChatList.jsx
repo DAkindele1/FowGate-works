@@ -3,7 +3,7 @@ import { FiPlus, FiSearch } from 'react-icons/fi';
 
 export default function ChatList({ chats, onSelect, selectedId }) {
   return (
-    <div className="w-80 border-r border-gray-200 p-4 overflow-y-auto bg-white shadow-sm">
+    <div className="w-[340px] border-r border-gray-200 p-4 overflow-y-auto bg-white shadow-sm">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold text-gray-800">Messages</h2>
