@@ -10,11 +10,12 @@ function App() {
 
   return (
     <div className="bg-white p-[32px_30px] min-h-screen w-full box-border">
-      <div className="flex w-full h-full rounded-[12px] overflow-hidden">
+      <div className="flex gap-[32px] w-full h-full rounded-[12px] overflow-hidden">
         {/* Sidebar */}
         <Sidebar activeItem="messages" />
 
         {/* Chat List */}
+        
         <ChatList
           chats={mockChats}
           selectedId={selectedChat?.id}
@@ -24,9 +25,15 @@ function App() {
         {/* Chat Window */}
         {selectedChat ? (
           selectedChat.members.length > 2 ? (
-            <GroupChatWindow chat={selectedChat} onClose={() => setSelectedChat(null)} />
+            <GroupChatWindow
+              chat={selectedChat}
+              onClose={() => setSelectedChat(null)}
+            />
           ) : (
-            <ChatWindow chat={selectedChat} onClose={() => setSelectedChat(null)} />
+            <ChatWindow
+              chat={selectedChat}
+              onClose={() => setSelectedChat(null)}
+            />
           )
         ) : (
           <div className="flex-1 flex items-center justify-center bg-white text-gray-400">

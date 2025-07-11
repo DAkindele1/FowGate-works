@@ -23,7 +23,7 @@ export default function GroupChatWindow({ chat, onClose }) {
       <img
         src={chat.avatar}
         alt={chat.name}
-        className="w-10 h-10 rounded-full object-cover ring-2 ring-green-400"
+        className="w-10 h-10 rounded-full"
       />
       <div>
         <h2 className="font-semibold text-lg text-gray-800">{chat.name}</h2>
@@ -40,15 +40,20 @@ export default function GroupChatWindow({ chat, onClose }) {
 
       {/* Messages */}
       <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4">
-        {chat.messages.map((msg, idx) => {
+{chat.messages.map((msg, idx) => {
   const isUser = msg.sender === 'You';
-  const senderInfo = chat.members.find((name) => name === msg.sender);
-  const avatarUrl = senderInfo === 'You'
+  const avatarUrl = isUser
     ? 'https://i.pravatar.cc/100?u=you'
     : chat.avatarMap?.[msg.sender] || `https://ui-avatars.com/api/?name=${msg.sender}`;
 
   return (
-    <div key={idx} className={`flex items-start ${isUser ? 'justify-end' : 'justify-start'} gap-2`}>
+    <div
+      key={idx}
+      className={`flex items-start gap-2 ${
+        isUser ? 'justify-end' : 'justify-start'
+      }`}
+    >
+      {/* Other people's avatar (before message) */}
       {!isUser && (
         <img
           src={avatarUrl}
@@ -56,13 +61,14 @@ export default function GroupChatWindow({ chat, onClose }) {
           className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
         />
       )}
+
+      {/* Message Bubble */}
       <div
         className={`max-w-xs p-3 rounded-lg text-sm shadow ${
           isUser
-            ? 'text-white rounded-br-none'
+            ? 'bg-green-500 text-white rounded-br-none'
             : 'bg-white text-gray-900 rounded-bl-none'
         }`}
-        style={isUser ? { backgroundColor: '#34A853' } : {}}
       >
         {!isUser && (
           <p className="text-xs font-semibold mb-1 text-gray-600">{msg.sender}</p>
@@ -70,6 +76,15 @@ export default function GroupChatWindow({ chat, onClose }) {
         <p>{msg.text}</p>
         <div className="text-[10px] mt-1 text-right text-gray-500">{msg.time}</div>
       </div>
+
+      {/* User's avatar (after message) */}
+      {isUser && (
+        <img
+          src={avatarUrl}
+          alt={msg.sender}
+          className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
+        />
+      )}
     </div>
   );
 })}

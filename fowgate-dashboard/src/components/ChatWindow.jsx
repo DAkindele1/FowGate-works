@@ -32,7 +32,7 @@ export default function ChatWindow({ chat, onClose }) {
       <img
         src={chat.avatar}
         alt={chat.name}
-        className="w-10 h-10 rounded-full object-cover ring-2 ring-green-400"
+        className="w-10 h-10 rounded-full"
       />
       <div>
         <h2 className="font-semibold text-lg text-gray-800">{chat.name}</h2>

@@ -41,7 +41,7 @@ export default function ChatList({ chats, onSelect, selectedId }) {
     <img
       src={chat.avatar}
       alt={chat.name}
-      className="w-10 h-10 rounded-full object-cover ring-2 ring-green-400"
+      className="w-10 h-10 rounded-full"
     />
 
     {/* Info section with timestamp aligned to right */}
