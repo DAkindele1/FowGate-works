@@ -3,6 +3,7 @@ import FowgateSymbol from '../assets/fowgate_symbol.png';
 import userIcon from '../assets/user.svg';
 import messageIcon from '../assets/message.svg';
 import Line from '../assets/line.png';
+import { handleUnavailableFeature } from '../utils/feature.js';
 
 export default function Sidebar({ activeItem = "dashboard" }) {
   return (

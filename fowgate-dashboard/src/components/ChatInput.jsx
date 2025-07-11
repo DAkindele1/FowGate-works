@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import emojiIcon from '../assets/smile.svg';
 import attachmentIcon from '../assets/attachments.svg';
 import sendButtonIcon from '../assets/send_button.svg';
-
+import { handleUnavailableFeature } from '../utils/feature.js';
 
 export default function ChatInput() {
   const [message, setMessage] = useState('');
@@ -13,7 +13,7 @@ export default function ChatInput() {
   };
 
   return (
-    <div className="flex items-center px-4 py-3 bg-white border-t">
+    <div className="flex items-center px-4 py-3 bg-white">
       {/* Message Bar*/}
       <div className="flex items-center h-[54px] flex-1 bg-gray-100 rounded-full px-4">
         <input
@@ -26,12 +26,12 @@ export default function ChatInput() {
 
         {/* Emoji */}
         <button type="button" className="ml-2 w-[24px] h-[24px] hover:opacity-80 transition">
-          <img src={emojiIcon} alt="Emoji" className="w-full h-full object-contain" />
+          <img src={emojiIcon} alt="Emoji" onClick={handleUnavailableFeature} className="w-full h-full object-contain" />
         </button>
 
         {/* Attachment */}
         <button type="button" className="ml-2 w-[24px] h-[24px] hover:opacity-80 transition">
-          <img src={attachmentIcon} alt="Attach" className="w-full h-full object-contain" />
+          <img src={attachmentIcon} alt="Attach" onClick={handleUnavailableFeature} className="w-full h-full object-contain" />
         </button>
       </div>
 
