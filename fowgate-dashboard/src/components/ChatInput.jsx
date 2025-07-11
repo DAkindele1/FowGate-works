@@ -1,35 +1,51 @@
 import React, { useState } from 'react';
-import { FiSend } from 'react-icons/fi';
+import emojiIcon from '../assets/smile.svg';
+import attachmentIcon from '../assets/attachments.svg';
+import sendButtonIcon from '../assets/send_button.svg';
+
 
 export default function ChatInput() {
   const [message, setMessage] = useState('');
 
   const handleSend = () => {
     if (!message.trim()) return;
-
-    console.log('Sending message:', message);
+    // send logic here
     setMessage('');
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') handleSend();
-  };
-
   return (
-    <div className="border-t bg-white px-6 py-4 flex items-center gap-2">
-      <input
-        type="text"
-        placeholder="Type your message..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyDown={handleKeyDown}
-        className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-400 text-sm"
-      />
+    <div className="flex items-center px-4 py-3 bg-white border-t">
+      {/* Message Bar (54px height) */}
+      <div className="flex items-center h-[54px] flex-1 bg-gray-100 rounded-full px-4">
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type a message..."
+          className="flex-1 bg-transparent outline-none text-sm text-gray-800 placeholder-gray-400"
+        />
+
+        {/* Emoji */}
+        <button type="button" className="ml-2 w-5 h-5 hover:opacity-80 transition">
+          <img src={emojiIcon} alt="Emoji" className="w-full h-full object-contain" />
+        </button>
+
+        {/* Attachment */}
+        <button type="button" className="ml-2 w-5 h-5 hover:opacity-80 transition">
+          <img src={attachmentIcon} alt="Attach" className="w-full h-full object-contain" />
+        </button>
+      </div>
+
+      {/* Send Button (54x54 px) */}
       <button
         onClick={handleSend}
-        className="bg-green-500 text-white p-2 rounded-full hover:bg-green-600 transition"
+        className="ml-3 w-[54px] h-[54px] flex items-center justify-center hover:opacity-80 transition"
       >
-        <FiSend className="w-4 h-4" />
+        <img
+          src={sendButtonIcon}
+          alt="Send"
+          className="w-full h-full object-contain"
+        />
       </button>
     </div>
   );
