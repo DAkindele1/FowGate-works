@@ -70,15 +70,19 @@ export default function GroupChatWindow({ chat, onClose }) {
       : 'bg-white text-gray-900 rounded-bl-none'
   }`}
 >
-  {/* Time + Sender Name in one line */}
+  {/* Name + Time row */}
   <div className="flex justify-between items-center text-[10px] mb-1">
-    {!isUser && (
-      <span className="font-semibold text-gray-600 text-xs">{msg.sender}</span>
+    {!isUser ? (
+      <>
+        <span className="font-semibold text-gray-600 text-xs">{msg.sender}</span>
+        <span className="text-gray-500">{msg.time}</span>
+      </>
+    ) : (
+      <span className="text-gray-100 ml-auto">{msg.time}</span> // right-aligned time
     )}
-    <span className="text-gray-500">{msg.time}</span>
   </div>
 
-  {/* Message Text */}
+  {/* Message text */}
   <p>{msg.text}</p>
 </div>
       {/* User's avatar (after message) */}
