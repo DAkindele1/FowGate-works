@@ -48,7 +48,7 @@ export default function ChatList({ chats, onSelect, selectedId }) {
     <div className="flex-1 flex justify-between items-start">
       {/* Left for name and message */}
       <div className="flex flex-col w-[calc(100%-3rem)]">
-        <p className="font-medium text-sm text-gray-800 truncate w-[150px]">{chat.name}</p>
+        <p className="font-rubik font-medium text-[16px] leading-[140%] text-[#292929] truncate w-[150px]">{chat.name}</p>
         <p className="text-xs text-gray-500 truncate w-[180px]">{chat.lastMessage || 'No message yet'}</p>
       </div>
 

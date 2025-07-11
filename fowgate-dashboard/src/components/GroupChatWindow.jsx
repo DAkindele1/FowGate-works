@@ -44,7 +44,7 @@ export default function GroupChatWindow({ chat, onClose }) {
   const isUser = msg.sender === 'You';
   const avatarUrl = isUser
     ? 'https://i.pravatar.cc/100?u=you'
-    : chat.avatarMap?.[msg.sender] || `https://ui-avatars.com/api/?name=${msg.sender}`;
+    : chat.avatar || `https://ui-avatars.com/api/?name=${msg.sender}`;
 
   return (
     <div
@@ -53,7 +53,7 @@ export default function GroupChatWindow({ chat, onClose }) {
         isUser ? 'justify-end' : 'justify-start'
       }`}
     >
-      {/* Other people's avatar (before message) */}
+      {/* Other user's avatar */}
       {!isUser && (
         <img
           src={avatarUrl}
@@ -62,30 +62,36 @@ export default function GroupChatWindow({ chat, onClose }) {
         />
       )}
 
-      {/* Message Bubble */}
-<div
-  className={`max-w-xs p-3 rounded-lg text-sm shadow ${
-    isUser
-      ? 'bg-green-500 text-white rounded-br-none'
-      : 'bg-white text-gray-900 rounded-bl-none'
-  }`}
->
-  {/* Name + Time row */}
-  <div className="flex justify-between items-center text-[10px] mb-1">
-    {!isUser ? (
-      <>
-        <span className="font-semibold text-gray-600 text-xs">{msg.sender}</span>
-        <span className="text-gray-500">{msg.time}</span>
-      </>
-    ) : (
-      <span className="text-gray-100 ml-auto">{msg.time}</span> // right-aligned time
-    )}
-  </div>
+      {/* Message bubble */}
+      <div
+        className={`max-w-xs p-3 rounded-lg text-sm shadow ${
+          isUser
+            ? 'bg-green-500 text-white rounded-br-none'
+            : 'bg-white text-gray-900 rounded-bl-none'
+        }`}
+      >
+        {/* Name + Timestamp */}
+        <div className="flex justify-between items-center mb-1">
+          {!isUser ? (
+            <>
+              <span className="font-semibold text-gray-600 text-xs">
+                {msg.sender}
+              </span>
+              <span className="font-rubik font-light text-[12px] text-[#707070] text-right">
+                {msg.time}
+              </span>
+            </>
+          ) : (
+            <span className="ml-auto font-rubik font-light text-[12px] text-[#EAEAEA] text-right">
+              {msg.time}
+            </span>
+          )}
+        </div>
 
-  {/* Message text */}
-  <p>{msg.text}</p>
-</div>
-      {/* User's avatar (after message) */}
+        <p>{msg.text}</p>
+      </div>
+
+      {/* User avatar */}
       {isUser && (
         <img
           src={avatarUrl}
