@@ -4,6 +4,7 @@ import ChatInput from './ChatInput';
 import CallIcon from '../assets/call.svg';
 import MoreIcon from '../assets/more.svg';
 import { handleUnavailableFeature } from '../utils/feature.js';
+import { userChat, othersChat } from '../styles/fonts';
 
 export default function GroupChatWindow({ chat, onClose }) {
   return (
@@ -114,11 +115,7 @@ export default function GroupChatWindow({ chat, onClose }) {
                     </span>
                   )}
                 </div>
-                <p
-                className={`font-rubik text-[14px] leading-[140%] tracking-[0] ${
-                isUser
-                ? 'font-[300] text-white'
-                : 'font-[300] text-[#292929]'}`}>{msg.text}</p>
+                <p style={isUser ? userChat : othersChat}>{msg.text}</p>
               </div>
 
               {isUser && (

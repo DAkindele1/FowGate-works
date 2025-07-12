@@ -4,6 +4,8 @@ import ChatInput from './ChatInput';
 import CallIcon from '../assets/call.svg';
 import MoreIcon from '../assets/more.svg';
 import { handleUnavailableFeature } from '../utils/feature.js';
+import { userChat, othersChat } from '../styles/fonts';
+
 export default function ChatWindow({ chat, onClose }) {
   if (!chat) {
     return (
@@ -37,44 +39,43 @@ export default function ChatWindow({ chat, onClose }) {
         </div>
 
         <div className="flex gap-4 text-gray-500">
-            <img
+          <img
             src={CallIcon}
-           alt="Call"
-           onClick={handleUnavailableFeature}
-            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"
-           />
-            <img
-           src={MoreIcon}
-           alt="More"
+            alt="Call"
             onClick={handleUnavailableFeature}
-           className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"
-           />
+            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"
+          />
+          <img
+            src={MoreIcon}
+            alt="More"
+            onClick={handleUnavailableFeature}
+            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"
+          />
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4 font-rubik text-[14px]">
-        {chat.messages.map((msg, idx) => (
-          <div key={idx} className={`flex ${msg.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
-            <div
-              className={`max-w-xs p-3 rounded-lg text-sm shadow ${
-                msg.sender === 'You'
-                  ? 'bg-[#34A853] text-white rounded-br-none'
-                  : 'bg-white text-gray-900 rounded-bl-none'
-              }`}
-            >
-              <p
-    className={`font-rubik text-[14px] leading-[140%] tracking-[0] ${
-    msg.sender === 'You'
-      ? 'font-[300] text-white'    
-      : 'font-[300] text-[#292929]'}`}>{msg.text}</p>
-              <div className="text-[10px] mt-1 text-right text-[707070]">{msg.time}</div>
+      <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4">
+        {chat.messages.map((msg, idx) => {
+          const isUser = msg.sender === 'You';
+          return (
+            <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+              <div
+                className={`max-w-xs p-3 rounded-lg shadow ${
+                  isUser
+                    ? 'bg-[#34A853] text-white rounded-br-none'
+                    : 'bg-white text-gray-900 rounded-bl-none'
+                }`}
+              >
+                <p style={isUser ? userChat : othersChat}>{msg.text}</p>
+                <div className="text-[10px] mt-1 text-right text-[#707070]">{msg.time}</div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Chat Input (anchored at bottom) */}
+      {/* Chat Input */}
       <div className="px-6 py-4 bg-white">
         <ChatInput />
       </div>

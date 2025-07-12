@@ -7,6 +7,7 @@ import ReadIcon from '../assets/read.svg';
 import PinnedIcon from '../assets/pinned.svg';
 import AllIcon from '../assets/all.svg';
 import { handleUnavailableFeature } from '../utils/feature.js';
+import { chatName, chatPreview, chatListTimestamp,chatsHeader } from '../styles/fonts';
 
 export default function ChatList({ chats, onSelect, selectedId }) {
   const pinnedChats = chats.filter(chat => chat.pinned);
@@ -24,69 +25,80 @@ export default function ChatList({ chats, onSelect, selectedId }) {
     return (
       <div
         key={chat.id}
-        className={`relative flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
+        onClick={() => onSelect(chat)}
+        className={`relative cursor-pointer transition-all ${
           chat.id === selectedId ? 'bg-[#E8EFF9]' : 'hover:bg-gray-100'
         }`}
-        onClick={() => onSelect(chat)}
       >
-        {/* Avatar */}
-        <div className="relative w-10 h-10 shrink-0">
-          <img
-            src={chat.avatar}
-            alt={chat.name}
-            className="w-full h-full rounded-full object-cover"
-          />
-          <img
-            src={chat.isOnline ? OnlineIcon : OfflineIcon}
-            alt={chat.isOnline ? 'Online' : 'Offline'}
-            className="absolute bottom-0 right-0 w-3 h-3"
-          />
-        </div>
-
-        {/* Info Section */}
-        <div className="flex-1 flex justify-between items-start">
-          <div className="flex flex-col w-[calc(100%-3rem)]">
-            <p className="font-rubik font-medium text-[16px] leading-[140%] text-[#292929] truncate w-[150px]">
-              {chat.name}
-            </p>
-            <p className="text-xs text-gray-500 truncate w-[180px]">
-              {chat.lastMessage || 'No message yet'}
-            </p>
+        {/* This is the padded content wrapper */}
+        <div className="flex items-center gap-3 px-4 py-3 relative">
+          {/* Avatar */}
+          <div className="relative w-10 h-10 shrink-0">
+            <img
+              src={chat.avatar}
+              alt={chat.name}
+              className="w-full h-full rounded-full object-cover"
+            />
+            <img
+              src={chat.isOnline ? OnlineIcon : OfflineIcon}
+              alt={chat.isOnline ? 'Online' : 'Offline'}
+              className="absolute bottom-0 right-0 w-3 h-3"
+            />
           </div>
-          <span className="text-xs text-gray-400 whitespace-nowrap pl-2 self-start mt-0.5">
-            {chat.time}
-          </span>
-        </div>
 
-        {/* Status icon */}
-        {statusIcon && (
-          <img
-            src={statusIcon}
-            alt={lastUserMsg.status}
-            className="absolute bottom-2 right-[2px] w-4 h-4"
-          />
-        )}
+          {/* Name + Message */}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex justify-between items-center w-full">
+              <p className="truncate" style={chatName}>
+                {chat.name}
+              </p>
+              <span className="whitespace-nowrap pl-2 shrink-0" style={chatListTimestamp}>
+                {chat.time}
+              </span>
+            </div>
+            <div className="flex justify-between items-center w-full mt-1">
+              <p className="truncate" style={chatPreview}>
+                {chat.lastMessage || 'No message yet'}
+              </p>
+              {statusIcon && (
+                <img
+                  src={statusIcon}
+                  alt={lastUserMsg.status}
+                  className="w-4 h-4 ml-2 shrink-0"
+                />
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     );
   };
 
   return (
-    <div className="w-[321px] h-[812px] border border-[#EAEAEA] rounded-[10px] p-4 bg-white overflow-y-auto shadow-sm">
+    <div
+      className="w-[350px] max-h-[844px] pt-4 pb-4 bg-white overflow-y-auto"
+      style={{
+        border: '0.5px solid #EAEAEA',
+        borderRadius: '10px',
+      }}
+    >
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold text-gray-800">Chats</h2>
-        <button
-          onClick={handleUnavailableFeature}
-          title="Start new chat"
-          className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-blue-100 text-blue-800 text-sm font-medium hover:bg-blue-200 transition">
-          <FiPlus className="w-4 h-4" />
-          New Chat
-        </button>
+      <div className="mb-4 pb-5 border-b border-gray-200 px-4">
+        <div className="flex justify-between items-center h-[40px]">
+          <h2 style={chatsHeader}>Chats</h2>
+          <button
+            onClick={handleUnavailableFeature}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-[#E8EFF9] text-[#1B5FC1] text-sm font-medium hover:bg-blue-200 transition"
+          >
+            <FiPlus className="w-4 h-4" />
+            New Chat
+          </button>
+        </div>
       </div>
 
       {/* Search */}
-      <div className="relative mb-4">
-        <FiSearch className="absolute top-2.5 right-3 text-gray-400" />
+      <div className="relative mb-4 px-4">
+        <FiSearch className="absolute top-2.5 right-6 text-gray-400 " />
         <input
           type="text"
           placeholder="Search name, group..."
@@ -96,21 +108,24 @@ export default function ChatList({ chats, onSelect, selectedId }) {
       </div>
 
       {/* Pinned Section */}
-{pinnedChats.length > 0 && (
-  <div className="mb-[40px]">
-    <img
-      src={PinnedIcon}
-      alt="Pinned"
-      className="w-full h-[20px] object-contain mb-2"
-    />
-    <div className="space-y-2">{pinnedChats.map(renderChat)}</div>
-  </div>
-)}
+      {pinnedChats.length > 0 && (
+        <div className="mb-[24px]">
+          <img
+            src={PinnedIcon}
+            alt="Pinned"
+            className="w-full h-[20px] object-contain mb-2 "
+          />
+          <div className="space-y-2 mb-4">{pinnedChats.map(renderChat)}</div>
+
+          {/* Divider */}
+          <div className="border-t border-gray-200 my-4 w-full px-4" />
+        </div>
+      )}
 
       {/* All Messages Section */}
       <div>
         <div className="flex items-center gap-2 mb-2 mt-4">
-          <img src={AllIcon} alt="All" className="w-[340px] h-[20px] object-contain mb-2"/>
+          <img src={AllIcon} alt="All" className="w-[340px] h-[20px] object-contain mb-2" />
         </div>
         <div className="space-y-2">{unpinnedChats.map(renderChat)}</div>
       </div>
