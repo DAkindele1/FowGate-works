@@ -79,3 +79,34 @@ export const chatsHeader = {
   letterSpacing: '0%',
   color: '#292929'
 };
+export const otherschatTimestamp = {
+  fontFamily: 'Rubik',
+  fontWeight: 300,
+  fontStyle: 'normal', // or 'Light' if supported
+  fontSize: '12px',
+  lineHeight: '140%',
+  letterSpacing: '0%',
+  textAlign: 'right',
+  color: '#707070',
+};
+
+export const userchatTimestamp = {
+  fontFamily: 'Rubik',
+  fontWeight: 300,
+  fontStyle: 'normal', // or 'Light' if supported
+  fontSize: '12px',
+  lineHeight: '140%',
+  letterSpacing: '0%',
+  textAlign: 'right',
+  color: '#EAEAEA',
+};
+
+export const othersName = {
+  fontFamily: 'Rubik',
+  fontWeight: 400,
+  fontStyle: 'normal', // 'Regular' is often equivalent to 'normal'
+  fontSize: '16px',
+  lineHeight: '140%',
+  letterSpacing: '0%',
+  color: '#292929',
+};

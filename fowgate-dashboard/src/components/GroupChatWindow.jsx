@@ -4,7 +4,7 @@ import ChatInput from './ChatInput';
 import CallIcon from '../assets/call.svg';
 import MoreIcon from '../assets/more.svg';
 import { handleUnavailableFeature } from '../utils/feature.js';
-import { userChat, othersChat } from '../styles/fonts';
+import { userChat, othersChat, userchatTimestamp, otherschatTimestamp, othersName } from '../styles/fonts';
 
 export default function GroupChatWindow({ chat, onClose }) {
   return (
@@ -102,16 +102,12 @@ export default function GroupChatWindow({ chat, onClose }) {
                 <div className="flex justify-between items-center mb-1">
                   {!isUser ? (
                     <>
-                      <span className="font-semibold text-gray-600 text-xs">
-                        {msg.sender}
-                      </span>
-                      <span className="font-rubik font-light text-[12px] text-[#707070] text-right">
-                        {msg.time}
-                      </span>
+                      <span style={othersName}>{msg.sender}</span>
+                      <span style={otherschatTimestamp}>{msg.time}</span>
                     </>
                   ) : (
-                    <span className="ml-auto font-rubik font-light text-[12px] text-[#EAEAEA] text-right">
-                      {msg.time}
+                    <span className="ml-auto" style={userchatTimestamp}>
+                    {msg.time}
                     </span>
                   )}
                 </div>

@@ -4,7 +4,9 @@ import ChatInput from './ChatInput';
 import CallIcon from '../assets/call.svg';
 import MoreIcon from '../assets/more.svg';
 import { handleUnavailableFeature } from '../utils/feature.js';
-import { userChat, othersChat } from '../styles/fonts';
+import { userChat, othersChat, otherschatTimestamp, userchatTimestamp
+  
+ } from '../styles/fonts';
 
 export default function ChatWindow({ chat, onClose }) {
   if (!chat) {
@@ -68,7 +70,7 @@ export default function ChatWindow({ chat, onClose }) {
                 }`}
               >
                 <p style={isUser ? userChat : othersChat}>{msg.text}</p>
-                <div className="text-[10px] mt-1 text-right text-[#707070]">{msg.time}</div>
+                <div className="mt-1 text-right" style={isUser ? userchatTimestamp : otherschatTimestamp}>{msg.time}</div>
               </div>
             </div>
           );
