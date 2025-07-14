@@ -15,8 +15,7 @@ export default function Sidebar({ activeItem = "dashboard", setCurrentPage }) {
           <img
             src={FowgateSymbol}
             alt="Fowgate Logo"
-            className="w-24 h-8 object-contain"
-          />
+            className="w-24 h-8 object-contain"/>
         </div>
 
         <div className="mb-[24px]">
@@ -57,14 +56,13 @@ export default function Sidebar({ activeItem = "dashboard", setCurrentPage }) {
               )}
               <div className={`flex items-center gap-2 py-2 pl-[10px] pr-4 relative z-20 ${
                 activeItem === "account"
-                  ? "text-gray-300"
-                  : "text-gray-300 hover:text-white"
+                  ? "text-[#9d9d9d]"
+                  : "text-[#9d9d9d] hover:text-white"
               }`} style={sidebarMembers}>
                 <img
                   src={userIcon}
                   alt="User"
-                  className="w-[20px] h-[20px] object-contain"
-                />
+                  className="w-[20px] h-[20px] object-contain"/>
                 <span className="text-sm font-normal">My Account</span>
               </div>
             </li>
@@ -91,14 +89,13 @@ export default function Sidebar({ activeItem = "dashboard", setCurrentPage }) {
               )}
               <div className={`flex items-center gap-2 py-2 pl-[10px] pr-4 relative z-20 ${
                 activeItem === "messages"
-                  ? "text-gray-300"
-                  : "text-gray-300 hover:text-white"
+                  ? "text-[#9d9d9d]"
+                  : "text-[#9d9d9d] hover:text-white"
               }`} style={sidebarMembers}>
                 <img
                   src={messageIcon}
                   alt="Messages"
-                  className="w-[20px] h-[20px] object-contain"
-                />
+                  className="w-[20px] h-[20px] object-contain"/>
                 <span className="text-sm font-normal">Messages</span>
               </div>
             </li>

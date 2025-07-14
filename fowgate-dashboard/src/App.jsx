@@ -22,8 +22,7 @@ function App() {
       <div className="flex gap-[32px] w-full h-full rounded-[12px]">
         {/* Sidebar */}
         <Sidebar activeItem={currentPage} setCurrentPage={setCurrentPage} />
-
-        {/* Wrapper for Main Content */}
+        {/* Main Content */}
         <div className="flex flex-col gap-4 flex-1">
           {/* Top Feature Bar */}
           <div className="flex justify-between items-center h-[100px] border-b border-radius-[0.5px] border-gray-200">
@@ -36,8 +35,7 @@ function App() {
                 lineHeight: '130%',
                 letterSpacing: '0px',
                 color: '#292929',
-              }}
-            >
+              }}>
               {currentPage.charAt(0).toUpperCase() + currentPage.slice(1)}
             </h1>
             <div className="flex gap-6 items-center">
@@ -54,20 +52,17 @@ function App() {
                 <ChatList
                   chats={mockChats}
                   selectedId={selectedChat?.id}
-                  onSelect={setSelectedChat}
-                />
+                  onSelect={setSelectedChat}/>
                 <div className="flex-1 h-[872px]">
                   {selectedChat ? (
                     selectedChat.members.length > 2 ? (
                       <GroupChatWindow
                         chat={selectedChat}
-                        onClose={() => setSelectedChat(null)}
-                      />
+                        onClose={() => setSelectedChat(null)}/>
                     ) : (
                       <ChatWindow
                         chat={selectedChat}
-                        onClose={() => setSelectedChat(null)}
-                      />
+                        onClose={() => setSelectedChat(null)}/>
                     )
                   ) : (
                     <div className="flex items-center justify-center h-full text-gray-400">

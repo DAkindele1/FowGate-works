@@ -15,8 +15,7 @@ export default function GroupChatWindow({ chat, onClose }) {
           <button
             onClick={onClose}
             title="Close Chat"
-            className="text-gray-500 hover:text-red-500 transition"
-          >
+            className="text-gray-500 hover:text-red-500 transition">
             <FiX className="w-5 h-5" />
           </button>
 
@@ -24,8 +23,7 @@ export default function GroupChatWindow({ chat, onClose }) {
             <img
               src={chat.avatar}
               alt={chat.name}
-              className="w-10 h-10 rounded-full"
-            />
+              className="w-10 h-10 rounded-full"/>
             <div>
               <h2 className="font-semibold text-lg text-gray-800">{chat.name}</h2>
               <p className="text-sm text-gray-500">{chat.members.join(', ')}</p>
@@ -33,9 +31,10 @@ export default function GroupChatWindow({ chat, onClose }) {
           </div>
         </div>
 
-        {/* Right: Group Avatars + Icons */}
+        {/* Right: Group avatars and Icons */}
         <div className="flex items-center gap-4 text-gray-500">
-          {/* Overlapping member avatars */}
+
+          {/* Member avatars */}
           <div className="flex -space-x-2">
             {chat.members
               .filter((name) => name !== 'You')
@@ -47,25 +46,22 @@ export default function GroupChatWindow({ chat, onClose }) {
                     src={avatar || `https://ui-avatars.com/api/?name=${member}`}
                     alt={member}
                     title={member}
-                    className="w-6 h-6 rounded-full border-2 border-white object-cover"
-                  />
+                    className="w-6 h-6 rounded-full border-2 border-white object-cover"/>
                 );
               })}
           </div>
 
-          {/* Action icons */}
+          {/* Icons */}
           <img
             src={CallIcon}
             alt="Call"
             onClick={handleUnavailableFeature}
-            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"
-          />
+            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"/>
           <img
             src={MoreIcon}
             alt="More"
             onClick={handleUnavailableFeature}
-            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"
-          />
+            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"/>
         </div>
       </div>
 
@@ -82,14 +78,12 @@ export default function GroupChatWindow({ chat, onClose }) {
               key={idx}
               className={`flex items-start gap-2 ${
                 isUser ? 'justify-end' : 'justify-start'
-              }`}
-            >
+              }`}>
               {!isUser && (
                 <img
                   src={avatarUrl}
                   alt={msg.sender}
-                  className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
-                />
+                  className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"/>
               )}
 
               <div
@@ -97,8 +91,7 @@ export default function GroupChatWindow({ chat, onClose }) {
                   isUser
                     ? 'bg-[#34A853] text-white rounded-br-none'
                     : 'bg-white text-gray-900 rounded-bl-none'
-                }`}
-              >
+                }`}>
                 <div className="flex justify-between items-center mb-1">
                   {!isUser ? (
                     <>
@@ -113,20 +106,18 @@ export default function GroupChatWindow({ chat, onClose }) {
                 </div>
                 <p style={isUser ? userChat : othersChat}>{msg.text}</p>
               </div>
-
               {isUser && (
                 <img
                   src={avatarUrl}
                   alt={msg.sender}
-                  className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
-                />
+                  className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"/>
               )}
             </div>
           );
         })}
       </div>
 
-      {/* Chat Input anchored at bottom */}
+      {/* Chat Input */}
       <div className="px-6 py-4 bg-white">
         <ChatInput />
       </div>

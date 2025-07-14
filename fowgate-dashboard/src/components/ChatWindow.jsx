@@ -4,9 +4,7 @@ import ChatInput from './ChatInput';
 import CallIcon from '../assets/call.svg';
 import MoreIcon from '../assets/more.svg';
 import { handleUnavailableFeature } from '../utils/feature.js';
-import { userChat, othersChat, otherschatTimestamp, userchatTimestamp
-  
- } from '../styles/fonts';
+import { userChat, othersChat, otherschatTimestamp, userchatTimestamp } from '../styles/fonts';
 
 export default function ChatWindow({ chat, onClose }) {
   if (!chat) {
@@ -16,7 +14,7 @@ export default function ChatWindow({ chat, onClose }) {
           Select a chat to begin
         </div>
       </div>
-    );
+);
   }
 
   return (
@@ -27,8 +25,7 @@ export default function ChatWindow({ chat, onClose }) {
           <button
             onClick={onClose}
             title="Close Chat"
-            className="text-gray-500 hover:text-red-500 transition"
-          >
+            className="text-gray-500 hover:text-red-500 transition">
             <FiX className="w-5 h-5" />
           </button>
           <div className="flex items-center gap-3">
@@ -45,14 +42,12 @@ export default function ChatWindow({ chat, onClose }) {
             src={CallIcon}
             alt="Call"
             onClick={handleUnavailableFeature}
-            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"
-          />
+            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"/>
           <img
             src={MoreIcon}
             alt="More"
             onClick={handleUnavailableFeature}
-            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"
-          />
+            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"/>
         </div>
       </div>
 
@@ -67,8 +62,7 @@ export default function ChatWindow({ chat, onClose }) {
                   isUser
                     ? 'bg-[#34A853] text-white rounded-br-none'
                     : 'bg-white text-gray-900 rounded-bl-none'
-                }`}
-              >
+                }`}>
                 <p style={isUser ? userChat : othersChat}>{msg.text}</p>
                 <div className="mt-1 text-right" style={isUser ? userchatTimestamp : otherschatTimestamp}>{msg.time}</div>
               </div>

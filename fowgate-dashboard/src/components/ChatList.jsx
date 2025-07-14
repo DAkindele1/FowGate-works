@@ -27,26 +27,21 @@ export default function ChatList({ chats, onSelect, selectedId }) {
         key={chat.id}
         onClick={() => onSelect(chat)}
         className={`relative cursor-pointer transition-all ${
-          chat.id === selectedId ? 'bg-[#E8EFF9]' : 'hover:bg-gray-100'
-        }`}
-      >
-        {/* This is the padded content wrapper */}
+          chat.id === selectedId ? 'bg-[#E8EFF9]' : 'hover:bg-gray-100'}`}>
         <div className="flex items-center gap-3 px-4 py-3 relative">
           {/* Avatar */}
           <div className="relative w-10 h-10 shrink-0">
             <img
               src={chat.avatar}
               alt={chat.name}
-              className="w-full h-full rounded-full object-cover"
-            />
+              className="w-full h-full rounded-full object-cover"/>
             <img
               src={chat.isOnline ? OnlineIcon : OfflineIcon}
               alt={chat.isOnline ? 'Online' : 'Offline'}
-              className="absolute bottom-0 right-0 w-3 h-3"
-            />
+              className="absolute bottom-0 right-0 w-3 h-3"/>
           </div>
 
-          {/* Name + Message */}
+          {/* Name and Message */}
           <div className="flex-1 flex flex-col overflow-hidden">
             <div className="flex justify-between items-center w-full">
               <p className="truncate" style={chatName}>
@@ -64,9 +59,7 @@ export default function ChatList({ chats, onSelect, selectedId }) {
                 <img
                   src={statusIcon}
                   alt={lastUserMsg.status}
-                  className="w-4 h-4 ml-2 shrink-0"
-                />
-              )}
+                  className="w-4 h-4 ml-2 shrink-0"/>)}
             </div>
           </div>
         </div>
@@ -79,17 +72,14 @@ export default function ChatList({ chats, onSelect, selectedId }) {
       className="w-[350px] max-h-[844px] pt-4 pb-4 bg-white overflow-y-auto"
       style={{
         border: '0.5px solid #EAEAEA',
-        borderRadius: '10px',
-      }}
-    >
+        borderRadius: '10px',}}>
       {/* Header */}
       <div className="mb-4 pb-5 border-b border-gray-200 px-4">
         <div className="flex justify-between items-center h-[40px]">
           <h2 style={chatsHeader}>Chats</h2>
           <button
             onClick={handleUnavailableFeature}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-[#E8EFF9] text-[#1B5FC1] text-sm font-medium hover:bg-blue-200 transition"
-          >
+            className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-[#E8EFF9] text-[#1B5FC1] text-sm font-medium hover:bg-blue-200 transition">
             <FiPlus className="w-4 h-4" />
             New Chat
           </button>
@@ -103,8 +93,7 @@ export default function ChatList({ chats, onSelect, selectedId }) {
           type="text"
           placeholder="Search name, group..."
           className="w-full pl-4 pr-3 py-2 border border-gray-300 rounded-md text-[14px] leading-[160%] text-[#9D9D9D] focus:outline-none focus:ring-2 focus:ring-blue-400 font-light font-[Rubik]"
-          style={{ letterSpacing: '0%', fontWeight: 300 }}
-        />
+          style={{ letterSpacing: '0%', fontWeight: 300 }}/>
       </div>
 
       {/* Pinned Section */}
@@ -113,14 +102,12 @@ export default function ChatList({ chats, onSelect, selectedId }) {
           <img
             src={PinnedIcon}
             alt="Pinned"
-            className="w-full h-[20px] object-contain mb-2 "
-          />
+            className="w-full h-[20px] object-contain mb-2 "/>
           <div className="space-y-2 mb-4">{pinnedChats.map(renderChat)}</div>
 
           {/* Divider */}
-          <div className="border-t border-gray-200 my-4 w-full px-4" />
-        </div>
-      )}
+          <div className="border-t border-gray-200 my-4 w-full px-4"/>
+        </div>)}
 
       {/* All Messages Section */}
       <div>
