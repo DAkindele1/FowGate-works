@@ -18,7 +18,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('messages');
 
   return (
-    <div className="bg-white p-[32px_30px] min-h-screen w-full box-border">
+    <div className="bg-white p-[22px_30px] min-h-screen w-full box-border">
       <div className="flex gap-[32px] w-full h-full rounded-[12px]">
         {/* Sidebar */}
         <Sidebar activeItem={currentPage} setCurrentPage={setCurrentPage} />
