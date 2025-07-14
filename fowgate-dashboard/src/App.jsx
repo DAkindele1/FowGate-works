@@ -18,14 +18,14 @@ function App() {
   const [currentPage, setCurrentPage] = useState('messages');
 
   return (
-    <div className="bg-white p-[22px_30px] min-h-screen w-full box-border">
+    <div className="bg-white p-[32px_30px] min-h-screen w-full box-border">
       <div className="flex gap-[32px] w-full h-full rounded-[12px]">
         {/* Sidebar */}
         <Sidebar activeItem={currentPage} setCurrentPage={setCurrentPage} />
         {/* Main Content */}
         <div className="flex flex-col gap-4 flex-1">
           {/* Top Feature Bar */}
-          <div className="flex justify-between items-top h-[70px] border-b border-radius-[0.5px] border-gray-200">
+          <div className="flex justify-between items-center h-[100px] border-b border-radius-[0.5px] border-gray-200">
             <h1
               className="text-[28px]"
               style={{
