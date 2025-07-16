@@ -6,7 +6,7 @@ import MoreIcon from '../assets/more.svg';
 import { handleUnavailableFeature } from '../utils/feature.js';
 import { userChat, othersChat, otherschatTimestamp, userchatTimestamp } from '../styles/fonts';
 
-export default function ChatWindow({ chat, onClose }) {
+export default function ChatWindow({ chat, onClose, onSendMessage }) {
   if (!chat) {
     return (
       <div className="flex flex-col justify-end h-[512px] bg-gray-100">
@@ -73,7 +73,7 @@ export default function ChatWindow({ chat, onClose }) {
 
       {/* Chat Input */}
       <div className="px-6 py-4 bg-white">
-        <ChatInput />
+        <ChatInput onSend={(text) => onSendMessage(chat.id, text)} />
       </div>
     </div>
   );

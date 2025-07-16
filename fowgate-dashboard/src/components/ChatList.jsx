@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiPlus, FiSearch } from 'react-icons/fi';
 import OnlineIcon from '../assets/online.svg';
 import OfflineIcon from '../assets/offline.svg';
@@ -6,12 +6,20 @@ import DeliveredIcon from '../assets/delivered.svg';
 import ReadIcon from '../assets/read.svg';
 import PinnedIcon from '../assets/pinned.svg';
 import AllIcon from '../assets/all.svg';
-import { handleUnavailableFeature } from '../utils/feature.js';
+import NewChatModal from './NewChatModal';
 import { chatName, chatPreview, chatListTimestamp,chatsHeader } from '../styles/fonts';
 
-export default function ChatList({ chats, onSelect, selectedId }) {
+export default function ChatList({ chats, onSelect, selectedId, onStartChat }) {
   const pinnedChats = chats.filter(chat => chat.pinned);
   const unpinnedChats = chats.filter(chat => !chat.pinned);
+
+const [showModal, setShowModal] = useState(false);
+
+const handleStartChat = (chatData) => {
+  onStartChat(chatData); // calls App's handler
+  setShowModal(false);
+};;
+
 
   const renderChat = (chat) => {
     const lastUserMsg = [...chat.messages].reverse().find(m => m.sender === 'You');
@@ -78,11 +86,20 @@ export default function ChatList({ chats, onSelect, selectedId }) {
         <div className="flex justify-between items-center h-[40px]">
           <h2 style={chatsHeader}>Chats</h2>
           <button
-            onClick={handleUnavailableFeature}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-[#E8EFF9] text-[#1B5FC1] text-sm font-medium hover:bg-blue-200 transition">
-            <FiPlus className="w-4 h-4" />
-            New Chat
-          </button>
+        onClick={() => setShowModal(true)}
+        className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-[#E8EFF9] text-[#1B5FC1] text-sm font-medium hover:bg-blue-200 transition"
+      >
+        <FiPlus className="w-4 h-4" />
+        New Chat
+      </button>
+
+      {/* Modal */}
+      {showModal && (
+        <NewChatModal
+          onClose={() => setShowModal(false)}
+          onStartChat={handleStartChat}
+        />
+      )}
         </div>
       </div>
 

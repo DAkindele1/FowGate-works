@@ -4,12 +4,13 @@ import attachmentIcon from '../assets/attachments.svg';
 import sendButtonIcon from '../assets/send_button.svg';
 import { handleUnavailableFeature } from '../utils/feature.js';
 
-export default function ChatInput() {
+export default function ChatInput({ onSend }) {
   const [message, setMessage] = useState('');
   const handleSend = () => {
-    if (!message.trim()) return;
-    setMessage('');
-  };
+  if (!message.trim()) return;
+  onSend?.(message);  // Call parent
+  setMessage('');
+};
 
   return (
     <div className="flex items-center px-4 py-3 bg-white">

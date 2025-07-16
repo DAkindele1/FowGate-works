@@ -8,6 +8,7 @@ import BellIcon from './assets/bell.svg';
 import NotificationIcon from './assets/notification.svg';
 import AccountIcon from './assets/acc.svg';
 import BlankPage from './components/BlankPage';
+import NewChatModal from './components/NewChatModal';
 
 const handleUnavailableFeature = () => {
   alert('Sorry, this feature is currently unavailable');
@@ -15,7 +16,57 @@ const handleUnavailableFeature = () => {
 
 function App() {
   const [selectedChat, setSelectedChat] = useState(mockChats[0]);
+  const [chats, setChats] = useState(mockChats);
   const [currentPage, setCurrentPage] = useState('messages');
+  const [showModal, setShowModal] = useState(false);
+
+
+  const handleStartChat = (chatData) => {
+  const { type, contacts, groupName, groupDesc, groupAvatar } = chatData;
+  const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const newChat = {
+    id: Date.now().toString(),
+    name: type === 'group' ? groupName : contacts[0].name,
+    avatar: type === 'group'
+      ? groupAvatar || '/default-group-avatar.jpg'
+      : contacts[0].avatar,
+    isOnline: type === 'individual' ? contacts[0].isOnline : true,
+    pinned: false,
+    messages: [],
+    time: timestamp,
+    lastMessage: '',
+    members: contacts,
+  };
+
+  
+
+  setChats(prev => [newChat, ...prev]);
+  setSelectedChat(newChat);
+};
+
+const handleSendMessage = (chatId, messageText) => {
+  const newMessage = {
+    id: Date.now().toString(),
+    sender: 'You',
+    text: messageText,
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    status: 'delivered', // or 'sent', 'read'
+  };
+
+  setChats(prevChats =>
+    prevChats.map(chat =>
+      chat.id === chatId
+        ? {
+            ...chat,
+            messages: [...chat.messages, newMessage],
+            lastMessage: messageText,
+            time: newMessage.time,
+          }
+        : chat
+    )
+  );
+};
 
   return (
     <div className="bg-white p-[32px_30px] min-h-screen w-full box-border">
@@ -50,18 +101,21 @@ function App() {
             {currentPage === 'messages' ? (
               <>
                 <ChatList
-                  chats={mockChats}
-                  selectedId={selectedChat?.id}
-                  onSelect={setSelectedChat}/>
+                chats={chats}
+                selectedId={selectedChat?.id}
+                onSelect={setSelectedChat}
+                onStartChat={handleStartChat} />
                 <div className="flex-1 h-[872px]">
                   {selectedChat ? (
                     selectedChat.members.length > 2 ? (
                       <GroupChatWindow
                         chat={selectedChat}
+                        onSendMessage={handleSendMessage}
                         onClose={() => setSelectedChat(null)}/>
                     ) : (
                       <ChatWindow
                         chat={selectedChat}
+                        onSendMessage={handleSendMessage}
                         onClose={() => setSelectedChat(null)}/>
                     )
                   ) : (
@@ -79,6 +133,12 @@ function App() {
           </div>
         </div>
       </div>
+      {showModal && (
+  <NewChatModal
+    onClose={() => setShowModal(false)}
+    onStartChat={handleStartChat}
+  />
+)}
     </div>
   );
 }
