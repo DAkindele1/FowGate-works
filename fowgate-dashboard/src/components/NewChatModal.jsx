@@ -16,14 +16,16 @@ export default function NewChatModal({ onClose, onStartChat }) {
   const [groupAvatar, setGroupAvatar] = useState(null);
 
   const handleSelect = (id) => {
-    if (tab === 'individual') {
-      setSelected([id]);
-    } else {
-      setSelected(prev => (
-        prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-      ));
-    }
-  };
+  if (tab === 'individual') {
+    setSelected(prev => (
+      prev.includes(id) ? [] : [id]
+    ));
+  } else {
+    setSelected(prev => (
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    ));
+  }
+};
 
   const modalRef = useRef(null);
 
