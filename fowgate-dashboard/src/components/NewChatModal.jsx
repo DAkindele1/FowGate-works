@@ -15,6 +15,12 @@ export default function NewChatModal({ onClose, onStartChat }) {
   const [groupDesc, setGroupDesc] = useState('');
   const [groupAvatar, setGroupAvatar] = useState(null);
 
+
+  const switchTab = (newTab) => {
+  setTab(newTab);
+  setSelected([]);
+};
+
   const handleSelect = (id) => {
   if (tab === 'individual') {
     setSelected(prev => (
@@ -82,14 +88,14 @@ const handleStart = () => {
         {/* Tabs */}
         <div className="p-2 flex bg-[#E8EFF9] p-2 m-4 justify-between rounded-md">
           <button
-            onClick={() => setTab('individual')}
+            onClick={() => switchTab('individual')}
             className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-1 text-sm transition ${tab === 'individual' ? 'bg-white shadow-sm text-blue-600 font-semibold' : 'text-gray-500 hover:bg-white'}`}
           >
             <img src={tab === 'individual' ? IndividualIconOn : IndividualIcon} alt="Individual" className="w-4 h-4" />
             <span className="font-[Rubik] font-normal text-[14px] leading-[140%] tracking-[0px] align-middle">Individual Chat</span>
           </button>
           <button
-            onClick={() => setTab('group')}
+            onClick={() => switchTab('group')}
             className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-1 text-sm transition ${tab === 'group' ? 'bg-white shadow-sm text-blue-600 font-semibold' : 'text-gray-500 hover:bg-white'}`}
           >
             <img src={tab === 'group' ? GroupIconOn : GroupIcon} alt="Group" className="w-4 h-4" />
