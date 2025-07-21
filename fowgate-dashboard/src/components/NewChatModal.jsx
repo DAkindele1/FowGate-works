@@ -66,7 +66,7 @@ const handleStart = () => {
       <div
         ref={modalRef}
         className="bg-white shadow-lg overflow-hidden flex flex-col"
-        style={{ width: '36.67%', height: '72.656%', borderRadius: '4px', opacity: 1 }}
+        style={{ width: '28.67%', height: '75.656%', borderRadius: '4px', opacity: 1 }}
       >
         {/* Header */}
         <div className="text-white px-5 py-4 flex justify-between items-center rounded-t-[4px]" style={{ background: '#1B5FC1' }}>
