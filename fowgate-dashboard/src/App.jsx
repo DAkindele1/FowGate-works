@@ -68,6 +68,26 @@ const handleSendMessage = (chatId, messageText) => {
   );
 };
 
+const handleTogglePin = (chatId) => {
+  setChats(prevChats =>
+    prevChats.map(chat =>
+      chat.id === chatId ? { ...chat, pinned: !chat.pinned } : chat
+    )
+  );
+
+  // Update selected chat if it's the one being pinned/unpinned
+  if (selectedChat?.id === chatId) {
+    setSelectedChat(prev => ({ ...prev, pinned: !prev.pinned }));
+  }
+};
+
+const handleDeleteChat = (chatId) => {
+  setChats(prevChats => prevChats.filter(chat => chat.id !== chatId));
+  if (selectedChat?.id === chatId) {
+    setSelectedChat(null);
+  }
+};
+
   return (
     <div className="bg-white p-[32px_30px] min-h-screen w-full box-border">
       <div className="flex gap-[32px] w-full h-full rounded-[12px]">
@@ -111,12 +131,17 @@ const handleSendMessage = (chatId, messageText) => {
                       <GroupChatWindow
                         chat={selectedChat}
                         onSendMessage={handleSendMessage}
-                        onClose={() => setSelectedChat(null)}/>
+                        onClose={() => setSelectedChat(null)}
+                        togglePinChat={handleTogglePin}
+                        onDeleteChat={handleDeleteChat}/>
+                        
                     ) : (
                       <ChatWindow
                         chat={selectedChat}
                         onSendMessage={handleSendMessage}
-                        onClose={() => setSelectedChat(null)}/>
+                        onClose={() => setSelectedChat(null)}
+                        togglePinChat={handleTogglePin}
+                        onDeleteChat={handleDeleteChat}/>
                     )
                   ) : (
                     <div className="flex items-center justify-center h-full text-gray-400">

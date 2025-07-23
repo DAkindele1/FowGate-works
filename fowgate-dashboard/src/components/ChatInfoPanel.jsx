@@ -1,43 +1,55 @@
 import { useEffect, useState } from 'react';
 import { FiX } from 'react-icons/fi';
-import JpgIcon from '../assets/jpg.svg';
-import Mp3Icon from '../assets/mp3.svg';
-import Mp4Icon from '../assets/mp4.svg';
-import PdfIcon from '../assets/pdf.svg';
-import DocIcon from '../assets/doc.svg';
+import jpgIcon from '../assets/jpg.svg';
+import mp3Icon from '../assets/mp3.svg';
+import mp4Icon from '../assets/mp4.svg';
+import pdfIcon from '../assets/pdf.svg';
+import docIcon from '../assets/doc.svg';
+import editGroupIcon from '../assets/editgroup.svg';
+import downloadButtonIcon from '../assets/download.svg';
 
 const TABS = ['All Files', 'Audio', 'Docs', 'Images', 'PDFs', 'Videos'];
 
+const currentUserAvatar = 'https://i.pravatar.cc/100?img=9';
+
 const FILE_ICONS = {
-  Images: JpgIcon,
-  Audio: Mp3Icon,
-  Videos: Mp4Icon,
-  PDFs: PdfIcon,
-  Docs: DocIcon,
+  Images: jpgIcon,
+  Audio: mp3Icon,
+  Videos: mp4Icon,
+  PDFs: pdfIcon,
+  Docs: docIcon,
 };
 
-export default function ChatInfoPanel({ chat, isOpen, onClose }) {
+export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
+  const isGroupChat = Array.isArray(chat?.members) && chat.members.length > 2;
   const [showPanel, setShowPanel] = useState(false);
   const [activeTab, setActiveTab] = useState(TABS[0]);
   const [description, setDescription] = useState('');
-  const [files, setFiles] = useState({
-    Images: [],
-    Videos: [],
-    Docs: [],
-    PDFs: [],
-    Audio: [],
-  });
-
-  const members = chat?.members || [];
+  const [groupAvatar, setGroupAvatar] = useState(chat?.avatar);
+  const [members, setMembers] = useState(isGroupChat ? chat.members : []);
 
   useEffect(() => {
     if (isOpen) {
       setShowPanel(true);
+      if (isGroupChat) {
+        setMembers(chat.members || []);
+        setDescription(chat.description || '');
+        setGroupAvatar(chat.avatar);
+      }
     } else {
       const timer = setTimeout(() => setShowPanel(false), 300);
       return () => clearTimeout(timer);
     }
-  }, [isOpen]);
+  }, [isOpen, chat]);
+
+  const handleRemoveMember = (memberToRemove) => {
+    const updatedMembers = members.filter((m) => m !== memberToRemove);
+    setMembers(updatedMembers);
+
+    if (onUpdateChat) {
+      onUpdateChat({ ...chat, members: updatedMembers });
+    }
+  };
 
   if (!isOpen && !showPanel) return null;
 
@@ -50,7 +62,6 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
         onClick={onClose}
       />
 
-      {/* Panel */}
       <div
         className={`relative h-full w-[608px] bg-white shadow-xl z-50 transform transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
@@ -58,7 +69,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
       >
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold">Chat Info</h2>
+          <h2 className="font-[Rubik] font-medium text-2xl leading-[1.4] text-[#292929]">Chat Info</h2>
           <button onClick={onClose}>
             <FiX size={24} className="text-gray-500 hover:text-red-500" />
           </button>
@@ -66,112 +77,182 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
 
         {/* Body */}
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
-          {/* Group Header */}
+          {/* Group or Single Chat Header */}
           <div className="flex flex-col items-center text-center space-y-1">
             <div className="flex -space-x-2">
-              <img src={chat?.avatar} className="w-20 h-20 rounded-full border-2 border-white" />
+              <div className="relative w-20 h-20">
+                <img
+                  src={groupAvatar}
+                  alt="Chat Avatar"
+                  className="w-20 h-20 rounded-full border-2 border-white object-cover"
+                />
+                {isGroupChat && (
+                  <label className="absolute bottom-0 right-1 bg-white rounded-full cursor-pointer">
+                    <img src={editGroupIcon} alt="Edit" className="w-5 h-5" />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file && file.type.startsWith('image/')) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setGroupAvatar(reader.result);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
             </div>
-            <h3 className="font-semibold text-lg mt-2">{chat?.name}</h3>
-            <p className="text-sm text-gray-500">{members.length} Members</p>
+            <h3 className="font-rubik font-medium text-base leading-[1.4] text-[#292929]">{chat?.name}</h3>
+            {isGroupChat && (
+              <p className="font-rubik font-light text-sm leading-[1.4] text-[#707070]">{members.length} Members</p>
+            )}
           </div>
 
-          {/* Description */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">Group Description</label>
-            <input
-              type="text"
-              placeholder="Type here"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 w-full border border-gray-200 rounded-md px-3 py-5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8EFF9]"
-            />
-          </div>
+          {/* Group Description */}
+          {isGroupChat && (
+            <div>
+              <label className="font-rubik font-normal text-sm leading-[1.4] text-[#292929] align-middle">Group Description</label>
+              <input
+                type="text"
+                placeholder="Type here"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="mt-1 w-full border border-gray-200 rounded-md px-3 py-5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8EFF9]"
+              />
+            </div>
+          )}
 
           {/* Shared Files */}
           <div>
-         <div className="flex justify-between items-center mb-2">
-        <p className="text-sm font-medium text-gray-700">Shared Files</p>
-        <div className="flex items-center gap-2">
-         <span className="text-xs text-gray-500">Filter by</span>
-         <select
-          value={activeTab}
-          onChange={(e) => setActiveTab(e.target.value)}
-          className="text-sm border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#E8EFF9]"
-          >
-        {TABS.map((tab) => (
-          <option key={tab} value={tab}>
-            {tab}
-          </option>
-        ))}
-       </select>
-     </div>
-   </div>
-<div className="h-[200px] overflow-y-auto rounded-md border border-gray-100 p-2 bg-gray-50 space-y-2">
-  {activeTab === 'All Files' ? (
-    Object.entries(files).every(([_, arr]) => arr.length === 0) ? (
-      <p className="text-sm text-gray-400 text-center pt-18">No files yet.</p>
-    ) : (
-      Object.entries(files).flatMap(([type, arr]) =>
-        arr.map((file, idx) => (
-          <div
-            key={`${type}-${idx}`}
-            className="flex items-center space-x-2 text-sm text-gray-700"
-          >
-            <img
-              src={FILE_ICONS[type]}
-              alt={`${type} icon`}
-              className="w-4 h-4"
-            />
-            <span>{file.name}</span>
-          </div>
-        ))
-      )
-    )
-  ) : files[activeTab].length === 0 ? (
-    <p className="text-sm text-gray-400 text-center pt-18">
-      No {activeTab.toLowerCase()} yet.
-    </p>
-  ) : (
-    files[activeTab].map((file, idx) => (
-      <div
-        key={idx}
-        className="flex items-center space-x-2 text-sm text-gray-700"
-      >
-        <img
-          src={FILE_ICONS[activeTab]}
-          alt={`${activeTab} icon`}
-          className="w-4 h-4"
-        />
-        <span>{file.name}</span>
-      </div>
-    ))
-  )}
-</div>
+            <div className="flex justify-between items-center mb-2">
+              <p className="font-rubik font-medium text-base leading-[1.4] align-middle text-[#292929]">Shared Files</p>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-500">Filter by</span>
+                <select
+                  value={activeTab}
+                  onChange={(e) => setActiveTab(e.target.value)}
+                  className="text-sm border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#E8EFF9]"
+                >
+                  {TABS.map((tab) => (
+                    <option key={tab} value={tab}>
+                      {tab}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="h-[200px] overflow-y-auto bg-gray-50 rounded p-2 mt-4 space-y-2">
+              {(() => {
+                if (!chat || !chat.files) {
+                  return <div className="text-sm text-gray-400 text-center">No files available.</div>;
+                }
+
+                const fileTypeMap = {
+                  'All Files': ['jpg', 'mp3', 'mp4', 'pdf', 'doc'],
+                  Images: ['jpg'],
+                  Audio: ['mp3'],
+                  Videos: ['mp4'],
+                  PDFs: ['pdf'],
+                  Docs: ['doc'],
+                };
+
+                const fileKeys = fileTypeMap[activeTab] || [];
+                const filteredFiles = fileKeys.flatMap((key) => chat.files[key] || []);
+
+                if (filteredFiles.length === 0) {
+                  return <div className="text-sm text-gray-400 text-center">No files found in this category.</div>;
+                }
+
+                return filteredFiles.map((file, idx) => {
+                  const iconMap = {
+                    jpg: jpgIcon,
+                    mp3: mp3Icon,
+                    mp4: mp4Icon,
+                    pdf: pdfIcon,
+                    doc: docIcon,
+                  };
+
+                  const fileKey = Object.entries(chat.files).find(([, arr]) =>
+                    arr.includes(file)
+                  )?.[0];
+
+                  const icon = iconMap[fileKey] || '/icons/file-icon.svg';
+
+                  return (
+                    <div
+                    key={idx}
+                    className="flex items-center justify-between p-2 border-b border-gray-200 bg-gray-50"
+                  >
+                    <div className="flex items-center space-x-2 overflow-hidden">
+                      <img src={icon} alt="file icon" className="w-5 h-5 flex-shrink-0" />
+                      <span className="font-rubik font-normal text-base leading-[1.4] text-[#292929] truncate">
+                        {file.name}
+                      </span>
+                    </div>
+
+                    <button
+                      title="Download"
+                      onClick={() => console.log(`Downloading ${file.name}`)} // optional handler
+                      className="ml-auto p-1 hover:opacity-80 transition"
+                    >
+                      <img
+                        src={downloadButtonIcon}
+                        alt="Download"
+                        className="w-4 h-4"
+                      />
+                    </button>
+                  </div>
+                  );
+                });
+              })()}
+            </div>
           </div>
 
-          {/* Members */}
-          <div>
-            <p className="text-sm font-medium text-gray-700 mb-2">Group Members ({members.length})</p>
-            <div className="flex space-x-4 overflow-x-auto pb-2">
-  {chat.members.map((member, idx) => (
-    <div key={idx} className="flex flex-col items-center text-center">
-      <img
-        src={chat.avatarMap[member] || 'https://via.placeholder.com/48'} // fallback image
-        alt={member}
-        className="w-12 h-12 rounded-full mb-1 object-cover"
-      />
-      <span className="text-xs text-gray-600 w-16 truncate">{member}</span>
-    </div>
-  ))}
-</div>
-          </div>
+          {/* Group Members */}
+          {isGroupChat && (
+            <div>
+              <p className="font-rubik font-medium text-[#292929] mb-2">Group Members ({members.length})</p>
+              <div className="flex space-x-4 overflow-x-auto pb-2">
+                {members.map((member, idx) => (
+                  <div key={idx} className="relative flex flex-col items-center text-center group">
+                    <div className="relative">
+                      <img
+                        src={
+                          chat.avatarMap?.[member] ||
+                          (member === 'You' ? currentUserAvatar : 'https://via.placeholder.com/48')
+                        }
+                        alt={member}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      {member !== 'You' && (
+                        <button
+                          onClick={() => handleRemoveMember(member)}
+                          className="absolute top-0 right-0 w-3 h-3 bg-[#EB4335] text-white rounded-full flex items-center justify-center text-[7px]"
+                          title={`Remove ${member}`}
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+                    <span className="text-xs font-rubik font-normal text-[#292929] w-16 truncate mt-1">{member}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Footer */}
         <div className="border-t border-gray-200 p-4">
           <button
             onClick={onClose}
-            className="ml-auto px-4 py-2 bg-[#E8EFF9] text-[#1B5FC1] rounded-md hover:bg-[#E8EFF9] text-sm float-right"
+            className=" font-rubik font-normal text-sm ml-auto px-4 py-2 bg-[#E8EFF9] text-[#1B5FC1] rounded-md hover:bg-[#E8EFF9] text-sm float-right"
           >
             Done
           </button>
@@ -180,3 +261,4 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
     </div>
   );
 }
+
