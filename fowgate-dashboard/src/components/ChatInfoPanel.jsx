@@ -98,20 +98,22 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
                   <label className="absolute bottom-0 right-1 bg-white rounded-full cursor-pointer">
                     <img src={editGroupIcon} alt="Edit" className="w-5 h-5" />
                     <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files[0];
-                        if (file && file.type.startsWith('image/')) {
-                          const reader = new FileReader();
-                          reader.onloadend = () => {
-                            setGroupAvatar(reader.result);
-                          };
-                          reader.readAsDataURL(file);
-                        }
-                      }}
-                      className="hidden"
-                    />
+  type="file"
+  accept="image/*"
+  onChange={(e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const newAvatar = reader.result;
+        setGroupAvatar(newAvatar); // still update local
+        onUpdateChat?.({ ...chat, avatar: newAvatar }); // 🔧 update globally too
+      };
+      reader.readAsDataURL(file);
+    }
+  }}
+  className="hidden"
+/>
                   </label>
                 )}
               </div>
