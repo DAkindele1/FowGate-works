@@ -25,7 +25,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage }) {
           title="Close Chat"
          className="text-gray-500 hover:text-red-500 transition"
          onClick={(e) => {
-         e.stopPropagation(); // Prevent opening info panel
+         e.stopPropagation();
          onClose();
   }}
 >

@@ -43,7 +43,6 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
-      {/* Backdrop */}
       <div
         className={`absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300 ${
           isOpen ? 'opacity-100' : 'opacity-0'
@@ -104,32 +103,48 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
             {tab}
           </option>
         ))}
-      </select>
-    </div>
-  </div>
-            <div className="space-y-2 max-h-[200px] overflow-y-auto">
-            {activeTab === 'All Files' ? (
-            Object.entries(files).every(([_, arr]) => arr.length === 0) ? (
-            <p className="text-sm text-gray-400">No files yet.</p>
-            ) : (
-           Object.entries(files).flatMap(([type, arr]) =>
-           arr.map((file, idx) => (
-          <div key={`${type}-${idx}`} className="flex items-center space-x-2 text-sm text-gray-700">
-            <img src={FILE_ICONS[type]} alt={`${type} icon`} className="w-4 h-4" />
+       </select>
+     </div>
+   </div>
+<div className="h-40 overflow-y-auto rounded-md border border-gray-100 p-2 bg-gray-50 space-y-2">
+  {activeTab === 'All Files' ? (
+    Object.entries(files).every(([_, arr]) => arr.length === 0) ? (
+      <p className="text-sm text-gray-400 text-center pt-15">No files yet.</p>
+    ) : (
+      Object.entries(files).flatMap(([type, arr]) =>
+        arr.map((file, idx) => (
+          <div
+            key={`${type}-${idx}`}
+            className="flex items-center space-x-2 text-sm text-gray-700"
+          >
+            <img
+              src={FILE_ICONS[type]}
+              alt={`${type} icon`}
+              className="w-4 h-4"
+            />
             <span>{file.name}</span>
           </div>
         ))
       )
     )
-     ) : files[activeTab].length === 0 ? (
-       <p className="text-sm text-gray-400">No {activeTab.toLowerCase()} yet.</p>
-        ) : (
-         files[activeTab].map((file, idx) => (
-         <div key={idx} className="flex items-center space-x-2 text-sm text-gray-700">
-         <img src={FILE_ICONS[activeTab]} alt={`${activeTab} icon`} className="w-4 h-4" />
-         <span>{file.name}</span>
-         </div>
-     ))
+  ) : files[activeTab].length === 0 ? (
+    <p className="text-sm text-gray-400 text-center pt-4">
+      No {activeTab.toLowerCase()} yet.
+    </p>
+  ) : (
+    files[activeTab].map((file, idx) => (
+      <div
+        key={idx}
+        className="flex items-center space-x-2 text-sm text-gray-700"
+      >
+        <img
+          src={FILE_ICONS[activeTab]}
+          alt={`${activeTab} icon`}
+          className="w-4 h-4"
+        />
+        <span>{file.name}</span>
+      </div>
+    ))
   )}
 </div>
           </div>
