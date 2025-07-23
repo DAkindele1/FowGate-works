@@ -153,13 +153,17 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
           <div>
             <p className="text-sm font-medium text-gray-700 mb-2">Group Members ({members.length})</p>
             <div className="flex space-x-4 overflow-x-auto pb-2">
-              {members.map((member, idx) => (
-                <div key={idx} className="flex flex-col items-center text-center">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full mb-1" />
-                  <span className="text-xs text-gray-600 w-16 truncate">{member}</span>
-                </div>
-              ))}
-            </div>
+  {chat.members.map((member, idx) => (
+    <div key={idx} className="flex flex-col items-center text-center">
+      <img
+        src={chat.avatarMap[member] || 'https://via.placeholder.com/48'} // fallback image
+        alt={member}
+        className="w-12 h-12 rounded-full mb-1 object-cover"
+      />
+      <span className="text-xs text-gray-600 w-16 truncate">{member}</span>
+    </div>
+  ))}
+</div>
           </div>
         </div>
 
