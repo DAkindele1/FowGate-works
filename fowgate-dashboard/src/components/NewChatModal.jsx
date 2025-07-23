@@ -7,6 +7,7 @@ import IndividualIconOn from '../assets/individual_on.svg';
 import GroupIcon from '../assets/group.svg';
 import GroupIconOn from '../assets/group_on.svg';
 import CameraIcon from '../assets/camera.svg';
+import NoAvatarIcon from '../assets/noavatar.svg';
 
 export default function NewChatModal({ onClose, onStartChat }) {
   const [tab, setTab] = useState('individual');
@@ -64,7 +65,7 @@ const handleStart = () => {
     contacts: selectedContacts,
     groupName,
     groupDesc,
-    groupAvatar,
+    groupAvatar: groupAvatar || NoAvatarIcon,
   });
   onClose();
 };

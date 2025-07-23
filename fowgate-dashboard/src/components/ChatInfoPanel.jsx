@@ -7,6 +7,8 @@ import pdfIcon from '../assets/pdf.svg';
 import docIcon from '../assets/doc.svg';
 import editGroupIcon from '../assets/editgroup.svg';
 import downloadButtonIcon from '../assets/download.svg';
+import NoAvatarIcon from '../assets/noavatar.svg';
+import NoFilesIcon from '../assets/nofiles.svg';
 
 const TABS = ['All Files', 'Audio', 'Docs', 'Images', 'PDFs', 'Videos'];
 
@@ -19,6 +21,7 @@ const FILE_ICONS = {
   PDFs: pdfIcon,
   Docs: docIcon,
 };
+
 
 export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
   const isGroupChat = Array.isArray(chat?.members) && chat.members.length > 2;
@@ -43,27 +46,32 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
   }, [isOpen, chat]);
 
   const handleRemoveMember = (memberToRemove) => {
-    const updatedMembers = members.filter((m) => m !== memberToRemove);
-    setMembers(updatedMembers);
+  const updatedMembers = members.filter((m) => {
+    const nameA = typeof m === 'string' ? m : m.name;
+    const nameB = typeof memberToRemove === 'string' ? memberToRemove : memberToRemove.name;
+    return nameA !== nameB;
+  });
 
-    if (onUpdateChat) {
-      onUpdateChat({ ...chat, members: updatedMembers });
-    }
-  };
+  setMembers(updatedMembers);
+
+  if (onUpdateChat) {
+    onUpdateChat({ ...chat, members: updatedMembers });
+  }
+};
 
   if (!isOpen && !showPanel) return null;
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
       <div
-        className={`absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`absolute inset-0 bg-black/30 backdrop-blur-sm transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'opacity-100' : 'opacity-0'
         }`}
         onClick={onClose}
       />
 
       <div
-        className={`relative h-full w-[608px] bg-white shadow-xl z-50 transform transition-transform duration-300 ${
+        className={`relative h-full w-[608px] bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         } flex flex-col`}
       >
@@ -82,9 +90,9 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
             <div className="flex -space-x-2">
               <div className="relative w-20 h-20">
                 <img
-                  src={groupAvatar}
-                  alt="Chat Avatar"
-                  className="w-20 h-20 rounded-full border-2 border-white object-cover"
+                    src={chat.avatar || NoAvatarIcon}
+                    alt="Group Avatar"
+                    className="w-20 h-20 rounded-full object-cover"
                 />
                 {isGroupChat && (
                   <label className="absolute bottom-0 right-1 bg-white rounded-full cursor-pointer">
@@ -150,7 +158,9 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
             <div className="h-[200px] overflow-y-auto bg-gray-50 rounded p-2 mt-4 space-y-2">
               {(() => {
                 if (!chat || !chat.files) {
-                  return <div className="text-sm text-gray-400 text-center">No files available.</div>;
+                  return <div className="flex flex-col items-center justify-center py-10">
+    <img src={NoFilesIcon} alt="No files" className="opacity-50" />
+  </div>
                 }
 
                 const fileTypeMap = {
@@ -166,7 +176,9 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
                 const filteredFiles = fileKeys.flatMap((key) => chat.files[key] || []);
 
                 if (filteredFiles.length === 0) {
-                  return <div className="text-sm text-gray-400 text-center">No files found in this category.</div>;
+                  return <div className="flex flex-col items-center justify-center py-10">
+    <img src={NoFilesIcon} alt="No files" className="opacity-50" />
+  </div>
                 }
 
                 return filteredFiles.map((file, idx) => {
@@ -215,37 +227,46 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
           </div>
 
           {/* Group Members */}
-          {isGroupChat && (
-            <div>
-              <p className="font-rubik font-medium text-[#292929] mb-2">Group Members ({members.length})</p>
-              <div className="flex space-x-4 overflow-x-auto pb-2">
-                {members.map((member, idx) => (
-                  <div key={idx} className="relative flex flex-col items-center text-center group">
-                    <div className="relative">
-                      <img
-                        src={
-                          chat.avatarMap?.[member] ||
-                          (member === 'You' ? currentUserAvatar : 'https://via.placeholder.com/48')
-                        }
-                        alt={member}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                      {member !== 'You' && (
-                        <button
-                          onClick={() => handleRemoveMember(member)}
-                          className="absolute top-0 right-0 w-3 h-3 bg-[#EB4335] text-white rounded-full flex items-center justify-center text-[7px]"
-                          title={`Remove ${member}`}
-                        >
-                          ✕
-                        </button>
-                      )}
-                    </div>
-                    <span className="text-xs font-rubik font-normal text-[#292929] w-16 truncate mt-1">{member}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Group Members */}
+{isGroupChat && (
+  <div>
+    <p className="font-rubik font-medium text-[#292929] mb-2">Group Members ({members.length})</p>
+    <div className="flex space-x-4 overflow-x-auto pb-2">
+{members.map((member, idx) => {
+  const displayName = typeof member === 'string' ? member : member.name;
+  const avatarUrl =
+    (typeof member === 'object' && member.avatar) ||
+    chat.avatarMap?.[displayName] ||
+    (displayName === 'You' ? currentUserAvatar : 'https://via.placeholder.com/48');
+
+  return (
+    <div key={idx} className="relative flex flex-col items-center text-center group">
+      <div className="relative">
+        <img
+          src={avatarUrl}
+          alt={displayName}
+          className="w-12 h-12 rounded-full object-cover"
+        />
+        {displayName !== 'You' && (
+          <button
+            onClick={() => handleRemoveMember(member)}
+            className="absolute top-0 right-0 w-3 h-3 bg-[#EB4335] text-white rounded-full flex items-center justify-center text-[7px]"
+            title={`Remove ${displayName}`}
+          >
+            ✕
+          </button>
+        )}
+      </div>
+      <span className="text-xs font-rubik font-normal text-[#292929] w-16 truncate mt-1">
+        {displayName}
+      </span>
+    </div>
+  );
+})}
+    </div>
+  </div>
+)}
+
         </div>
 
         {/* Footer */}
