@@ -57,7 +57,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
         } flex flex-col`}
       >
         {/* Header */}
-        <div className="flex justify-between items-center p-4">
+        <div className="flex justify-between items-center p-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold">Chat Info</h2>
           <button onClick={onClose}>
             <FiX size={24} className="text-gray-500 hover:text-red-500" />
@@ -69,7 +69,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
           {/* Group Header */}
           <div className="flex flex-col items-center text-center space-y-1">
             <div className="flex -space-x-2">
-              <img src={chat?.avatar} className="w-12 h-12 rounded-full border-2 border-white" />
+              <img src={chat?.avatar} className="w-20 h-20 rounded-full border-2 border-white" />
             </div>
             <h3 className="font-semibold text-lg mt-2">{chat?.name}</h3>
             <p className="text-sm text-gray-500">{members.length} Members</p>
@@ -83,7 +83,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
               placeholder="Type here"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 w-full border border-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8EFF9]"
+              className="mt-1 w-full border border-gray-100 rounded-md px-3 py-5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8EFF9]"
             />
           </div>
 
@@ -106,10 +106,10 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
        </select>
      </div>
    </div>
-<div className="h-40 overflow-y-auto rounded-md border border-gray-100 p-2 bg-gray-50 space-y-2">
+<div className="h-[200px] overflow-y-auto rounded-md border border-gray-100 p-2 bg-gray-50 space-y-2">
   {activeTab === 'All Files' ? (
     Object.entries(files).every(([_, arr]) => arr.length === 0) ? (
-      <p className="text-sm text-gray-400 text-center pt-15">No files yet.</p>
+      <p className="text-sm text-gray-400 text-center pt-18">No files yet.</p>
     ) : (
       Object.entries(files).flatMap(([type, arr]) =>
         arr.map((file, idx) => (
@@ -164,7 +164,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className=" p-4">
+        <div className="border-t border-gray-200 p-4">
           <button
             onClick={onClose}
             className="ml-auto px-4 py-2 bg-[#E8EFF9] text-[#1B5FC1] rounded-md hover:bg-[#E8EFF9] text-sm float-right"
