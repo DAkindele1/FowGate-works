@@ -83,7 +83,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
               placeholder="Type here"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 w-full border border-gray-100 rounded-md px-3 py-5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8EFF9]"
+              className="mt-1 w-full border border-gray-200 rounded-md px-3 py-5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8EFF9]"
             />
           </div>
 
@@ -96,7 +96,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
          <select
           value={activeTab}
           onChange={(e) => setActiveTab(e.target.value)}
-          className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#E8EFF9]"
+          className="text-sm border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#E8EFF9]"
           >
         {TABS.map((tab) => (
           <option key={tab} value={tab}>
@@ -128,7 +128,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose }) {
       )
     )
   ) : files[activeTab].length === 0 ? (
-    <p className="text-sm text-gray-400 text-center pt-4">
+    <p className="text-sm text-gray-400 text-center pt-18">
       No {activeTab.toLowerCase()} yet.
     </p>
   ) : (
