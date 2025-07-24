@@ -87,7 +87,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage }) {
               )}
 
               <div
-                className={`max-w-xs p-3 rounded-lg text-sm shadow ${
+                className={`max-w-xs min-w-[100px] p-3 rounded-lg text-sm shadow ${
                   isUser
                     ? 'bg-[#34A853] text-white rounded-br-none'
                     : 'bg-white text-gray-900 rounded-bl-none'
