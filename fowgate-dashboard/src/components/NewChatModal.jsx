@@ -64,7 +64,7 @@ const handleStart = () => {
     type: tab,
     contacts: selectedContacts,
     groupName,
-    groupDesc,
+    description: groupDesc,
     groupAvatar: groupAvatar || NoAvatarIcon,
   });
   onClose();

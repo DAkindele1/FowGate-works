@@ -22,22 +22,23 @@ function App() {
 
 
   const handleStartChat = (chatData) => {
-  const { type, contacts, groupName, groupDesc, groupAvatar } = chatData;
+  const { type, contacts, groupName, description, groupAvatar } = chatData;
   const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-  const newChat = {
-    id: Date.now().toString(),
-    name: type === 'group' ? groupName : contacts[0].name,
-    avatar: type === 'group'
-      ? groupAvatar || '/default-group-avatar.jpg'
-      : contacts[0].avatar,
-    isOnline: type === 'individual' ? contacts[0].isOnline : true,
-    pinned: false,
-    messages: [],
-    time: timestamp,
-    lastMessage: '',
-    members: contacts,
-  };
+const newChat = {
+  id: Date.now().toString(),
+  name: type === 'group' ? groupName : contacts[0].name,
+  avatar: type === 'group'
+    ? groupAvatar || '/default-group-avatar.jpg'
+    : contacts[0].avatar,
+  isOnline: type === 'individual' ? contacts[0].isOnline : true,
+  pinned: false,
+  messages: [],
+  time: timestamp,
+  lastMessage: '',
+  members: contacts,
+  ...(type === 'group' && { description: description }), // ✅ Only for groups
+};
 
   
 

@@ -28,29 +28,28 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
   const [showPanel, setShowPanel] = useState(false);
   const [activeTab, setActiveTab] = useState(TABS[0]);
   const [description, setDescription] = useState('');
-  const [groupAvatar, setGroupAvatar] = useState(chat?.avatar);
+  const [groupAvatar, setGroupAvatar] = useState(NoAvatarIcon);
   const [members, setMembers] = useState(isGroupChat ? chat.members : []);
   const [mounted, setMounted] = useState(false);
   const [animateIn, setAnimateIn] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    if (isOpen) {
-      setShowPanel(true);               // mount immediately
-      // flip to "in" on the next frame so CSS can animate
-      setTimeout(() => setAnimateIn(true), 10);
+useEffect(() => {
+  if (isOpen) {
+    setShowPanel(true);
+    setTimeout(() => setAnimateIn(true), 10);
+  } else {
+    setAnimateIn(false);
+    const timer = setTimeout(() => setShowPanel(false), 300);
+    return () => clearTimeout(timer);
+  }
 
-      if (isGroupChat) {
-        setMembers(chat.members || []);
-        setDescription(chat.description || '');
-        setGroupAvatar(chat.avatar || 'noavatar.svg');
-      }
-    } else {
-      setAnimateIn(false);
-      const timer = setTimeout(() => setShowPanel(false), 300); // matches transition duration
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen, chat, isGroupChat]);
+  if (isGroupChat) {
+    setMembers(chat.members || []);
+    setDescription(chat.description || '');
+    setGroupAvatar(chat.avatar || NoAvatarIcon);
+  }
+}, [isOpen, chat, isGroupChat]);
 
   const handleRemoveMember = (memberToRemove) => {
   const updatedMembers = members.filter((m) => {
