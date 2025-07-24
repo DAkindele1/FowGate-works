@@ -9,9 +9,13 @@ const mockChats = [
     pinned: true,
     members: ['Enomfon Okon', 'You'],
     messages: [
-      { sender: 'Enomfon Okon', text: 'Bro, how is the holiday going? ', time: '9:40 AM' },
+      { sender: 'Enomfon Okon', text: 'Bro, how is the holiday going?', time: '9:40 AM' },
       { sender: 'You', text: 'Bro, it has been a while. The holiday is going well', time: '9:42 AM', status: Math.random() > 0.5 ? 'read' : 'delivered' },
     ],
+    files: {
+      pdf: [{ name: 'itinerary.pdf', url: '/files/itinerary.pdf' }],
+      jpg: [{ name: 'beach.jpg', url: '/files/beach.jpg' }],
+    },
   },
   {
     id: 2,
@@ -28,6 +32,9 @@ const mockChats = [
       { sender: 'John Doe', text: "That's good. Greet her for me", time: '9:04 AM' },
       { sender: 'You', text: "I'll make sure to do that", time: '9:10 AM', status: Math.random() > 0.5 ? 'read' : 'delivered' },
     ],
+    files: {
+      doc: [{ name: 'greeting-letter.doc', url: '/files/greeting-letter.doc' }],
+    },
   },
   {
     id: 3,
@@ -41,6 +48,9 @@ const mockChats = [
     messages: [
       { sender: 'JohnPaul Emmanuel', text: 'Going home now bro', time: '4:12 PM' },
     ],
+    files: {
+      mp3: [{ name: 'voice-note.mp3', url: '/files/voice-note.mp3' }],
+    },
   },
   {
     id: 4,
@@ -55,6 +65,24 @@ const mockChats = [
       James: 'https://i.pravatar.cc/100?img=6',
       Joshua: 'https://i.pravatar.cc/100?img=2',
       Miracle: 'https://i.pravatar.cc/100?img=3',
+    },
+    files: {
+      jpg: [
+        { name: 'screenshot.jpg', url: '/files/screenshot.jpg' },
+        { name: 'design.jpg', url: '/files/design.jpg' },
+      ],
+      mp3: [
+        { name: 'meeting-audio.mp3', url: '/files/meeting-audio.mp3' },
+      ],
+      mp4: [
+        { name: 'demo.mp4', url: '/files/demo.mp4' },
+      ],
+      pdf: [
+        { name: 'project-brief.pdf', url: '/files/project-brief.pdf' },
+      ],
+      doc: [
+        { name: 'notes.doc', url: '/files/notes.doc' },
+      ],
     },
     messages: [
       { sender: 'James', text: 'Standup meeting at 10?', time: '9:30 AM' },
@@ -80,6 +108,10 @@ const mockChats = [
       { sender: 'You', text: "Yes, I'll send the updates by then.", time: 'Last week', status: Math.random() > 0.5 ? 'read' : 'delivered' },
       { sender: 'Yve', text: 'Great, looking forward to it', time: 'Last week' },
     ],
+    files: {
+      pdf: [{ name: 'alpha-design-specs.pdf', url: '/files/alpha-design-specs.pdf' }],
+      mp4: [{ name: 'walkthrough.mp4', url: '/files/walkthrough.mp4' }],
+    },
   },
 ];
 

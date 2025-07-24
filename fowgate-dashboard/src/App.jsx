@@ -22,22 +22,23 @@ function App() {
 
 
   const handleStartChat = (chatData) => {
-  const { type, contacts, groupName, groupDesc, groupAvatar } = chatData;
+  const { type, contacts, groupName, description, groupAvatar } = chatData;
   const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-  const newChat = {
-    id: Date.now().toString(),
-    name: type === 'group' ? groupName : contacts[0].name,
-    avatar: type === 'group'
-      ? groupAvatar || '/default-group-avatar.jpg'
-      : contacts[0].avatar,
-    isOnline: type === 'individual' ? contacts[0].isOnline : true,
-    pinned: false,
-    messages: [],
-    time: timestamp,
-    lastMessage: '',
-    members: contacts,
-  };
+const newChat = {
+  id: Date.now().toString(),
+  name: type === 'group' ? groupName : contacts[0].name,
+  avatar: type === 'group'
+    ? groupAvatar || '/default-group-avatar.jpg'
+    : contacts[0].avatar,
+  isOnline: type === 'individual' ? contacts[0].isOnline : true,
+  pinned: false,
+  messages: [],
+  time: timestamp,
+  lastMessage: '',
+  members: contacts,
+  ...(type === 'group' && { description: description }), // ✅ Only for groups
+};
 
   
 
@@ -66,6 +67,26 @@ const handleSendMessage = (chatId, messageText) => {
         : chat
     )
   );
+};
+
+const handleTogglePin = (chatId) => {
+  setChats(prevChats =>
+    prevChats.map(chat =>
+      chat.id === chatId ? { ...chat, pinned: !chat.pinned } : chat
+    )
+  );
+
+  // Update selected chat if it's the one being pinned/unpinned
+  if (selectedChat?.id === chatId) {
+    setSelectedChat(prev => ({ ...prev, pinned: !prev.pinned }));
+  }
+};
+
+const handleDeleteChat = (chatId) => {
+  setChats(prevChats => prevChats.filter(chat => chat.id !== chatId));
+  if (selectedChat?.id === chatId) {
+    setSelectedChat(null);
+  }
 };
 
   return (
@@ -111,12 +132,17 @@ const handleSendMessage = (chatId, messageText) => {
                       <GroupChatWindow
                         chat={selectedChat}
                         onSendMessage={handleSendMessage}
-                        onClose={() => setSelectedChat(null)}/>
+                        onClose={() => setSelectedChat(null)}
+                        togglePinChat={handleTogglePin}
+                        onDeleteChat={handleDeleteChat}/>
+                        
                     ) : (
                       <ChatWindow
                         chat={selectedChat}
                         onSendMessage={handleSendMessage}
-                        onClose={() => setSelectedChat(null)}/>
+                        onClose={() => setSelectedChat(null)}
+                        togglePinChat={handleTogglePin}
+                        onDeleteChat={handleDeleteChat}/>
                     )
                   ) : (
                     <div className="flex items-center justify-center h-full text-gray-400">

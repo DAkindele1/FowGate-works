@@ -1,67 +1,121 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FiX } from 'react-icons/fi';
 import ChatInput from './ChatInput';
+import ChatInfoPanel from './ChatInfoPanel';
 import CallIcon from '../assets/call.svg';
 import MoreIcon from '../assets/more.svg';
-import { handleUnavailableFeature } from '../utils/feature.js';
-import { userChat, othersChat, userchatTimestamp, otherschatTimestamp, othersName } from '../styles/fonts';
+import MoreOptionsModal from './MoreOptionsModal';
+import PinIcon from '../assets/pin.svg';
+import UnpinIcon from '../assets/unpin.svg';
+import InfoIcon from '../assets/info.svg';
+import TrashIcon from '../assets/trashred.svg';
+import {
+  userChat,
+  othersChat,
+  userchatTimestamp,
+  otherschatTimestamp,
+  othersName
+} from '../styles/fonts';
 
-export default function GroupChatWindow({ chat, onClose, onSendMessage }) {
+export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePinChat, onDeleteChat  }) {
+  const [showChatInfo, setShowChatInfo] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
+  const [chatToDelete, setChatToDelete] = useState(null);
+  const optionsRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (optionsRef.current && !optionsRef.current.contains(e.target)) {
+        setShowMoreOptions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
-    <div className="flex flex-col h-[844px] bg-[#F6F8FC] rounded-md shadow-sm">
+    <div className="relative flex flex-col h-[844px] bg-[#F6F8FC] rounded-md">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 bg-white">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 cursor-pointer" onClick={() => setShowChatInfo(true)}>
           <button
-            onClick={onClose}
             title="Close Chat"
-            className="text-gray-500 hover:text-red-500 transition">
+            className="text-gray-500 hover:text-red-500 transition"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
+          >
             <FiX className="w-5 h-5" />
           </button>
 
           <div className="flex items-center gap-3">
-            <img
-              src={chat.avatar}
-              alt={chat.name}
-              className="w-10 h-10 rounded-full"/>
+            <img src={chat.avatar} alt={chat.name} className="w-10 h-10 rounded-full" />
             <div>
               <h2 className="font-semibold text-lg text-gray-800">{chat.name}</h2>
-              <p className="text-sm text-gray-500">{chat.members.join(', ')}</p>
+              <p className="text-sm text-gray-500">{chat.members.map(m => typeof m === 'string' ? m : m.name).join(', ')}</p>
             </div>
           </div>
         </div>
 
-        {/* Right: Group avatars and Icons */}
-        <div className="flex items-center gap-4 text-gray-500">
-
-          {/* Member avatars */}
-          <div className="flex -space-x-2">
-            {chat.members
-              .filter((name) => name !== 'You')
-              .map((member, idx) => {
-                const avatar = chat.avatarMap?.[member];
-                return (
-                  <img
-                    key={idx}
-                    src={avatar || `https://ui-avatars.com/api/?name=${member}`}
-                    alt={member}
-                    title={member}
-                    className="w-6 h-6 rounded-full border-2 border-white object-cover"/>
-                );
-              })}
-          </div>
-
-          {/* Icons */}
+        {/* Right-side Icons */}
+        <div className="relative flex items-center gap-4 text-gray-500">
           <img
             src={CallIcon}
             alt="Call"
-            onClick={handleUnavailableFeature}
-            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"/>
-          <img
-            src={MoreIcon}
-            alt="More"
-            onClick={handleUnavailableFeature}
-            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"/>
+            className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"
+            onClick={() => alert('Call feature unavailable')}
+          />
+             <img
+               src={MoreIcon}
+               alt="More"
+               onClick={() => setShowOptions(!showOptions)}
+               className="w-[24px] h-[24px] cursor-pointer hover:opacity-70 transition"
+             />
+ 
+             {/* Options Modal */}
+          {showOptions && (
+          <div
+            ref={optionsRef}
+            className="font-rubik absolute top-10 right-0 w-[136px] h-[136px] bg-white border border-gray-200 rounded-md z-50 flex flex-col items-start justify-start gap-1.5 px-2 py-2"
+          >
+            {/* Pin/Unpin */}
+            <button
+              onClick={() => {
+                setShowOptions(false);
+                togglePinChat?.(chat.id);
+              }}
+              className="h-[36px] w-full hover:bg-gray-100 rounded-md font-rubik font-normal text-[14px] leading-[1.4] text-[#292929] flex items-center justify-start gap-2 px-2"
+            >
+              <img src={chat.pinned ? UnpinIcon : PinIcon} alt="pin" className="w-4 h-4" />
+              {chat.pinned ? 'Unpin Chat' : 'Pin Chat'}
+            </button>
+
+            {/* Show Chat or Group Info */}
+            <button
+              onClick={() => {
+                setShowOptions(false);
+                setShowChatInfo(true);
+              }}
+              className="h-[36px] w-full hover:bg-gray-100 rounded-md font-rubik font-normal text-[14px] leading-[1.4] text-[#292929] flex items-center justify-start gap-2 px-2"
+            >
+              <img src={InfoIcon} alt="info" className="w-4 h-4" />
+              {chat.members.length > 2 ? 'Group Info' : 'Chat Info'}
+            </button>
+
+            {/* Delete Chat */}
+            <button
+              onClick={() => {
+                setShowOptions(false);
+                setChatToDelete(chat);
+              }}
+              className="h-[36px] w-full hover:bg-red-100 rounded-md font-rubik font-normal text-[14px] leading-[1.4] text-red-500 flex items-center justify-start gap-2 px-2"
+            >
+              <img src={TrashIcon} alt="trash" className="w-4 h-4" />
+              Delete Chat
+            </button>
+          </div>
+        )}
         </div>
       </div>
 
@@ -74,24 +128,25 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage }) {
             : chat.avatar || `https://ui-avatars.com/api/?name=${msg.sender}`;
 
           return (
-            <div
-              key={idx}
-              className={`flex items-start gap-2 ${
-                isUser ? 'justify-end' : 'justify-start'
-              }`}>
+            <div key={idx} className={`flex items-start gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
               {!isUser && (
                 <img
                   src={avatarUrl}
                   alt={msg.sender}
-                  className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"/>
+                  className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
+                />
               )}
-
               <div
+<<<<<<< HEAD
                 className={`max-w-xs min-w-[100px] p-3 rounded-lg text-sm shadow ${
+=======
+                className={`max-w-xs p-3 rounded-lg text-sm ${
+>>>>>>> b5d775d6f0c2a5dcaee4bdc33dd246ed15315611
                   isUser
                     ? 'bg-[#34A853] text-white rounded-br-none'
                     : 'bg-white text-gray-900 rounded-bl-none'
-                }`}>
+                }`}
+              >
                 <div className="flex justify-between items-center mb-1">
                   {!isUser ? (
                     <>
@@ -100,7 +155,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage }) {
                     </>
                   ) : (
                     <span className="ml-auto" style={userchatTimestamp}>
-                    {msg.time}
+                      {msg.time}
                     </span>
                   )}
                 </div>
@@ -110,7 +165,8 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage }) {
                 <img
                   src={avatarUrl}
                   alt={msg.sender}
-                  className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"/>
+                  className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
+                />
               )}
             </div>
           );
@@ -121,6 +177,37 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage }) {
       <div className="px-6 py-4 bg-white">
         <ChatInput onSend={(text) => onSendMessage(chat.id, text)} />
       </div>
+
+      {/* Info Panel */}
+      <ChatInfoPanel isOpen={showChatInfo} onClose={() => setShowChatInfo(false)} chat={chat} />
+       
+        {chatToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+       <div className="bg-white rounded-lg p-6 w-[320px] shadow-xl text-center">
+      <h2 className="text-lg font-semibold text-gray-800 mb-2">Delete Chat</h2>
+      <p className="text-sm text-gray-600 mb-4">
+        Are you sure you want to delete this chat with <strong>{chatToDelete.name}</strong>?
+      </p>
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setChatToDelete(null)}
+          className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => {
+            onDeleteChat?.(chatToDelete.id); // confirm deletion
+            setChatToDelete(null);           // close modal
+          }}
+          className="px-4 py-2 bg-[#1B5FC1] text-white rounded hover:bg-[#1B5FC1]"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }
