@@ -30,20 +30,27 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
   const [description, setDescription] = useState('');
   const [groupAvatar, setGroupAvatar] = useState(chat?.avatar);
   const [members, setMembers] = useState(isGroupChat ? chat.members : []);
+  const [mounted, setMounted] = useState(false);
+  const [animateIn, setAnimateIn] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      setShowPanel(true);
+      setShowPanel(true);               // mount immediately
+      // flip to "in" on the next frame so CSS can animate
+      setTimeout(() => setAnimateIn(true), 10);
+
       if (isGroupChat) {
         setMembers(chat.members || []);
         setDescription(chat.description || '');
-        setGroupAvatar(chat.avatar);
+        setGroupAvatar(chat.avatar || 'noavatar.svg');
       }
     } else {
-      const timer = setTimeout(() => setShowPanel(false), 300);
+      setAnimateIn(false);
+      const timer = setTimeout(() => setShowPanel(false), 300); // matches transition duration
       return () => clearTimeout(timer);
     }
-  }, [isOpen, chat]);
+  }, [isOpen, chat, isGroupChat]);
 
   const handleRemoveMember = (memberToRemove) => {
   const updatedMembers = members.filter((m) => {
@@ -59,22 +66,24 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
   }
 };
 
-  if (!isOpen && !showPanel) return null;
+  if (!showPanel) return null;
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
-      <div
-        className={`absolute inset-0 bg-black/30 backdrop-blur-sm transform transition-transform duration-300 ease-in-out ${
-          isOpen ? 'opacity-100' : 'opacity-0'
-        }`}
-        onClick={onClose}
-      />
+    {/* Overlay */}
+    <div
+      className={`absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-700 ease-in-out ${
+        animateIn ? 'opacity-100' : 'opacity-0'
+      }`}
+      onClick={onClose}
+    />
 
-      <div
-        className={`relative h-full w-[608px] bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        } flex flex-col`}
-      >
+    {/* Sliding panel */}
+    <div
+      className={`relative h-full w-[608px] bg-white shadow-xl z-50 transform transition-transform duration-700 ease-in-out ${
+        animateIn ? 'translate-x-0' : 'translate-x-full'
+      } flex flex-col`}
+    >
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-200">
           <h2 className="font-[Rubik] font-medium text-2xl leading-[1.4] text-[#292929]">Chat Info</h2>
