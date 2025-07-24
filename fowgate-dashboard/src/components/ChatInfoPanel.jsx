@@ -9,6 +9,7 @@ import editGroupIcon from '../assets/editgroup.svg';
 import downloadButtonIcon from '../assets/download.svg';
 import NoAvatarIcon from '../assets/noavatar.svg';
 import NoFilesIcon from '../assets/nofiles.svg';
+import MessagePop from '../assets/messagepop.svg';
 
 const TABS = ['All Files', 'Audio', 'Docs', 'Images', 'PDFs', 'Videos'];
 
@@ -33,6 +34,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
   const [mounted, setMounted] = useState(false);
   const [animateIn, setAnimateIn] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [confirmingMember, setConfirmingMember] = useState(null);
 
 useEffect(() => {
   if (isOpen) {
@@ -241,7 +243,7 @@ useEffect(() => {
 {isGroupChat && (
   <div>
     <p className="font-rubik font-medium text-[#292929] mb-2">Group Members ({members.length})</p>
-    <div className="flex space-x-4 overflow-x-auto pb-2">
+    <div className="relative flex space-x-4 overflow-x-auto pb-2">
 {members.map((member, idx) => {
   const displayName = typeof member === 'string' ? member : member.name;
   const avatarUrl =
@@ -249,8 +251,46 @@ useEffect(() => {
     chat.avatarMap?.[displayName] ||
     (displayName === 'You' ? currentUserAvatar : 'https://via.placeholder.com/48');
 
+  const isConfirming = confirmingMember === member;
+
   return (
     <div key={idx} className="relative flex flex-col items-center text-center group">
+      {/* Confirmation Popup */}
+      {isConfirming && (
+  <div className="absolute z-50 flex flex-col items-center -top-[130px] left-1/2 -translate-x-1/2">
+    {/* MessagePop bubble background */}
+    <img
+      src={MessagePop}
+      alt="popup"
+      className="w-72 h-auto absolute top-0 left-1/2 transform -translate-x-1/2"
+    />
+
+    <div className="relative mt-4 w-60 px-4 py-3 bg-white border border-gray-200 shadow-md rounded-md text-center z-10">
+      <p className="text-sm text-[#292929] mb-3">
+        Are you sure you want to remove <span className="font-semibold">{displayName}</span>?
+      </p>
+      <div className="flex justify-center gap-4">
+        <button
+          className="text-sm text-gray-500 hover:underline"
+          onClick={() => setConfirmingMember(null)}
+        >
+          No
+        </button>
+        <button
+          className="text-sm text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded"
+          onClick={() => {
+            handleRemoveMember(member);
+            setConfirmingMember(null);
+          }}
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+      {/* Avatar with remove button */}
       <div className="relative">
         <img
           src={avatarUrl}
@@ -259,7 +299,7 @@ useEffect(() => {
         />
         {displayName !== 'You' && (
           <button
-            onClick={() => handleRemoveMember(member)}
+            onClick={() => setConfirmingMember(member)}
             className="absolute top-0 right-0 w-3 h-3 bg-[#EB4335] text-white rounded-full flex items-center justify-center text-[7px]"
             title={`Remove ${displayName}`}
           >
@@ -267,6 +307,7 @@ useEffect(() => {
           </button>
         )}
       </div>
+
       <span className="text-xs font-rubik font-normal text-[#292929] w-16 truncate mt-1">
         {displayName}
       </span>
