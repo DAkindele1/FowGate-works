@@ -127,7 +127,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
             return (
               <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
                 <div
-                  className={`max-w-xs p-3 rounded-lg ${
+                  className={`max-w-xs min-w-[160px] p-3 rounded-lg ${
                     isUser
                       ? 'bg-[#34A853] text-white rounded-br-none'
                       : 'bg-white text-gray-900 rounded-bl-none'
