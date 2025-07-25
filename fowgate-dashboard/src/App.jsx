@@ -180,13 +180,23 @@ const handleDeleteChat = (chatId) => {
           onStartChat={handleStartChat}
         />
       )}
-      {showDeletedModal && (
-  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30">
-    <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-      <h2 className="text-lg font-bold mb-2">Chat Deleted</h2>
-      <p className="text-gray-600">The chat was successfully deleted.</p>
+{showDeletedModal && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-300">
+    <div className="bg-white rounded-2xl shadow-xl p-10 w-[440px] text-center animate-fade-in-up">
+      {/* Success Icon */}
+      <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
+        <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+
+      {/* Modal Content */}
+      <h2 className="text-2xl font-semibold text-gray-800 mb-2">Chat Deleted</h2>
+      <p className="text-base text-gray-500">This chat has been permanently removed and can no longer be accessed by any participants.</p>
+
+      {/* OK Button */}
       <button
-        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        className="mt-8 bg-[#1B5FC1] text-white px-6 py-2 rounded-full hover:bg-blue-700 transition"
         onClick={() => setShowDeletedModal(false)}
       >
         OK
