@@ -155,7 +155,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
                     </span>
                   )}
                 </div>
-                <p style={isUser ? userChat : othersChat}>{msg.text}</p>
+                <p style={{ ...(isUser ? userChat : othersChat), whiteSpace: 'pre-wrap' }}>{msg.text}</p>
               </div>
               {isUser && (
                 <img

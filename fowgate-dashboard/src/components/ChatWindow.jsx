@@ -133,7 +133,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
                       : 'bg-white text-gray-900 rounded-bl-none'
                   }`}
                 >
-                  <p style={isUser ? userChat : othersChat}>{msg.text}</p>
+                  <p style={{ ...(isUser ? userChat : othersChat), whiteSpace: 'pre-wrap' }}>{msg.text}</p>
                   <div className="mt-1 text-right" style={isUser ? userchatTimestamp : otherschatTimestamp}>
                     {msg.time}
                   </div>
