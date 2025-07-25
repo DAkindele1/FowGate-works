@@ -10,6 +10,8 @@ import AccountIcon from './assets/acc.svg';
 import BlankPage from './components/BlankPage';
 import NewChatModal from './components/NewChatModal';
 
+const currentUser = { name: 'You', avatar: 'https://i.pravatar.cc/100?img=9', isOnline: true };
+
 const handleUnavailableFeature = () => {
   alert('Sorry, this feature is currently unavailable');
 };
@@ -33,7 +35,7 @@ function App() {
       messages: [],
       time: timestamp,
       lastMessage: '',
-      members: contacts,
+      members: [...contacts, currentUser],
       ...(type === 'group' && { description }),
     };
 
