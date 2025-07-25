@@ -21,6 +21,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
   const [showChatInfo, setShowChatInfo] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [chatToDelete, setChatToDelete] = useState(null);
+  const [replyingTo, setReplyingTo] = useState(null);
   const optionsRef = useRef(null);
 
   useEffect(() => {
@@ -129,49 +130,70 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
 
           return (
             <div key={idx} className={`flex items-start gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
-              {!isUser && (
-                <img
-                  src={avatarUrl}
-                  alt={msg.sender}
-                  className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
-                />
+            {!isUser && (
+              <img
+                src={avatarUrl}
+                alt={msg.sender}
+                className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
+              />
+            )}
+            <div
+              className={`max-w-xs min-w-[160px] p-3 rounded-lg text-sm relative group ${
+                isUser
+                  ? 'bg-[#34A853] text-white rounded-br-none'
+                  : 'bg-white text-gray-900 rounded-bl-none'
+              }`}
+            >
+              {/* Replied message */}
+              {msg.replyTo && (
+                    <div className="text-xs text-gray-600 italic mb-1 border-l-2 border-gray-100 pl-2">
+                      Replying to <strong>{msg.replyTo.sender}</strong>: {msg.replyTo.text.slice(0, 40)}…
+                    </div>
               )}
-              <div
-                className={`max-w-xs min-w-[160px] p-3 rounded-lg text-sm ${
-                  isUser
-                    ? 'bg-[#34A853] text-white rounded-br-none'
-                    : 'bg-white text-gray-900 rounded-bl-none'
-                }`}
-              >
-                <div className="flex justify-between items-center mb-1">
-                  {!isUser ? (
-                    <>
-                      <span style={othersName}>{msg.sender}</span>
-                      <span style={otherschatTimestamp}>{msg.time}</span>
-                    </>
-                  ) : (
-                    <span className="ml-auto" style={userchatTimestamp}>
-                      {msg.time}
-                    </span>
-                  )}
-                </div>
-                <p style={{ ...(isUser ? userChat : othersChat), whiteSpace: 'pre-wrap' }}>{msg.text}</p>
+              {/* Header row with name and time */}
+              <div className="flex justify-between items-center mb-1">
+                {!isUser ? (
+                  <>
+                    <span style={othersName}>{msg.sender}</span>
+                    <span style={otherschatTimestamp}>{msg.time}</span>
+                  </>
+                ) : (
+                  <span className="ml-auto" style={userchatTimestamp}>
+                    {msg.time}
+                  </span>
+                )}
               </div>
-              {isUser && (
-                <img
-                  src={avatarUrl}
-                  alt={msg.sender}
-                  className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
-                />
-              )}
+
+              {/* Message Text */}
+              <p style={{ ...(isUser ? userChat : othersChat), whiteSpace: 'pre-wrap' }}>{msg.text}</p>
+
+              {/* Reply button on hover */}
+              <div className="text-xs text-gray-900 cursor-pointer mt-1" onClick={() => setReplyingTo(msg)}>
+                Reply
+              </div>
             </div>
+            {isUser && (
+              <img
+                src={avatarUrl}
+                alt={msg.sender}
+                className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
+              />
+            )}
+          </div>
           );
         })}
       </div>
 
       {/* Chat Input */}
       <div className="px-6 py-4 bg-white">
-        <ChatInput onSend={(text) => onSendMessage(chat.id, text)} />
+        <ChatInput
+        onSend={(text) => {
+          onSendMessage(chat.id, text, replyingTo); // include reply info
+          setReplyingTo(null); // clear reply state
+        }}
+        replyingTo={replyingTo}
+        onCancelReply={() => setReplyingTo(null)}
+      />
       </div>
 
       {/* Info Panel */}
