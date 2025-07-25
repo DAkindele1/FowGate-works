@@ -9,7 +9,8 @@ import PinIcon from '../assets/pin.svg';
 import UnpinIcon from '../assets/unpin.svg';
 import InfoIcon from '../assets/info.svg';
 import TrashIcon from '../assets/trashred.svg';
-import noMessageIcon from '../assets/nomessage.svg'
+import noMessageIcon from '../assets/nomessage.svg';
+import Delete from '../assets/delete2.svg';
 import {
   userChat,
   othersChat,
@@ -234,21 +235,9 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
     <div className="w-[400px] bg-white rounded-lg shadow-xl overflow-hidden">
       
-      {/* Header */}
-      <div className="bg-[#EB4335] text-white flex items-center gap-2 px-6 py-4">
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
+      {/* Red Header with centered icon and text */}
+      <div className="bg-red-600 text-white flex flex-col items-center justify-center px-6 py-5">
+        <img src={Delete} alt="Delete Icon" className="w-8 h-8 mb-2" />
         <h2 className="text-lg font-semibold">Delete</h2>
       </div>
 
