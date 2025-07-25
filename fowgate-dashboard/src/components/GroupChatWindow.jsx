@@ -184,6 +184,19 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
         })}
       </div>
 
+        {replyingTo && (
+        <div className="px-6 py-2 bg-gray-100 border-t border-b border-gray-300">
+          <div className="flex justify-between items-center">
+            <div className="text-sm text-gray-700">
+              Replying to <strong>{replyingTo.sender}</strong>: {replyingTo.text.slice(0, 50)}
+            </div>
+            <button onClick={() => setReplyingTo(null)} className="text-gray-500 hover:text-red-500">
+              <FiX className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Chat Input */}
       <div className="px-6 py-4 bg-white">
         <ChatInput
