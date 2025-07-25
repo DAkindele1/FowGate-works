@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiX } from 'react-icons/fi';
 import jpgIcon from '../assets/jpg.svg';
 import mp3Icon from '../assets/mp3.svg';
@@ -27,11 +27,9 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
   const [activeTab, setActiveTab] = useState(TABS[0]);
   const [description, setDescription] = useState('');
   const [groupAvatar, setGroupAvatar] = useState(NoAvatarIcon);
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState(isGroupChat ? chat.members : []);
   const [animateIn, setAnimateIn] = useState(false);
   const [confirmingMember, setConfirmingMember] = useState(null);
-  const [popupPos, setPopupPos] = useState({ top: 0, left: 0 });
-  const avatarRefs = useRef({});
 
   useEffect(() => {
     if (isOpen) {
@@ -48,25 +46,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
       setDescription(chat.description || '');
       setGroupAvatar(chat.avatar || NoAvatarIcon);
     }
-  }, [isOpen, chat]);
-
-const handleOpenPopup = (e, member) => {
-  const container = e.currentTarget.closest('.avatar-container');
-  if (!container) {
-    console.warn('Could not find avatar container');
-    return;
-  }
-
-  const rect = container.getBoundingClientRect();
-  const top = rect.top - 100;
-  const left = rect.left + rect.width / 2;
-
-  console.log('Clicked member:', member);
-  console.log('Popup position:', { top, left });
-
-  setPopupPosition({ top, left });
-  setConfirmingMember(member);
-};
+  }, [isOpen, chat, isGroupChat]);
 
   const handleRemoveMember = (memberToRemove) => {
     const updatedMembers = members.filter((m) => {
@@ -76,7 +56,10 @@ const handleOpenPopup = (e, member) => {
     });
 
     setMembers(updatedMembers);
-    onUpdateChat?.({ ...chat, members: updatedMembers });
+
+    if (onUpdateChat) {
+      onUpdateChat({ ...chat, members: updatedMembers });
+    }
   };
 
   if (!showPanel) return null;
@@ -90,46 +73,6 @@ const handleOpenPopup = (e, member) => {
         }`}
         onClick={onClose}
       />
-
-      {/* Confirmation popup */}
-      {console.log('confirmingMember:', confirmingMember)}
-      {confirmingMember && (
-        <div
-          className="fixed z-50 bg-white px-4 py-3 rounded shadow-md border border-gray-300 w-60 text-center"
-          style={{
-            top: popupPos.top,
-            left: popupPos.left,
-            transform: 'translateX(-50%)',
-          }}
-        >
-          <p className="text-sm text-gray-800 mb-3">
-            Remove{' '}
-            <span className="font-semibold">
-              {typeof confirmingMember === 'string'
-                ? confirmingMember
-                : confirmingMember.name}
-            </span>{' '}
-            from the group?
-          </p>
-          <div className="flex justify-center gap-4">
-            <button
-              onClick={() => setConfirmingMember(null)}
-              className="text-gray-500 hover:underline text-sm"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => {
-                handleRemoveMember(confirmingMember);
-                setConfirmingMember(null);
-              }}
-              className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
-            >
-              Remove
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Sliding panel */}
       <div
@@ -147,11 +90,15 @@ const handleOpenPopup = (e, member) => {
 
         {/* Body */}
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
-          {/* Group Info */}
+          {/* Avatar and name */}
           <div className="flex flex-col items-center text-center space-y-1">
             <div className="flex -space-x-2">
               <div className="relative w-20 h-20">
-                <img src={groupAvatar} alt="Group Avatar" className="w-20 h-20 rounded-full object-cover" />
+                <img
+                  src={chat.avatar || NoAvatarIcon}
+                  alt="Group Avatar"
+                  className="w-20 h-20 rounded-full object-cover"
+                />
                 {isGroupChat && (
                   <label className="absolute bottom-0 right-1 bg-white rounded-full cursor-pointer">
                     <img src={editGroupIcon} alt="Edit" className="w-5 h-5" />
@@ -177,33 +124,35 @@ const handleOpenPopup = (e, member) => {
               </div>
             </div>
             <h3 className="font-rubik font-medium text-base text-[#292929]">{chat?.name}</h3>
-            {isGroupChat && <p className="text-sm text-[#707070]">{members.length} Members</p>}
+            {isGroupChat && (
+              <p className="font-rubik text-sm text-[#707070]">{members.length} Members</p>
+            )}
           </div>
 
           {/* Group Description */}
           {isGroupChat && (
             <div>
-              <label className="text-sm text-[#292929]">Group Description</label>
+              <label className="font-rubik text-sm text-[#292929]">Group Description</label>
               <input
                 type="text"
                 placeholder="Type here"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="mt-1 w-full border border-gray-200 rounded-md px-3 py-5 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8EFF9]"
+                className="mt-1 w-full border border-gray-200 rounded-md px-3 py-5 text-sm focus:ring-[#E8EFF9]"
               />
             </div>
           )}
 
           {/* Shared Files */}
-         <div>
+          <div>
             <div className="flex justify-between items-center mb-2">
-              <p className="font-rubik font-medium text-base leading-[1.4] align-middle text-[#292929]">Shared Files</p>
+              <p className="font-rubik text-base text-[#292929]">Shared Files</p>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-gray-500">Filter by</span>
                 <select
                   value={activeTab}
                   onChange={(e) => setActiveTab(e.target.value)}
-                  className="text-sm border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#E8EFF9]"
+                  className="text-sm border border-gray-200 rounded-md px-2 py-1"
                 >
                   {TABS.map((tab) => (
                     <option key={tab} value={tab}>
@@ -215,10 +164,12 @@ const handleOpenPopup = (e, member) => {
             </div>
             <div className="h-[200px] overflow-y-auto bg-gray-50 rounded p-2 mt-4 space-y-2">
               {(() => {
-                if (!chat || !chat.files) {
-                  return <div className="flex flex-col items-center justify-center py-10">
-    <img src={NoFilesIcon} alt="No files" className="opacity-50" />
-  </div>
+                if (!chat?.files) {
+                  return (
+                    <div className="flex flex-col items-center justify-center py-10">
+                      <img src={NoFilesIcon} alt="No files" className="opacity-50" />
+                    </div>
+                  );
                 }
 
                 const fileTypeMap = {
@@ -234,50 +185,34 @@ const handleOpenPopup = (e, member) => {
                 const filteredFiles = fileKeys.flatMap((key) => chat.files[key] || []);
 
                 if (filteredFiles.length === 0) {
-                  return <div className="flex flex-col items-center justify-center py-10">
-    <img src={NoFilesIcon} alt="No files" className="opacity-50" />
-  </div>
+                  return (
+                    <div className="flex flex-col items-center justify-center py-10">
+                      <img src={NoFilesIcon} alt="No files" className="opacity-50" />
+                    </div>
+                  );
                 }
 
                 return filteredFiles.map((file, idx) => {
-                  const iconMap = {
-                    jpg: jpgIcon,
-                    mp3: mp3Icon,
-                    mp4: mp4Icon,
-                    pdf: pdfIcon,
-                    doc: docIcon,
-                  };
-
-                  const fileKey = Object.entries(chat.files).find(([, arr]) =>
-                    arr.includes(file)
-                  )?.[0];
-
-                  const icon = iconMap[fileKey] || '/icons/file-icon.svg';
+                  const fileKey = Object.entries(chat.files).find(([, arr]) => arr.includes(file))?.[0];
+                  const icon = FILE_ICONS[fileKey] || '/icons/file-icon.svg';
 
                   return (
                     <div
-                    key={idx}
-                    className="flex items-center justify-between p-2 border-b border-gray-200 bg-gray-50"
-                  >
-                    <div className="flex items-center space-x-2 overflow-hidden">
-                      <img src={icon} alt="file icon" className="w-5 h-5 flex-shrink-0" />
-                      <span className="font-rubik font-normal text-base leading-[1.4] text-[#292929] truncate">
-                        {file.name}
-                      </span>
-                    </div>
-
-                    <button
-                      title="Download"
-                      onClick={() => console.log(`Downloading ${file.name}`)} // optional handler
-                      className="ml-auto p-1 hover:opacity-80 transition"
+                      key={idx}
+                      className="flex items-center justify-between p-2 border-b border-gray-200 bg-gray-50"
                     >
-                      <img
-                        src={downloadButtonIcon}
-                        alt="Download"
-                        className="w-4 h-4"
-                      />
-                    </button>
-                  </div>
+                      <div className="flex items-center space-x-2 overflow-hidden">
+                        <img src={icon} alt="file icon" className="w-5 h-5 flex-shrink-0" />
+                        <span className="font-rubik text-base text-[#292929] truncate">{file.name}</span>
+                      </div>
+                      <button
+                        title="Download"
+                        onClick={() => console.log(`Downloading ${file.name}`)}
+                        className="ml-auto p-1 hover:opacity-80 transition"
+                      >
+                        <img src={downloadButtonIcon} alt="Download" className="w-4 h-4" />
+                      </button>
+                    </div>
                   );
                 });
               })()}
@@ -285,43 +220,66 @@ const handleOpenPopup = (e, member) => {
           </div>
 
           {/* Group Members */}
-{isGroupChat && (
+          {isGroupChat && (
             <div>
-              <p className="font-rubik font-medium text-[#292929] mb-2">Group Members ({members.length})</p>
-              <div className="flex space-x-4 overflow-x-auto pb-2">
+              <p className="font-rubik text-[#292929] mb-2">Group Members ({members.length})</p>
+              <div className="relative flex space-x-4 overflow-x-auto pb-2">
                 {members.map((member, idx) => {
-                  const name = typeof member === 'string' ? member : member.name;
+                  const displayName = typeof member === 'string' ? member : member.name;
                   const avatarUrl =
                     (typeof member === 'object' && member.avatar) ||
-                    chat.avatarMap?.[name] ||
-                    (name === 'You' ? currentUserAvatar : 'https://via.placeholder.com/48');
+                    chat.avatarMap?.[displayName] ||
+                    (displayName === 'You' ? currentUserAvatar : 'https://via.placeholder.com/48');
+
+                  const isConfirming = confirmingMember === member;
 
                   return (
-                    <div
-                      key={idx}
-                      ref={(el) => (avatarRefs.current[name] = el)}
-                      className="relative flex flex-col items-center text-center"
-                    >
+                    <div key={idx} className="relative flex flex-col items-center text-center group">
+                      {isConfirming && (
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-white px-4 py-3 rounded shadow-md border border-gray-300">
+                          <p className="text-sm text-gray-800 mb-3 text-center">
+                            Remove <span className="font-semibold">{displayName}</span> from the group?
+                          </p>
+                          <div className="flex justify-center gap-4">
+                            <button
+                              onClick={() => setConfirmingMember(null)}
+                              className="text-gray-500 hover:underline text-sm"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={() => {
+                                handleRemoveMember(member);
+                                setConfirmingMember(null);
+                              }}
+                              className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
                       <div className="relative">
                         <img
                           src={avatarUrl}
-                          alt={name}
+                          alt={displayName}
                           className="w-12 h-12 rounded-full object-cover"
                         />
-                        {name !== 'You' && (
+                        {displayName !== 'You' && (
                           <button
-                            onClick={(e) =>{
-                              console.log('❌ clicked for', member);
-                              handleOpenPopup(e, member);
-                            }}
+                            onClick={() => setConfirmingMember(member)}
                             className="absolute top-0 right-0 w-3 h-3 bg-[#EB4335] text-white rounded-full flex items-center justify-center text-[7px]"
-                            title={`Remove ${name}`}
+                            title={`Remove ${displayName}`}
                           >
                             ✕
                           </button>
                         )}
                       </div>
-                      <span className="text-xs w-16 truncate mt-1 text-[#292929]">{name}</span>
+
+                      <span className="text-xs font-rubik text-[#292929] w-16 truncate mt-1">
+                        {displayName}
+                      </span>
                     </div>
                   );
                 })}
@@ -334,7 +292,7 @@ const handleOpenPopup = (e, member) => {
         <div className="border-t border-gray-200 p-4">
           <button
             onClick={onClose}
-            className="ml-auto px-4 py-2 bg-[#E8EFF9] text-[#1B5FC1] rounded-md hover:bg-[#d9e7f6] text-sm"
+            className="font-rubik text-sm ml-auto px-4 py-2 bg-[#E8EFF9] text-[#1B5FC1] rounded-md float-right"
           >
             Done
           </button>
