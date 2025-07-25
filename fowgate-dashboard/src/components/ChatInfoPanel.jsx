@@ -50,17 +50,23 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
     }
   }, [isOpen, chat]);
 
-  const handleOpenPopup = (e, member) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+const handleOpenPopup = (e, member) => {
+  const container = e.currentTarget.closest('.avatar-container');
+  if (!container) {
+    console.warn('Could not find avatar container');
+    return;
+  }
 
-    setPopupPos({
-      top: rect.top + scrollTop - 100,
-      left: rect.left + scrollLeft + rect.width / 2,
-    });
-    setConfirmingMember(member);
-  };
+  const rect = container.getBoundingClientRect();
+  const top = rect.top - 100;
+  const left = rect.left + rect.width / 2;
+
+  console.log('Clicked member:', member);
+  console.log('Popup position:', { top, left });
+
+  setPopupPosition({ top, left });
+  setConfirmingMember(member);
+};
 
   const handleRemoveMember = (memberToRemove) => {
     const updatedMembers = members.filter((m) => {
@@ -86,6 +92,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
       />
 
       {/* Confirmation popup */}
+      {console.log('confirmingMember:', confirmingMember)}
       {confirmingMember && (
         <div
           className="fixed z-50 bg-white px-4 py-3 rounded shadow-md border border-gray-300 w-60 text-center"
@@ -303,7 +310,10 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
                         />
                         {name !== 'You' && (
                           <button
-                            onClick={(e) => handleOpenPopup(e, member)}
+                            onClick={(e) =>{
+                              console.log('❌ clicked for', member);
+                              handleOpenPopup(e, member);
+                            }}
                             className="absolute top-0 right-0 w-3 h-3 bg-[#EB4335] text-white rounded-full flex items-center justify-center text-[7px]"
                             title={`Remove ${name}`}
                           >
