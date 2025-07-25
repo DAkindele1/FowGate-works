@@ -257,39 +257,26 @@ useEffect(() => {
     <div key={idx} className="relative flex flex-col items-center text-center group">
       {/* Confirmation Popup */}
 {isConfirming && (
-  <div className="absolute z-50 -top-[130px] left-1/2 -translate-x-1/2 flex flex-col items-center">
-    {/* Wrapping container */}
-    <div className="relative w-72">
-      {/* SVG background behind */}
-      <img
-        src="/path/to/messagepop_cleaned.svg"
-        alt="popup background"
-        className="absolute inset-0 w-full h-auto z-0 pointer-events-none"
-      />
-
-      {/* Confirmation box */}
-      <div className="relative z-10 mt-6 px-4 py-3 bg-white border border-gray-300 shadow-lg rounded-md text-center">
-        <p className="text-sm text-[#292929] mb-3">
-          Are you sure you want to remove <span className="font-semibold">{displayName}</span>?
-        </p>
-        <div className="flex justify-center gap-4">
-          <button
-            className="text-sm text-gray-500 hover:underline"
-            onClick={() => setConfirmingMember(null)}
-          >
-            No
-          </button>
-          <button
-            className="text-sm text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded"
-            onClick={() => {
-              handleRemoveMember(member);
-              setConfirmingMember(null);
-            }}
-          >
-            Yes
-          </button>
-        </div>
-      </div>
+  <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-white px-4 py-3 rounded shadow-md border border-gray-300">
+    <p className="text-sm text-gray-800 mb-3 text-center">
+      Remove <span className="font-semibold">{displayName}</span> from the group?
+    </p>
+    <div className="flex justify-center gap-4">
+      <button
+        onClick={() => setConfirmingMember(null)}
+        className="text-gray-500 hover:underline text-sm"
+      >
+        Cancel
+      </button>
+      <button
+        onClick={() => {
+          handleRemoveMember(member);
+          setConfirmingMember(null);
+        }}
+        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
+      >
+        Remove
+      </button>
     </div>
   </div>
 )}
