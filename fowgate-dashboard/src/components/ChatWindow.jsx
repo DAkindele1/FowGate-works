@@ -19,6 +19,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
   const [showOptions, setShowOptions] = useState(false);
   const [chatToDelete, setChatToDelete] = useState(null);
   const [replyingTo, setReplyingTo] = useState(null);
+  const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
   const optionsRef = useRef(null);
 
   useEffect(() => {
@@ -231,8 +232,9 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
           </button>
           <button
             onClick={() => {
-              onDeleteChat?.(chatToDelete.id);
-              setChatToDelete(null);
+              onDeleteChat?.(chatToDelete.id); // perform delete
+              setChatToDelete(null);           // close confirmation popup
+              setShowDeleteSuccess(true);      // show success modal
             }}
             className="px-4 py-2 rounded-md"
             style={{ backgroundColor: '#FDECEB', color: '#EB4335' }}
@@ -241,6 +243,24 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
           </button>
         </div>
       </div>
+    </div>
+  </div>
+)}
+
+{showDeleteSuccess && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+    <div className="bg-white rounded-lg shadow-md w-[400px] px-6 py-8 text-center">
+      <h2 className="text-lg font-semibold text-gray-900 mb-3">Chat Deleted!</h2>
+      <p className="text-sm text-gray-600 mb-6">
+        This chat has been permanently removed and can no longer be accessed by any participants.
+      </p>
+      <button
+        onClick={() => setShowDeleteSuccess(false)}
+        className="text-white px-6 py-2 rounded-md"
+        style={{ backgroundColor: '#1B5FC1' }}
+      >
+        Okay
+      </button>
     </div>
   </div>
 )}
