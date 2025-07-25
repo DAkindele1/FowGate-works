@@ -11,6 +11,7 @@ import PinIcon from '../assets/pin.svg';
 import UnpinIcon from '../assets/unpin.svg';
 import InfoIcon from '../assets/info.svg';
 import TrashIcon from '../assets/trashred.svg';
+import noMessageIcon from '../assets/nomessage.svg';
 
 export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat, onDeleteChat }) {
   const [showChatInfo, setShowChatInfo] = useState(false);
@@ -122,35 +123,44 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
         </div>
 
         {/* Messages */}
-        <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4">
-          {chat.messages.map((msg, idx) => {
-            const isUser = msg.sender === 'You';
-            return (
-              <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-                <div
-                  className={`max-w-xs min-w-[160px] p-3 rounded-lg ${
-                    isUser
-                      ? 'bg-[#34A853] text-white rounded-br-none'
-                      : 'bg-white text-gray-900 rounded-bl-none'
-                  }`}
-                >
-                  {msg.replyTo && (
-                    <div className="text-xs text-gray-600 italic mb-1 border-l-2 border-gray-100 pl-2">
-                      Replying to <strong>{msg.replyTo.sender}</strong>: {msg.replyTo.text.slice(0, 40)}…
-                    </div>
-                  )}
-                  <p style={{ ...(isUser ? userChat : othersChat), whiteSpace: 'pre-wrap' }}>{msg.text}</p>
-                  <div className="mt-1 text-right" style={isUser ? userchatTimestamp : otherschatTimestamp}>
-                    {msg.time}
-                  </div>
-                  <div className="text-xs text-gray-900 cursor-pointer mt-1" onClick={() => setReplyingTo(msg)}>
-                    Reply
-                  </div>
+        <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4 relative">
+  {chat.messages.length === 0 ? (
+    <div className="absolute inset-0 flex items-center justify-center">
+      <img src={noMessageIcon} alt="No messages" className="w-40 h-40 opacity-50" />
+    </div>
+  ) : (
+    chat.messages.map((msg, idx) => {
+      const isUser = msg.sender === 'You';
+      return (
+        <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+          <div
+            className={`max-w-xs min-w-[160px] p-3 rounded-lg ${
+              isUser
+                ? 'bg-[#34A853] text-white rounded-br-none'
+                : 'bg-white text-gray-900 rounded-bl-none'
+            }`}
+          >
+            {msg.replyTo && (
+              <div className="text-xs text-gray-600 italic mb-1 border-l-2 border-gray-100 pl-2">
+                Replying to <strong>{msg.replyTo.sender}</strong>: {msg.replyTo.text.slice(0, 40)}…
+              </div>
+            )}
+            <p style={{ ...(isUser ? userChat : othersChat), whiteSpace: 'pre-wrap' }}>{msg.text}</p>
+            <div className="mt-1 text-right" style={isUser ? userchatTimestamp : otherschatTimestamp}>
+              {msg.time}
+            </div>
+            <div
+              className="text-xs text-gray-100 cursor-pointer mt-1"
+              onClick={() => setReplyingTo(msg)}
+            >
+              Reply
                 </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })
+      )}
+    </div>
 
         {replyingTo && (
   <div className="px-6 py-2 bg-gray-100 border-t border-b border-gray-300">

@@ -9,6 +9,7 @@ import PinIcon from '../assets/pin.svg';
 import UnpinIcon from '../assets/unpin.svg';
 import InfoIcon from '../assets/info.svg';
 import TrashIcon from '../assets/trashred.svg';
+import noMessageIcon from '../assets/nomessage.svg'
 import {
   userChat,
   othersChat,
@@ -121,67 +122,77 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
       </div>
 
       {/* Messages */}
-      <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4 font-rubik text-[14px]">
-        {chat.messages.map((msg, idx) => {
-          const isUser = msg.sender === 'You';
-          const avatarUrl = isUser
-            ? 'https://i.pravatar.cc/100?u=you'
-            : chat.avatar || `https://ui-avatars.com/api/?name=${msg.sender}`;
+      <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4 font-rubik text-[14px] relative">
+        {chat.messages.length === 0 ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <img src={noMessageIcon} alt="No messages" className="w-40 h-40 opacity-50" />
+          </div>
+        ) : (
+          chat.messages.map((msg, idx) => {
+            const isUser = msg.sender === 'You';
+            const avatarUrl = isUser
+              ? 'https://i.pravatar.cc/100?u=you'
+              : chat.avatar || `https://ui-avatars.com/api/?name=${msg.sender}`;
 
-          return (
-            <div key={idx} className={`flex items-start gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
-            {!isUser && (
-              <img
-                src={avatarUrl}
-                alt={msg.sender}
-                className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
-              />
-            )}
-            <div
-              className={`max-w-xs min-w-[160px] p-3 rounded-lg text-sm relative group ${
-                isUser
-                  ? 'bg-[#34A853] text-white rounded-br-none'
-                  : 'bg-white text-gray-900 rounded-bl-none'
-              }`}
-            >
-              {/* Replied message */}
-              {msg.replyTo && (
+            return (
+              <div key={idx} className={`flex items-start gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
+                {!isUser && (
+                  <img
+                    src={avatarUrl}
+                    alt={msg.sender}
+                    className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
+                  />
+                )}
+                <div
+                  className={`max-w-xs min-w-[160px] p-3 rounded-lg text-sm relative group ${
+                    isUser
+                      ? 'bg-[#34A853] text-white rounded-br-none'
+                      : 'bg-white text-gray-900 rounded-bl-none'
+                  }`}
+                >
+                  {/* Replied message */}
+                  {msg.replyTo && (
                     <div className="text-xs text-gray-600 italic mb-1 border-l-2 border-gray-100 pl-2">
                       Replying to <strong>{msg.replyTo.sender}</strong>: {msg.replyTo.text.slice(0, 40)}…
                     </div>
-              )}
-              {/* Header row with name and time */}
-              <div className="flex justify-between items-center mb-1">
-                {!isUser ? (
-                  <>
-                    <span style={othersName}>{msg.sender}</span>
-                    <span style={otherschatTimestamp}>{msg.time}</span>
-                  </>
-                ) : (
-                  <span className="ml-auto" style={userchatTimestamp}>
-                    {msg.time}
-                  </span>
+                  )}
+
+                  {/* Header row with name and time */}
+                  <div className="flex justify-between items-center mb-1">
+                    {!isUser ? (
+                      <>
+                        <span style={othersName}>{msg.sender}</span>
+                        <span style={otherschatTimestamp}>{msg.time}</span>
+                      </>
+                    ) : (
+                      <span className="ml-auto" style={userchatTimestamp}>
+                        {msg.time}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Message Text */}
+                  <p style={{ ...(isUser ? userChat : othersChat), whiteSpace: 'pre-wrap' }}>{msg.text}</p>
+
+                  {/* Reply button on hover */}
+                  <div
+                    className="text-xs text-gray-900 cursor-pointer mt-1"
+                    onClick={() => setReplyingTo(msg)}
+                  >
+                    Reply
+                  </div>
+                </div>
+                {isUser && (
+                  <img
+                    src={avatarUrl}
+                    alt={msg.sender}
+                    className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
+                  />
                 )}
               </div>
-
-              {/* Message Text */}
-              <p style={{ ...(isUser ? userChat : othersChat), whiteSpace: 'pre-wrap' }}>{msg.text}</p>
-
-              {/* Reply button on hover */}
-              <div className="text-xs text-gray-900 cursor-pointer mt-1" onClick={() => setReplyingTo(msg)}>
-                Reply
-              </div>
-            </div>
-            {isUser && (
-              <img
-                src={avatarUrl}
-                alt={msg.sender}
-                className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
-              />
-            )}
-          </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
 
         {replyingTo && (
