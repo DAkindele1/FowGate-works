@@ -40,7 +40,18 @@ const newChat = {
   ...(type === 'group' && { description: description }), // ✅ Only for groups
 };
 
-  
+  const updatedChats = chats.map(chat =>
+    chat.id === chatId
+      ? {
+          ...chat,
+          messages: [...chat.messages, newMessage],
+          lastMessage: messageText,
+          time: newMessage.time,
+        }
+      : chat
+  );
+
+  setChats(updatedChats);
 
   setChats(prev => [newChat, ...prev]);
   setSelectedChat(newChat);
@@ -52,7 +63,7 @@ const handleSendMessage = (chatId, messageText) => {
     sender: 'You',
     text: messageText,
     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    status: 'delivered', // or 'sent', 'read'
+    status: 'delivered',
   };
 
   setChats(prevChats =>
@@ -78,7 +89,8 @@ const handleTogglePin = (chatId) => {
 
   // Update selected chat if it's the one being pinned/unpinned
   if (selectedChat?.id === chatId) {
-    setSelectedChat(prev => ({ ...prev, pinned: !prev.pinned }));
+    const updatedSelectedChat = updatedChats.find(c => c.id === chatId);
+    setSelectedChat(updatedSelectedChat);
   }
 };
 
