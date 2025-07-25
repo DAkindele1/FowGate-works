@@ -31,7 +31,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
   const [animateIn, setAnimateIn] = useState(false);
   const [confirmingMember, setConfirmingMember] = useState(null);
   const [popupPos, setPopupPos] = useState({ top: 0, left: 0 });
-
+  const popupRef = useRef();
   const avatarRefs = useRef({});
 
   useEffect(() => {
@@ -87,9 +87,10 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
         onClick={onClose}
       />
 
-      {/* Confirmation popup outside scroll */}
+      {/* Confirmation popup */}
       {confirmingMember && (
         <div
+          ref={popupRef}
           className="fixed z-50 bg-white px-4 py-3 rounded shadow-md border border-gray-300 w-60 text-center"
           style={{
             top: popupPos.top,
@@ -121,11 +122,9 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
       )}
 
       {/* Sliding panel */}
-      <div
-        className={`relative h-full w-[608px] bg-white shadow-xl z-50 transform transition-transform duration-700 ease-in-out ${
-          animateIn ? 'translate-x-0' : 'translate-x-full'
-        } flex flex-col`}
-      >
+      <div className={`relative h-full w-[608px] bg-white shadow-xl z-50 transform transition-transform duration-700 ease-in-out ${
+        animateIn ? 'translate-x-0' : 'translate-x-full'
+      } flex flex-col`}>
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-200">
           <h2 className="font-[Rubik] font-medium text-2xl text-[#292929]">Chat Info</h2>
