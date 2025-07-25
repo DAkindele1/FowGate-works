@@ -191,7 +191,7 @@ const handleDeleteChat = (chatId) => {
       </div>
 
       {/* Modal Content */}
-      <h2 className="text-2xl font-semibold text-gray-800 mb-2">Chat Deleted</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-2">Chat Deleted!</h2>
       <p className="text-base text-gray-500">This chat has been permanently removed and can no longer be accessed by any participants.</p>
 
       {/* OK Button */}
