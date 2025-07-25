@@ -32,7 +32,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  if (!chat) {
+  if (!chat && !showDeleteSuccess) {
     return (
       <div className="flex flex-col justify-end h-[512px] bg-gray-100">
         <div className="flex-1 flex items-center justify-center bg-white text-gray-400">
