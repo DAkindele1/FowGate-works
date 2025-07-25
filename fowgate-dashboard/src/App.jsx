@@ -181,7 +181,7 @@ const handleDeleteChat = (chatId) => {
         />
       )}
 {showDeletedModal && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-300">
+  <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex items-center justify-center z-50">
     <div className="bg-white rounded shadow-xl p-10 w-[440px] text-center animate-fade-in-up">
       {/* Success Icon */}
       <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
