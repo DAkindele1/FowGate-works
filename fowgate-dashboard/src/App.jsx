@@ -182,7 +182,7 @@ const handleDeleteChat = (chatId) => {
       )}
 {showDeletedModal && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-300">
-    <div className="bg-white rounded-2xl shadow-xl p-10 w-[440px] text-center animate-fade-in-up">
+    <div className="bg-white rounded shadow-xl p-10 w-[440px] text-center animate-fade-in-up">
       {/* Success Icon */}
       <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
         <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -196,10 +196,10 @@ const handleDeleteChat = (chatId) => {
 
       {/* OK Button */}
       <button
-        className="mt-8 bg-[#1B5FC1] text-white px-6 py-2 rounded-full hover:bg-blue-700 transition"
+        className="mt-8 bg-[#1B5FC1] text-white w-full py-3 rounded-md hover:bg-blue-700 transition"
         onClick={() => setShowDeletedModal(false)}
       >
-        OK
+        Okay
       </button>
     </div>
   </div>
