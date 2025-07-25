@@ -216,8 +216,8 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
       <div className="px-6 py-4 bg-white">
         <ChatInput
         onSend={(text) => {
-          onSendMessage(chat.id, text, replyingTo); // include reply info
-          setReplyingTo(null); // clear reply state
+          onSendMessage(chat.id, text, replyingTo);
+          setReplyingTo(null);
         }}
         replyingTo={replyingTo}
         onCancelReply={() => setReplyingTo(null)}
@@ -243,8 +243,8 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
         </button>
         <button
           onClick={() => {
-            onDeleteChat?.(chatToDelete.id); // confirm deletion
-            setChatToDelete(null);           // close modal
+            onDeleteChat?.(chatToDelete.id); 
+            setChatToDelete(null);           
           }}
           className="px-4 py-2 bg-[#1B5FC1] text-white rounded hover:bg-[#1B5FC1]"
         >
