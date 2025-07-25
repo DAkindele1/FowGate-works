@@ -233,7 +233,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
       <ChatInfoPanel isOpen={showChatInfo} onClose={() => setShowChatInfo(false)} chat={chat} />
        
 {chatToDelete && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+  <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
     <div className="w-[400px] bg-white rounded shadow-xl overflow-hidden">
       
       {/* Header */}
