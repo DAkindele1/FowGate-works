@@ -257,26 +257,29 @@ useEffect(() => {
     <div key={idx} className="relative flex flex-col items-center text-center group">
       {/* Confirmation Popup */}
 {isConfirming && (
-  <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-white px-4 py-3 rounded shadow-md border border-gray-300">
-    <p className="text-sm text-gray-800 mb-3 text-center">
-      Remove <span className="font-semibold">{displayName}</span> from the group?
-    </p>
-    <div className="flex justify-center gap-4">
-      <button
-        onClick={() => setConfirmingMember(null)}
-        className="text-gray-500 hover:underline text-sm"
-      >
-        Cancel
-      </button>
-      <button
-        onClick={() => {
-          handleRemoveMember(member);
-          setConfirmingMember(null);
-        }}
-        className="bg-[#1B5FC1] hover:bg-[#1B5FC1] text-white px-3 py-1 rounded text-sm"
-      >
-        Remove
-      </button>
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-lg p-6 w-[320px] shadow-xl text-center">
+      <h2 className="text-lg font-semibold text-gray-800 mb-2">Remove Member</h2>
+      <p className="text-sm text-gray-600 mb-4">
+        Are you sure you want to remove <strong>{displayName}</strong> from the group?
+      </p>
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setConfirmingMember(null)}
+          className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => {
+            handleRemoveMember(member);
+            setConfirmingMember(null);
+          }}
+          className="px-4 py-2 bg-[#1B5FC1] text-white rounded hover:bg-[#1B5FC1]"
+        >
+          Remove
+        </button>
+      </div>
     </div>
   </div>
 )}
