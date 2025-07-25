@@ -125,7 +125,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
       <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4 font-rubik text-[14px] relative">
         {chat.messages.length === 0 ? (
           <div className="absolute inset-0 flex items-center justify-center">
-            <img src={noMessageIcon} alt="No messages" className="w-40 h-40 opacity-50" />
+            <img src={noMessageIcon} alt="No messages" className="w-60 h-60 opacity-50" />
           </div>
         ) : (
           chat.messages.map((msg, idx) => {
