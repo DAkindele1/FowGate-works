@@ -233,7 +233,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
        
 {chatToDelete && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-    <div className="w-[400px] bg-white rounded-lg shadow-xl overflow-hidden">
+    <div className="w-[400px] bg-white rounded shadow-xl overflow-hidden">
       
       {/* Header */}
       <div className="bg-[#EB4335] text-white flex items-center gap-2 px-6 py-4">
@@ -262,7 +262,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
           className="px-4 py-2 rounded-md"
           style={{ backgroundColor: '#FDECEB', color: '#EB4335' }}
           >
-          Delete
+          Yes, I'm sure
           </button>
         </div>
       </div>
