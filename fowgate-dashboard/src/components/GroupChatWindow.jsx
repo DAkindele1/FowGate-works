@@ -245,7 +245,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
           onClick={() => setChatToDelete(null)}
           className="text-white text-lg font-light hover:text-gray-200"
         >
-          X
+          &#x2715
         </button>
       </div>
 
