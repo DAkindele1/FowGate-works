@@ -11,6 +11,7 @@ import InfoIcon from '../assets/info.svg';
 import TrashIcon from '../assets/trashred.svg';
 import noMessageIcon from '../assets/nomessage.svg';
 import Delete from '../assets/delete2.svg';
+import CancelIcon from '../assets/cancel.svg'
 import {
   userChat,
   othersChat,
@@ -243,9 +244,10 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
       </div>
         <button
           onClick={() => setChatToDelete(null)}
-          className="text-white text-lg font-light hover:text-gray-200"
+          className="transition hover:opacity-80"
+          title="Close"
         >
-          x
+          <img src={CancelIcon} alt="Cancel" className="w-6 h-6" />
         </button>
       </div>
 
