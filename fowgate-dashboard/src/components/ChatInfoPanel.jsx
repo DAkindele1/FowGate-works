@@ -51,6 +51,18 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
     }
   }, [isOpen, chat]);
 
+    const handleOpenPopup = (e, member) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+
+    setPopupPos({
+      top: rect.top + scrollTop - 100,
+      left: rect.left + scrollLeft + rect.width / 2,
+    });
+    setConfirmingMember(member);
+  };
+
   const handleRemoveMember = (memberToRemove) => {
     const updatedMembers = members.filter((m) => {
       const nameA = typeof m === 'string' ? m : m.name;
@@ -301,7 +313,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
                         />
                         {name !== 'You' && (
                           <button
-                            onClick={() => triggerConfirm(member)}
+                            onClick={(e) => handleOpenPopup(e, member)}
                             className="absolute top-0 right-0 w-3 h-3 bg-[#EB4335] text-white rounded-full flex items-center justify-center text-[7px]"
                             title={`Remove ${name}`}
                           >
