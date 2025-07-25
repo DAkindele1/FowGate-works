@@ -41,12 +41,16 @@ function App() {
     setSelectedChat(newChat);
   };
 
-  const handleSendMessage = (chatId, messageText) => {
+  const handleSendMessage = (chatId, messageText, replyingTo) => {
     const newMessage = {
       id: Date.now().toString(),
       sender: 'You',
       text: messageText,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      replyTo: replyingTo ? {
+      sender: replyingTo.sender,
+      text: replyingTo.text,
+    } : null,
       status: 'delivered',
     };
 

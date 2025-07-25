@@ -16,6 +16,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
   const [showChatInfo, setShowChatInfo] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [chatToDelete, setChatToDelete] = useState(null);
+  const [replyingTo, setReplyingTo] = useState(null);
   const optionsRef = useRef(null);
 
   useEffect(() => {
@@ -133,9 +134,17 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
                       : 'bg-white text-gray-900 rounded-bl-none'
                   }`}
                 >
+                  {msg.replyTo && (
+                    <div className="text-xs text-gray-600 italic mb-1 border-l-2 border-blue-500 pl-2">
+                      Replying to <strong>{msg.replyTo.sender}</strong>: {msg.replyTo.text.slice(0, 40)}…
+                    </div>
+                  )}
                   <p style={{ ...(isUser ? userChat : othersChat), whiteSpace: 'pre-wrap' }}>{msg.text}</p>
                   <div className="mt-1 text-right" style={isUser ? userchatTimestamp : otherschatTimestamp}>
                     {msg.time}
+                  </div>
+                  <div className="text-xs text-blue-600 cursor-pointer mt-1" onClick={() => setReplyingTo(msg)}>
+                    Reply
                   </div>
                 </div>
               </div>
@@ -143,9 +152,28 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
           })}
         </div>
 
+        {replyingTo && (
+  <div className="px-6 py-2 bg-gray-100 border-t border-b border-gray-300">
+    <div className="flex justify-between items-center">
+      <div className="text-sm text-gray-700">
+        Replying to <strong>{replyingTo.sender}</strong>: {replyingTo.text.slice(0, 50)}
+      </div>
+      <button onClick={() => setReplyingTo(null)} className="text-gray-500 hover:text-red-500">
+        <FiX className="w-4 h-4" />
+      </button>
+    </div>
+  </div>
+)}
+
         {/* Chat Input */}
         <div className="px-6 py-4 bg-white">
-          <ChatInput onSend={(text) => onSendMessage(chat.id, text)} />
+          <ChatInput
+          onSend={(text) => {
+            onSendMessage(chat.id, text, replyingTo); // pass reply metadata
+            setReplyingTo(null); // clear reply after sending
+          }}
+          replyingTo={replyingTo}
+        />
         </div>
       </div>
 
