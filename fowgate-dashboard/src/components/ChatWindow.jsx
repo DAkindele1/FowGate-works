@@ -203,7 +203,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
     <div className="w-[400px] bg-white rounded shadow-xl overflow-hidden">
       
       {/* Header */}
-      <div className="bg-[#EB4335] text-white flex items-center gap-2 px-6 py-4">
+      <div className="bg-[#EB4335] text-white flex items-center justify-between gap-2 px-6 py-4">
           <div className="flex items-center gap-2">
         <img src={Delete} alt="Delete Icon" className="w-5 h-5" />
         <h2 className="text-base font-semibold">Delete</h2>
