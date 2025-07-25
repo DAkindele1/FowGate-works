@@ -14,11 +14,11 @@ const TABS = ['All Files', 'Audio', 'Docs', 'Images', 'PDFs', 'Videos'];
 const currentUserAvatar = 'https://i.pravatar.cc/100?img=9';
 
 const FILE_ICONS = {
-  Images: jpgIcon,
-  Audio: mp3Icon,
-  Videos: mp4Icon,
-  PDFs: pdfIcon,
-  Docs: docIcon,
+  jpg: jpgIcon,
+  mp3: mp3Icon,
+  mp4: mp4Icon,
+  pdf: pdfIcon,
+  doc: docIcon,
 };
 
 export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
@@ -143,82 +143,6 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
             </div>
           )}
 
-          {/* Shared Files */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <p className="font-rubik text-base text-[#292929]">Shared Files</p>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-500">Filter by</span>
-                <select
-                  value={activeTab}
-                  onChange={(e) => setActiveTab(e.target.value)}
-                  className="text-sm border border-gray-200 rounded-md px-2 py-1"
-                >
-                  {TABS.map((tab) => (
-                    <option key={tab} value={tab}>
-                      {tab}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="h-[200px] overflow-y-auto bg-gray-50 rounded p-2 mt-4 space-y-2">
-              {(() => {
-                if (!chat?.files) {
-                  return (
-                    <div className="flex flex-col items-center justify-center py-10">
-                      <img src={NoFilesIcon} alt="No files" className="opacity-50" />
-                    </div>
-                  );
-                }
-
-                const fileTypeMap = {
-                  'All Files': ['jpg', 'mp3', 'mp4', 'pdf', 'doc'],
-                  Images: ['jpg'],
-                  Audio: ['mp3'],
-                  Videos: ['mp4'],
-                  PDFs: ['pdf'],
-                  Docs: ['doc'],
-                };
-
-                const fileKeys = fileTypeMap[activeTab] || [];
-                const filteredFiles = fileKeys.flatMap((key) => chat.files[key] || []);
-
-                if (filteredFiles.length === 0) {
-                  return (
-                    <div className="flex flex-col items-center justify-center py-10">
-                      <img src={NoFilesIcon} alt="No files" className="opacity-50" />
-                    </div>
-                  );
-                }
-
-                return filteredFiles.map((file, idx) => {
-                  const fileKey = Object.entries(chat.files).find(([, arr]) => arr.includes(file))?.[0];
-                  const icon = FILE_ICONS[fileKey] || '/icons/file-icon.svg';
-
-                  return (
-                    <div
-                      key={idx}
-                      className="flex items-center justify-between p-2 border-b border-gray-200 bg-gray-50"
-                    >
-                      <div className="flex items-center space-x-2 overflow-hidden">
-                        <img src={icon} alt="file icon" className="w-5 h-5 flex-shrink-0" />
-                        <span className="font-rubik text-base text-[#292929] truncate">{file.name}</span>
-                      </div>
-                      <button
-                        title="Download"
-                        onClick={() => console.log(`Downloading ${file.name}`)}
-                        className="ml-auto p-1 hover:opacity-80 transition"
-                      >
-                        <img src={downloadButtonIcon} alt="Download" className="w-4 h-4" />
-                      </button>
-                    </div>
-                  );
-                });
-              })()}
-            </div>
-          </div>
-
           {/* Group Members */}
           {isGroupChat && (
             <div>
@@ -301,3 +225,4 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
     </div>
   );
 }
+
