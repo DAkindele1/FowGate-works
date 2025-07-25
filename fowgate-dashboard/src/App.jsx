@@ -21,6 +21,7 @@ function App() {
   const [chats, setChats] = useState(mockChats);
   const [currentPage, setCurrentPage] = useState('messages');
   const [showModal, setShowModal] = useState(false);
+  const [showDeletedModal, setShowDeletedModal] = useState(false);
 
   const handleStartChat = (chatData) => {
     const { type, contacts, groupName, description, groupAvatar } = chatData;
@@ -92,12 +93,13 @@ function App() {
     });
   };
 
-  const handleDeleteChat = (chatId) => {
-    setChats(prevChats => prevChats.filter(chat => chat.id !== chatId));
-    if (selectedChat?.id === chatId) {
-      setSelectedChat(null);
-    }
-  };
+const handleDeleteChat = (chatId) => {
+  setChats(prevChats => prevChats.filter(chat => chat.id !== chatId));
+  if (selectedChat?.id === chatId) {
+    setSelectedChat(null);
+  }
+  setShowDeletedModal(true);
+};
 
   return (
     <div className="bg-white p-[32px_30px] min-h-screen w-full box-border">
@@ -178,6 +180,20 @@ function App() {
           onStartChat={handleStartChat}
         />
       )}
+      {showDeletedModal && (
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30">
+    <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+      <h2 className="text-lg font-bold mb-2">Chat Deleted</h2>
+      <p className="text-gray-600">The chat was successfully deleted.</p>
+      <button
+        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        onClick={() => setShowDeletedModal(false)}
+      >
+        OK
+      </button>
+    </div>
+  </div>
+)}
     </div>
   );
 }
