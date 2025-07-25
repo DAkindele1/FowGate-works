@@ -176,7 +176,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
 
                   {/* Reply button on hover */}
                   <div
-                    className="text-xs text-gray-900 cursor-pointer mt-1"
+                    className="text-xs text-gray-500 cursor-pointer mt-1"
                     onClick={() => setReplyingTo(msg)}
                   >
                     Reply

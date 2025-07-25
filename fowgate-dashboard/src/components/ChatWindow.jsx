@@ -150,7 +150,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
               {msg.time}
             </div>
             <div
-              className="text-xs text-gray-100 cursor-pointer mt-1"
+              className="text-xs text-gray-500 cursor-pointer mt-1"
               onClick={() => setReplyingTo(msg)}
             >
               Reply
