@@ -43,11 +43,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
   return (
     <>
       {/* Main Chat Window */}
-      <div className="flex flex-col h-[844px] bg-[#F6F8FC] rounded-md relative"
-      style={{
-        border: '0.5px solid #EAEAEA',
-        borderRadius: '10px',
-      }}>
+      <div className="flex flex-col h-[844px] bg-[#F6F8FC] rounded-md border-b border-gray-200 relative">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 bg-white relative border-b border-gray-200">
           <div className="flex items-center gap-4">

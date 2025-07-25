@@ -36,11 +36,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
   }, []);
 
   return (
-    <div className="relative flex flex-col h-[844px] bg-[#F6F8FC] rounded-md"
-    style={{
-        border: '0.5px solid #EAEAEA',
-        borderRadius: '10px',
-      }}>
+    <div className="flex flex-col h-[844px] bg-[#F6F8FC] rounded-md border border-gray-200 relative">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
         <div className="flex items-center gap-4 cursor-pointer" onClick={() => setShowChatInfo(true)}>
