@@ -212,7 +212,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
           onClick={() => setChatToDelete(null)}
           className="text-white text-lg light hover:text-gray-200"
         >
-          &#x2715
+          X
         </button>
       </div>
 
