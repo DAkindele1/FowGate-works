@@ -220,7 +220,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
       <div className="px-6 py-5 text-center">
         <p className="text-gray-700 text-sm mb-4">
           Are you sure you want to delete this chat with{' '}
-          <strong>{chatToDelete.name}</strong>? This action cannot be undone.
+          <strong>{chatToDelete.name}</strong>? This action is permanent and cannot be undone.
         </p>
         <div className="flex justify-end gap-3 mt-6">
           <button
