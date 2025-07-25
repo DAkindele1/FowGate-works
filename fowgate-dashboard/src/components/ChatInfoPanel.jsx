@@ -242,69 +242,75 @@ useEffect(() => {
           {/* Group Members */}
 {isGroupChat && (
   <div>
-    <p className="font-rubik font-medium text-[#292929] mb-2">Group Members ({members.length})</p>
-    <div className="relative flex space-x-4 overflow-x-auto pb-2">
-{members.map((member, idx) => {
-  const displayName = typeof member === 'string' ? member : member.name;
-  const avatarUrl =
-    (typeof member === 'object' && member.avatar) ||
-    chat.avatarMap?.[displayName] ||
-    (displayName === 'You' ? currentUserAvatar : 'https://via.placeholder.com/48');
-
-  const isConfirming = confirmingMember === member;
-
-  return (
-    <div key={idx} className="relative flex flex-col items-center text-center group">
-      {/* Confirmation Popup */}
-{isConfirming && (
-  <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-white px-4 py-3 rounded shadow-md border border-gray-300">
-    <p className="text-sm text-gray-800 mb-3 text-center">
-      Remove <span className="font-semibold">{displayName}</span> from the group?
+    <p className="font-rubik font-medium text-[#292929] mb-2">
+      Group Members ({members.length})
     </p>
-    <div className="flex justify-center gap-4">
-      <button
-        onClick={() => setConfirmingMember(null)}
-        className="text-gray-500 hover:underline text-sm"
-      >
-        Cancel
-      </button>
-      <button
-        onClick={() => {
-          handleRemoveMember(member);
-          setConfirmingMember(null);
-        }}
-        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
-      >
-        Remove
-      </button>
-    </div>
-  </div>
-)}
+    <div className="relative flex space-x-4 overflow-x-auto pb-2">
+      {members.map((member, idx) => {
+        const displayName = typeof member === 'string' ? member : member.name;
+        const avatarUrl =
+          (typeof member === 'object' && member.avatar) ||
+          chat.avatarMap?.[displayName] ||
+          (displayName === 'You' ? currentUserAvatar : 'https://via.placeholder.com/48');
 
-      {/* Avatar with remove button */}
-      <div className="relative">
-        <img
-          src={avatarUrl}
-          alt={displayName}
-          className="w-12 h-12 rounded-full object-cover"
-        />
-        {displayName !== 'You' && (
-          <button
-            onClick={() => setConfirmingMember(member)}
-            className="absolute top-0 right-0 w-3 h-3 bg-[#EB4335] text-white rounded-full flex items-center justify-center text-[7px]"
-            title={`Remove ${displayName}`}
+        const isConfirming = confirmingMember === member;
+
+        return (
+          <div
+            key={idx}
+            className="relative flex flex-col items-center text-center group"
           >
-            ✕
-          </button>
-        )}
-      </div>
+            {/* Avatar with remove button */}
+            <div className="relative">
+              <img
+                src={avatarUrl}
+                alt={displayName}
+                className="w-12 h-12 rounded-full object-cover"
+              />
+              {displayName !== 'You' && (
+                <button
+                  onClick={() => setConfirmingMember(member)}
+                  className="absolute top-0 right-0 w-3 h-3 bg-[#EB4335] text-white rounded-full flex items-center justify-center text-[7px]"
+                  title={`Remove ${displayName}`}
+                >
+                  ✕
+                </button>
+              )}
+            </div>
 
-      <span className="text-xs font-rubik font-normal text-[#292929] w-16 truncate mt-1">
-        {displayName}
-      </span>
-    </div>
-  );
-})}
+            {/* Name */}
+            <span className="text-xs font-rubik font-normal text-[#292929] w-16 truncate mt-1">
+              {displayName}
+            </span>
+
+            {/* Confirmation Popup */}
+            {isConfirming && (
+              <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-50 bg-white px-4 py-3 rounded shadow-md border border-gray-300 w-52 text-center">
+                <p className="text-sm text-gray-800 mb-3">
+                  Remove <span className="font-semibold">{displayName}</span> from the group?
+                </p>
+                <div className="flex justify-center gap-4">
+                  <button
+                    onClick={() => setConfirmingMember(null)}
+                    className="text-gray-500 hover:underline text-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleRemoveMember(member);
+                      setConfirmingMember(null);
+                    }}
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   </div>
 )}
