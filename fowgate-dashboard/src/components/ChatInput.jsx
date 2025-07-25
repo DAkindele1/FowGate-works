@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import emojiIcon from '../assets/smile.svg';
 import attachmentIcon from '../assets/attachments.svg';
 import sendButtonIcon from '../assets/send_button.svg';
@@ -6,18 +6,33 @@ import { handleUnavailableFeature } from '../utils/feature.js';
 
 export default function ChatInput({ onSend }) {
   const [message, setMessage] = useState('');
+  const textareaRef = useRef(null);
 
   const handleSend = () => {
     if (!message.trim()) return;
     onSend?.(message); // Call parent
     setMessage('');
+    autoResize(); // Reset height after sending
   };
+
+  const autoResize = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto'; // Reset height first
+      textarea.style.height = `${textarea.scrollHeight}px`; // Then set to scroll height
+    }
+  };
+
+  useEffect(() => {
+    autoResize();
+  }, [message]);
 
   return (
     <div className="flex items-center px-4 py-3 bg-white">
       {/* Message Bar */}
-      <div className="flex items-center h-auto min-h-[54px] flex-1 bg-gray-100 rounded-full px-4 py-2">
+      <div className="flex items-end flex-1 bg-gray-100 rounded-full px-4 py-2">
         <textarea
+          ref={textareaRef}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => {
@@ -28,7 +43,7 @@ export default function ChatInput({ onSend }) {
           }}
           rows={1}
           placeholder="Type a message..."
-          className="flex-1 bg-transparent resize-none outline-none text-sm text-gray-800 placeholder-gray-400 overflow-hidden"
+          className="flex-1 bg-transparent resize-none outline-none text-sm text-gray-800 placeholder-gray-400 overflow-hidden max-h-48"
         />
 
         {/* Emoji */}
