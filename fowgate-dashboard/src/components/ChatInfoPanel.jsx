@@ -253,7 +253,10 @@ useEffect(() => {
           chat.avatarMap?.[displayName] ||
           (displayName === 'You' ? currentUserAvatar : 'https://via.placeholder.com/48');
 
-        const isConfirming = confirmingMember === member;
+        const isConfirming =
+        (typeof confirmingMember === 'string'
+        ? confirmingMember
+        : confirmingMember?.name) === displayName;
 
         return (
           <div
@@ -269,7 +272,7 @@ useEffect(() => {
               />
               {displayName !== 'You' && (
                 <button
-                  onClick={() => setConfirmingMember(member)}
+                  onClick={() => setConfirmingMember(displayName)}
                   className="absolute top-0 right-0 w-3 h-3 bg-[#EB4335] text-white rounded-full flex items-center justify-center text-[7px]"
                   title={`Remove ${displayName}`}
                 >
