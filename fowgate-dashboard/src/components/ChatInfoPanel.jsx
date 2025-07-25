@@ -258,16 +258,17 @@ useEffect(() => {
       {/* Confirmation Popup */}
 {isConfirming && (
   <div className="absolute z-50 top-[-130px] left-1/2 -translate-x-1/2 flex flex-col items-center">
-    {/* Bubble Background */}
+    {/* Relative wrapper for stacking */}
     <div className="relative w-72">
+      {/* SVG Background (behind) */}
       <img
         src={MessagePop}
-        alt="popup"
-        className="w-full h-auto absolute top-0 left-0"
+        alt="popup background"
+        className="w-full h-auto absolute top-0 left-0 z-0"
       />
 
-      {/* Foreground Popup Content */}
-      <div className="relative z-10 mt-4 px-4 py-3 bg-white border border-gray-200 shadow-md rounded-md text-center">
+      {/* Foreground Confirmation Box */}
+      <div className="relative z-10 mt-6 px-4 py-3 bg-white border border-gray-200 shadow-md rounded-md text-center">
         <p className="text-sm text-[#292929] mb-3">
           Are you sure you want to remove <span className="font-semibold">{displayName}</span>?
         </p>
