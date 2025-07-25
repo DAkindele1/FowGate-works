@@ -135,7 +135,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
                   }`}
                 >
                   {msg.replyTo && (
-                    <div className="text-xs text-gray-600 italic mb-1 border-l-2 border-blue-500 pl-2">
+                    <div className="text-xs text-gray-600 italic mb-1 border-l-2 border-gray-100 pl-2">
                       Replying to <strong>{msg.replyTo.sender}</strong>: {msg.replyTo.text.slice(0, 40)}…
                     </div>
                   )}
@@ -143,7 +143,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
                   <div className="mt-1 text-right" style={isUser ? userchatTimestamp : otherschatTimestamp}>
                     {msg.time}
                   </div>
-                  <div className="text-xs text-blue-600 cursor-pointer mt-1" onClick={() => setReplyingTo(msg)}>
+                  <div className="text-xs text-gray-900 cursor-pointer mt-1" onClick={() => setReplyingTo(msg)}>
                     Reply
                   </div>
                 </div>
