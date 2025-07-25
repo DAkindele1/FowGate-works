@@ -214,7 +214,7 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
           className="transition hover:opacity-80"
           title="Close"
         >
-          <img src={CancelIcon} alt="Cancel" className="w-6 h-6" />
+          <img src={CancelIcon} alt="Cancel" className="w-5 h-5" />
         </button>
       </div>
 
