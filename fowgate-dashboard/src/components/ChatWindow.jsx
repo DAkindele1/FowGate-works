@@ -226,7 +226,8 @@ export default function ChatWindow({ chat, onClose, onSendMessage, togglePinChat
               onDeleteChat?.(chatToDelete.id);
               setChatToDelete(null);
             }}
-            className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700"
+            className="px-4 py-2 rounded-md"
+            style={{ backgroundColor: '#FDECEB', color: '#EB4335' }}
           >
             Delete
           </button>
