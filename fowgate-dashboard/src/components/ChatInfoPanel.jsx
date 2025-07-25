@@ -257,7 +257,7 @@ useEffect(() => {
     <div key={idx} className="relative flex flex-col items-center text-center group">
       {/* Confirmation Popup */}
 {isConfirming && (
-  <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-white px-4 py-3 rounded shadow-md border border-gray-300">
+  <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-50 bg-white px-4 py-3 rounded shadow-md border border-gray-300 w-52 text-center">
     <p className="text-sm text-gray-800 mb-3 text-center">
       Remove <span className="font-semibold">{displayName}</span> from the group?
     </p>
