@@ -119,22 +119,24 @@ const handleStart = () => {
 
       <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer bg-transparent">
         {groupAvatar ? (
-          <div className="relative w-7 h-7 rounded-full overflow-hidden group">
-            <img src={groupAvatar} alt="Group Avatar" className="w-full h-full object-cover" />
+          <div className="relative w-9 h-9 group">
+            <div className="w-7 h-7 rounded-full overflow-hidden">
+              <img src={groupAvatar} alt="Group Avatar" className="w-full h-full object-cover" />
+            </div>
             <button
-  onClick={() => setGroupAvatar(null)}
-  className="absolute -top-0 -right-0 bg-red-500 text-white rounded-full p-[2px] shadow hover:bg-red-600"
->
-  <svg
-    className="w-2 h-2"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    viewBox="0 0 24 24"
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-  </svg>
-</button>
+              onClick={() => setGroupAvatar(null)}
+              className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-[2px] shadow hover:bg-red-600"
+            >
+              <svg
+                className="w-3 h-3"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         ) : (
           <label className="cursor-pointer w-6 h-6 flex items-center justify-center">
