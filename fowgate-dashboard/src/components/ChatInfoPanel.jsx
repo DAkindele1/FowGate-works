@@ -62,8 +62,11 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
     onUpdateChat?.({ ...chat, members: updatedMembers });
   };
 
-  const triggerConfirm = (member) => {
-    const name = typeof member === 'string' ? member : member.name;
+const triggerConfirm = (member) => {
+  const name = typeof member === 'string' ? member : member.name;
+
+  // Ensure layout is done before measuring
+  setTimeout(() => {
     const ref = avatarRefs.current[name];
     if (ref) {
       const rect = ref.getBoundingClientRect();
@@ -71,9 +74,10 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
         top: rect.top + window.scrollY - 110,
         left: rect.left + rect.width / 2,
       });
+      setConfirmingMember(member);
     }
-    setConfirmingMember(member);
-  };
+  }, 0);
+};
 
   if (!showPanel) return null;
 
