@@ -31,7 +31,6 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
   const [animateIn, setAnimateIn] = useState(false);
   const [confirmingMember, setConfirmingMember] = useState(null);
   const [popupPos, setPopupPos] = useState({ top: 0, left: 0 });
-  const popupRef = useRef();
   const avatarRefs = useRef({});
 
   useEffect(() => {
@@ -51,7 +50,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
     }
   }, [isOpen, chat]);
 
-    const handleOpenPopup = (e, member) => {
+  const handleOpenPopup = (e, member) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
@@ -74,22 +73,6 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
     onUpdateChat?.({ ...chat, members: updatedMembers });
   };
 
-  const triggerConfirm = (member) => {
-    const name = typeof member === 'string' ? member : member.name;
-    setConfirmingMember(member);
-
-    requestAnimationFrame(() => {
-      const ref = avatarRefs.current[name];
-      if (ref) {
-        const rect = ref.getBoundingClientRect();
-        setPopupPos({
-          top: rect.top + window.scrollY - 110,
-          left: rect.left + rect.width / 2,
-        });
-      }
-    });
-  };
-
   if (!showPanel) return null;
 
   return (
@@ -105,7 +88,6 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
       {/* Confirmation popup */}
       {confirmingMember && (
         <div
-          ref={popupRef}
           className="fixed z-50 bg-white px-4 py-3 rounded shadow-md border border-gray-300 w-60 text-center"
           style={{
             top: popupPos.top,
@@ -114,7 +96,13 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
           }}
         >
           <p className="text-sm text-gray-800 mb-3">
-            Remove <span className="font-semibold">{typeof confirmingMember === 'string' ? confirmingMember : confirmingMember.name}</span> from the group?
+            Remove{' '}
+            <span className="font-semibold">
+              {typeof confirmingMember === 'string'
+                ? confirmingMember
+                : confirmingMember.name}
+            </span>{' '}
+            from the group?
           </p>
           <div className="flex justify-center gap-4">
             <button
@@ -137,9 +125,11 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
       )}
 
       {/* Sliding panel */}
-      <div className={`relative h-full w-[608px] bg-white shadow-xl z-50 transform transition-transform duration-700 ease-in-out ${
-        animateIn ? 'translate-x-0' : 'translate-x-full'
-      } flex flex-col`}>
+      <div
+        className={`relative h-full w-[608px] bg-white shadow-xl z-50 transform transition-transform duration-700 ease-in-out ${
+          animateIn ? 'translate-x-0' : 'translate-x-full'
+        } flex flex-col`}
+      >
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-200">
           <h2 className="font-[Rubik] font-medium text-2xl text-[#292929]">Chat Info</h2>
@@ -288,7 +278,7 @@ export default function ChatInfoPanel({ chat, isOpen, onClose, onUpdateChat }) {
           </div>
 
           {/* Group Members */}
-          {isGroupChat && (
+{isGroupChat && (
             <div>
               <p className="font-rubik font-medium text-[#292929] mb-2">Group Members ({members.length})</p>
               <div className="flex space-x-4 overflow-x-auto pb-2">
