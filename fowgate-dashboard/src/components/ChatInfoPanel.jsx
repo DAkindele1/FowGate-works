@@ -273,7 +273,7 @@ useEffect(() => {
           handleRemoveMember(member);
           setConfirmingMember(null);
         }}
-        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
+        className="bg-[#1B5FC1] hover:bg-[#1B5FC1] text-white px-3 py-1 rounded text-sm"
       >
         Remove
       </button>
