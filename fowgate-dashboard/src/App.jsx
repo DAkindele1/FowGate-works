@@ -35,7 +35,7 @@ function App() {
       messages: [],
       time: timestamp,
       lastMessage: '',
-      members: [...contacts, currentUser],
+      members: [currentUser, ...contacts],
       ...(type === 'group' && { description }),
     };
 
