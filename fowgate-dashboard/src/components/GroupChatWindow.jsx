@@ -230,29 +230,51 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
       {/* Info Panel */}
       <ChatInfoPanel isOpen={showChatInfo} onClose={() => setShowChatInfo(false)} chat={chat} />
        
-        {chatToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-       <div className="bg-white rounded-lg p-6 w-[320px] shadow-xl text-center">
-      <h2 className="text-lg font-semibold text-gray-800 mb-2">Delete Chat</h2>
-      <p className="text-sm text-gray-600 mb-4">
-        Are you sure you want to delete this chat with <strong>{chatToDelete.name}</strong>?
-      </p>
-      <div className="flex justify-end gap-3">
-        <button
-          onClick={() => setChatToDelete(null)}
-          className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+{chatToDelete && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="w-[400px] bg-white rounded-lg shadow-xl overflow-hidden">
+      
+      {/* Header */}
+      <div className="bg-[#EB4335] text-white flex items-center gap-2 px-6 py-4">
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
         >
-          Cancel
-        </button>
-        <button
-          onClick={() => {
-            onDeleteChat?.(chatToDelete.id); 
-            setChatToDelete(null);           
-          }}
-          className="px-4 py-2 bg-[#1B5FC1] text-white rounded hover:bg-[#1B5FC1]"
-        >
-          Delete
-        </button>
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+        <h2 className="text-lg font-semibold">Delete</h2>
+      </div>
+
+      {/* Body */}
+      <div className="px-6 py-5 text-center">
+        <p className="text-gray-700 text-sm mb-4">
+          Are you sure you want to delete this chat with{' '}
+          <strong>{chatToDelete.name}</strong>? This action cannot be undone.
+        </p>
+        <div className="flex justify-end gap-3 mt-6">
+          <button
+            onClick={() => setChatToDelete(null)}
+            className="px-4 py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => {
+              onDeleteChat?.(chatToDelete.id);
+              setChatToDelete(null);
+            }}
+            className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   </div>
