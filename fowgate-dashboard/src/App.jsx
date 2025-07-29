@@ -19,7 +19,7 @@ const handleUnavailableFeature = () => {
 function App() {
   const [selectedChat, setSelectedChat] = useState(mockChats[0]);
   const [chats, setChats] = useState(mockChats);
-  const [currentPage, setCurrentPage] = useState('messages');
+  const [currentPage, setCurrentPage] = useState('CLO Collaboration');
   const [showModal, setShowModal] = useState(false);
   const [showDeletedModal, setShowDeletedModal] = useState(false);
 
@@ -131,7 +131,7 @@ const handleDeleteChat = (chatId) => {
 
           {/* Main Content Area */}
           <div className="flex gap-[32px] flex-1">
-            {currentPage === 'messages' ? (
+            {currentPage === 'CLO Collaboration' ? (
               <>
                 <ChatList
                   chats={chats}
