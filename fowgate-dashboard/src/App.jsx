@@ -10,6 +10,8 @@ import AccountIcon from './assets/acc.svg';
 import BlankPage from './components/BlankPage';
 import NewChatModal from './components/NewChatModal';
 
+const currentUser = { name: 'You', avatar: 'https://i.pravatar.cc/100?img=9', isOnline: true };
+
 const handleUnavailableFeature = () => {
   alert('Sorry, this feature is currently unavailable');
 };
@@ -19,74 +21,84 @@ function App() {
   const [chats, setChats] = useState(mockChats);
   const [currentPage, setCurrentPage] = useState('messages');
   const [showModal, setShowModal] = useState(false);
-
+  const [showDeletedModal, setShowDeletedModal] = useState(false);
 
   const handleStartChat = (chatData) => {
-  const { type, contacts, groupName, description, groupAvatar } = chatData;
-  const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const { type, contacts, groupName, description, groupAvatar } = chatData;
+    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-const newChat = {
-  id: Date.now().toString(),
-  name: type === 'group' ? groupName : contacts[0].name,
-  avatar: type === 'group'
-    ? groupAvatar || '/default-group-avatar.jpg'
-    : contacts[0].avatar,
-  isOnline: type === 'individual' ? contacts[0].isOnline : true,
-  pinned: false,
-  messages: [],
-  time: timestamp,
-  lastMessage: '',
-  members: contacts,
-  ...(type === 'group' && { description: description }), // ✅ Only for groups
-};
+    const newChat = {
+      id: Date.now().toString(),
+      name: type === 'group' ? groupName : contacts[0].name,
+      avatar: type === 'group' ? groupAvatar || '/default-group-avatar.jpg' : contacts[0].avatar,
+      isOnline: type === 'individual' ? contacts[0].isOnline : true,
+      pinned: false,
+      messages: [],
+      time: timestamp,
+      lastMessage: '',
+      members: [currentUser, ...contacts],
+      ...(type === 'group' && { description }),
+    };
 
-  
-
-  setChats(prev => [newChat, ...prev]);
-  setSelectedChat(newChat);
-};
-
-const handleSendMessage = (chatId, messageText) => {
-  const newMessage = {
-    id: Date.now().toString(),
-    sender: 'You',
-    text: messageText,
-    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    status: 'delivered', // or 'sent', 'read'
+    setChats(prev => [newChat, ...prev]);
+    setSelectedChat(newChat);
   };
 
-  setChats(prevChats =>
-    prevChats.map(chat =>
-      chat.id === chatId
-        ? {
-            ...chat,
-            messages: [...chat.messages, newMessage],
-            lastMessage: messageText,
-            time: newMessage.time,
-          }
-        : chat
-    )
-  );
-};
+  const handleSendMessage = (chatId, messageText, replyingTo) => {
+    const newMessage = {
+      id: Date.now().toString(),
+      sender: 'You',
+      text: messageText,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      replyTo: replyingTo ? {
+      sender: replyingTo.sender,
+      text: replyingTo.text,
+    } : null,
+      status: 'delivered',
+    };
 
-const handleTogglePin = (chatId) => {
-  setChats(prevChats =>
-    prevChats.map(chat =>
-      chat.id === chatId ? { ...chat, pinned: !chat.pinned } : chat
-    )
-  );
+    setChats(prevChats => {
+      const updatedChats = prevChats.map(chat =>
+        chat.id === chatId
+          ? {
+              ...chat,
+              messages: [...chat.messages, newMessage],
+              lastMessage: messageText,
+              time: newMessage.time,
+            }
+          : chat
+      );
 
-  // Update selected chat if it's the one being pinned/unpinned
-  if (selectedChat?.id === chatId) {
-    setSelectedChat(prev => ({ ...prev, pinned: !prev.pinned }));
-  }
-};
+      const updatedSelected = updatedChats.find(chat => chat.id === chatId);
+      if (selectedChat?.id === chatId) {
+        setSelectedChat(updatedSelected);
+      }
+
+      return updatedChats;
+    });
+  };
+
+  const handleTogglePin = (chatId) => {
+    setChats(prevChats => {
+      const updatedChats = prevChats.map(chat =>
+        chat.id === chatId ? { ...chat, pinned: !chat.pinned } : chat
+      );
+
+      if (selectedChat?.id === chatId) {
+        const updatedSelectedChat = updatedChats.find(c => c.id === chatId);
+        setSelectedChat(updatedSelectedChat);
+      }
+
+      return updatedChats;
+    });
+  };
 
 const handleDeleteChat = (chatId) => {
   setChats(prevChats => prevChats.filter(chat => chat.id !== chatId));
   if (selectedChat?.id === chatId) {
     setSelectedChat(null);
   }
+  setShowDeletedModal(true);
 };
 
   return (
@@ -122,10 +134,11 @@ const handleDeleteChat = (chatId) => {
             {currentPage === 'messages' ? (
               <>
                 <ChatList
-                chats={chats}
-                selectedId={selectedChat?.id}
-                onSelect={setSelectedChat}
-                onStartChat={handleStartChat} />
+                  chats={chats}
+                  selectedId={selectedChat?.id}
+                  onSelect={setSelectedChat}
+                  onStartChat={handleStartChat}
+                />
                 <div className="flex-1 h-[872px]">
                   {selectedChat ? (
                     selectedChat.members.length > 2 ? (
@@ -134,15 +147,16 @@ const handleDeleteChat = (chatId) => {
                         onSendMessage={handleSendMessage}
                         onClose={() => setSelectedChat(null)}
                         togglePinChat={handleTogglePin}
-                        onDeleteChat={handleDeleteChat}/>
-                        
+                        onDeleteChat={handleDeleteChat}
+                      />
                     ) : (
                       <ChatWindow
                         chat={selectedChat}
                         onSendMessage={handleSendMessage}
                         onClose={() => setSelectedChat(null)}
                         togglePinChat={handleTogglePin}
-                        onDeleteChat={handleDeleteChat}/>
+                        onDeleteChat={handleDeleteChat}
+                      />
                     )
                   ) : (
                     <div className="flex items-center justify-center h-full text-gray-400">
@@ -159,14 +173,40 @@ const handleDeleteChat = (chatId) => {
           </div>
         </div>
       </div>
+
       {showModal && (
-  <NewChatModal
-    onClose={() => setShowModal(false)}
-    onStartChat={handleStartChat}
-  />
+        <NewChatModal
+          onClose={() => setShowModal(false)}
+          onStartChat={handleStartChat}
+        />
+      )}
+{showDeletedModal && (
+  <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white rounded shadow-xl p-10 w-[440px] text-center animate-fade-in-up">
+      {/* Success Icon */}
+      <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
+        <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+
+      {/* Modal Content */}
+      <h2 className="text-2xl font-bold text-gray-800 mb-2">Chat Deleted!</h2>
+      <p className="text-base text-gray-500">This chat has been permanently removed and can no longer be accessed by any participants.</p>
+
+      {/* OK Button */}
+      <button
+        className="mt-8 bg-[#1B5FC1] text-white w-full py-3 rounded-md hover:bg-blue-700 transition"
+        onClick={() => setShowDeletedModal(false)}
+      >
+        Okay
+      </button>
+    </div>
+  </div>
 )}
     </div>
   );
 }
 
 export default App;
+

@@ -9,6 +9,9 @@ import PinIcon from '../assets/pin.svg';
 import UnpinIcon from '../assets/unpin.svg';
 import InfoIcon from '../assets/info.svg';
 import TrashIcon from '../assets/trashred.svg';
+import noMessageIcon from '../assets/nomessage.svg';
+import Delete from '../assets/delete2.svg';
+import CancelIcon from '../assets/cancel.svg'
 import {
   userChat,
   othersChat,
@@ -21,6 +24,7 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
   const [showChatInfo, setShowChatInfo] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [chatToDelete, setChatToDelete] = useState(null);
+  const [replyingTo, setReplyingTo] = useState(null);
   const optionsRef = useRef(null);
 
   useEffect(() => {
@@ -34,9 +38,16 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
   }, []);
 
   return (
-    <div className="relative flex flex-col h-[844px] bg-[#F6F8FC] rounded-md">
+    <div
+          className="flex flex-col h-[844px] relative overflow-hidden"
+          style={{
+            backgroundColor: '#F6F8FC',
+            border: '0.5px solid #EAEAEA',
+            borderRadius: '10px',
+          }}
+        >
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 bg-white">
+      <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
         <div className="flex items-center gap-4 cursor-pointer" onClick={() => setShowChatInfo(true)}>
           <button
             title="Close Chat"
@@ -120,90 +131,156 @@ export default function GroupChatWindow({ chat, onClose, onSendMessage, togglePi
       </div>
 
       {/* Messages */}
-      <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4 font-rubik text-[14px]">
-        {chat.messages.map((msg, idx) => {
-          const isUser = msg.sender === 'You';
-          const avatarUrl = isUser
-            ? 'https://i.pravatar.cc/100?u=you'
-            : chat.avatar || `https://ui-avatars.com/api/?name=${msg.sender}`;
+      <div className="flex-1 px-6 py-4 overflow-y-auto space-y-4 font-rubik text-[14px] relative">
+        {chat.messages.length === 0 ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <img src={noMessageIcon} alt="No messages" className="w-60 h-60 opacity-50" />
+          </div>
+        ) : (
+          chat.messages.map((msg, idx) => {
+            const isUser = msg.sender === 'You';
+            const avatarUrl = isUser
+              ? 'https://i.pravatar.cc/100?u=you'
+              : chat.avatar || `https://ui-avatars.com/api/?name=${msg.sender}`;
 
-          return (
-            <div key={idx} className={`flex items-start gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
-              {!isUser && (
-                <img
-                  src={avatarUrl}
-                  alt={msg.sender}
-                  className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
-                />
-              )}
-              <div
-                className={`max-w-xs min-w-[160px] p-3 rounded-lg text-sm ${
-                  isUser
-                    ? 'bg-[#34A853] text-white rounded-br-none'
-                    : 'bg-white text-gray-900 rounded-bl-none'
-                }`}
-              >
-                <div className="flex justify-between items-center mb-1">
-                  {!isUser ? (
-                    <>
-                      <span style={othersName}>{msg.sender}</span>
-                      <span style={otherschatTimestamp}>{msg.time}</span>
-                    </>
-                  ) : (
-                    <span className="ml-auto" style={userchatTimestamp}>
-                      {msg.time}
-                    </span>
+            return (
+              <div key={idx} className={`flex items-start gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
+                {!isUser && (
+                  <img
+                    src={avatarUrl}
+                    alt={msg.sender}
+                    className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
+                  />
+                )}
+                <div
+                  className={`max-w-xs min-w-[160px] p-3 rounded-lg text-sm relative group ${
+                    isUser
+                      ? 'bg-[#34A853] text-white rounded-br-none'
+                      : 'bg-white text-gray-900 rounded-bl-none'
+                  }`}
+                >
+                  {/* Replied message */}
+                  {msg.replyTo && (
+                    <div className="text-xs text-gray-600 italic mb-1 border-l-2 border-gray-100 pl-2">
+                      Replying to <strong>{msg.replyTo.sender}</strong>: {msg.replyTo.text.slice(0, 40)}…
+                    </div>
                   )}
+
+                  {/* Header row with name and time */}
+                  <div className="flex justify-between items-center mb-1">
+                    {!isUser ? (
+                      <>
+                        <span style={othersName}>{msg.sender}</span>
+                        <span style={otherschatTimestamp}>{msg.time}</span>
+                      </>
+                    ) : (
+                      <span className="ml-auto" style={userchatTimestamp}>
+                        {msg.time}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Message Text */}
+                  <p style={{ ...(isUser ? userChat : othersChat), whiteSpace: 'pre-wrap' }}>{msg.text}</p>
+
+                  {/* Reply button on hover */}
+                  <div
+                    className="text-xs text-gray-700 cursor-pointer mt-1"
+                    onClick={() => setReplyingTo(msg)}
+                  >
+                    Reply
+                  </div>
                 </div>
-                <p style={isUser ? userChat : othersChat}>{msg.text}</p>
+                {isUser && (
+                  <img
+                    src={avatarUrl}
+                    alt={msg.sender}
+                    className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
+                  />
+                )}
               </div>
-              {isUser && (
-                <img
-                  src={avatarUrl}
-                  alt={msg.sender}
-                  className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-300 mt-1"
-                />
-              )}
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
+
+        {replyingTo && (
+        <div className="px-6 py-2 bg-gray-100 border-t border-b border-gray-300">
+          <div className="flex justify-between items-center">
+            <div className="text-sm text-gray-700">
+              Replying to <strong>{replyingTo.sender}</strong>: {replyingTo.text.slice(0, 50)}
+            </div>
+            <button onClick={() => setReplyingTo(null)} className="text-gray-500 hover:text-red-500">
+              <FiX className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Chat Input */}
       <div className="px-6 py-4 bg-white">
-        <ChatInput onSend={(text) => onSendMessage(chat.id, text)} />
+        <ChatInput
+        onSend={(text) => {
+          onSendMessage(chat.id, text, replyingTo);
+          setReplyingTo(null);
+        }}
+        replyingTo={replyingTo}
+        onCancelReply={() => setReplyingTo(null)}
+      />
       </div>
 
       {/* Info Panel */}
       <ChatInfoPanel isOpen={showChatInfo} onClose={() => setShowChatInfo(false)} chat={chat} />
        
-        {chatToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-       <div className="bg-white rounded-lg p-6 w-[320px] shadow-xl text-center">
-      <h2 className="text-lg font-semibold text-gray-800 mb-2">Delete Chat</h2>
-      <p className="text-sm text-gray-600 mb-4">
-        Are you sure you want to delete this chat with <strong>{chatToDelete.name}</strong>?
-      </p>
-      <div className="flex justify-end gap-3">
+{chatToDelete && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
+    <div className="w-[400px] bg-white rounded shadow-xl overflow-hidden">
+      
+      {/* Header */}
+      <div className="bg-[#EB4335] text-white flex items-center justify-between gap-2 px-6 py-4">
+        <div className="flex items-center gap-2">
+        <img src={Delete} alt="Delete Icon" className="w-5 h-5" />
+        <h2 className="text-base font-semibold">Delete</h2>
+      </div>
         <button
           onClick={() => setChatToDelete(null)}
-          className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+          className="transition hover:opacity-80"
+          title="Close"
         >
-          Cancel
+          <img src={CancelIcon} alt="Cancel" className="w-5 h-5" />
         </button>
-        <button
+      </div>
+
+      {/* Body */}
+      <div className="px-6 py-5 text-center">
+        <p className="text-gray-700 text-sm mb-4">
+          Are you sure you want to delete this groupchat with{' '}
+          <strong>{chatToDelete.name}</strong>? This action is permanent and cannot be undone.
+        </p>
+        <div className="flex justify-end gap-3 mt-6">
+          <button
+            onClick={() => setChatToDelete(null)}
+            className="px-4 py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200"
+          >
+            Cancel
+          </button>
+          <button
           onClick={() => {
-            onDeleteChat?.(chatToDelete.id); // confirm deletion
-            setChatToDelete(null);           // close modal
+              onDeleteChat?.(chatToDelete.id); // perform delete
+              setChatToDelete(null);           // close confirmation popup
+              setShowDeleteSuccess(true);      // show success modal
           }}
-          className="px-4 py-2 bg-[#1B5FC1] text-white rounded hover:bg-[#1B5FC1]"
-        >
-          Delete
-        </button>
+          className="px-4 py-2 rounded-md"
+          style={{ backgroundColor: '#FDECEB', color: '#EB4335' }}
+          >
+          Yes, I'm sure
+          </button>
+        </div>
       </div>
     </div>
   </div>
 )}
+
     </div>
   );
 }
