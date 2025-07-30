@@ -99,6 +99,26 @@ export default function Sidebar({ activeItem = "dashboard", setCurrentPage }) {
                 <span className="text-sm font-normal">CLO Collaboration</span>
               </div>
             </li>
+            {/* Document Hub */}
+            <li onClick={() => setCurrentPage('Document Hub')} className="relative cursor-pointer group w-full h-[40px]">
+              {activeItem === "Document Hub" && (
+                <>
+                  <div className="absolute inset-y-0 left-[-16px] right-[-16px] z-0 bg-[#2F2F2F] rounded-md" />
+                  <div className="absolute top-0 left-[-16px] w-[4px] h-full z-10 bg-white" />
+                </>
+              )}
+              <div className={`flex items-center gap-2 py-2 pl-[10px] pr-4 relative z-20 ${
+                activeItem === "Document Hub"
+                  ? "text-[#9d9d9d]"
+                  : "text-[#9d9d9d] hover:text-white"
+              }`} style={sidebarMembers}>
+                <img
+                  src={messageIcon} // You can replace this with a new icon if available
+                  alt="Document Hub"
+                  className="w-[20px] h-[20px] object-contain"/>
+                <span className="text-sm font-normal">Document Hub</span>
+              </div>
+            </li>
           </ul>
         </div>
       </div>

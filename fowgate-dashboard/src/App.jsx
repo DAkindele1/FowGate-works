@@ -9,6 +9,7 @@ import NotificationIcon from './assets/notification.svg';
 import AccountIcon from './assets/acc.svg';
 import BlankPage from './components/BlankPage';
 import NewChatModal from './components/NewChatModal';
+import DocumentHub from './pages/DocumentHub';
 
 const currentUser = { name: 'You', avatar: 'https://i.pravatar.cc/100?img=9', isOnline: true };
 
@@ -16,7 +17,7 @@ const handleUnavailableFeature = () => {
   alert('Sorry, this feature is currently unavailable');
 };
 
-function App() {
+function CLOCOLLAB() {
   const [selectedChat, setSelectedChat] = useState(mockChats[0]);
   const [chats, setChats] = useState(mockChats);
   const [currentPage, setCurrentPage] = useState('CLO Collaboration');
@@ -165,6 +166,10 @@ const handleDeleteChat = (chatId) => {
                   )}
                 </div>
               </>
+            ) : currentPage === 'Document Hub' ? (
+              <div className="flex-1 h-[872px]">
+                <DocumentHub />
+              </div>
             ) : (
               <div className="flex-1 h-[872px]">
                 <BlankPage />
@@ -208,5 +213,5 @@ const handleDeleteChat = (chatId) => {
   );
 }
 
-export default App;
+export default CLOCOLLAB;
 
