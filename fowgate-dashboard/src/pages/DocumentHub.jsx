@@ -69,7 +69,7 @@ const DocumentHub = () => {
       {/* Main Content */}
       <div className="flex-1 p-6 ml-7 p-6 border rounded-lg border-gray-200 overflow-y-auto">
       {/* Top Bar with Title and Toolbar */}
-      <div className="flex justify-between items-center mb-6 flex-nowrap gap-4">
+      <div className="flex justify-between items-center mb-6 flex-nowrap gap-4 border-b pb-4 border-gray-200">
         {/* Left: Title and Search */}
         <div className="flex items-center gap-4 flex-nowrap">
           <h1 className="text-2xl font-semibold whitespace-nowrap">My Drive</h1>
@@ -112,21 +112,18 @@ const DocumentHub = () => {
             <table className="w-full text-left border-separate border-spacing-y-3 rounded overflow-hidden">
               <thead className="sticky top-0 z-10">
                 <tr className="bg-[#E8EFF9] h-10 text-xs text-black px-4">
-                  <th className="pl-5 pr-4">File name</th>
-                  <th>Owner</th>
-                  <th>Collaborators</th>
-                  <th>Attachment</th>
-                  <th className="pl-4 pr-5">File Size</th>
+                  <th className="pl-5 pr-4 text-[14px] font-medium text-[#292929] leading-[1.6] font-[Rubik]">File name</th>
+                  <th className="px-4 text-[14px] font-medium text-[#292929] leading-[1.6] font-[Rubik]">Owner</th>
+                  <th className="px-4 text-[14px] font-medium text-[#292929] leading-[1.6] font-[Rubik]">Collaborators</th>
+                  <th className="px-4 text-[14px] font-medium text-[#292929] leading-[1.6] font-[Rubik]">Attachment</th>
+                  <th className="pl-4 pr-5 text-[14px] font-medium text-[#292929] leading-[1.6] font-[Rubik]">File Size</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 {fileData.map((file) => (
-                  <tr key={file.id} className="bg-white hover:bg-[#F3F4F6]">
-                    <td className="py-3 px-4 flex items-center gap-2 font-medium">
-                      <BsFolderFill className="text-yellow-500" />
-                      {file.name}
-                    </td>
+                  <tr key={file.id} className="bg-white hover:bg-[#F3F4F6] border-b border-gray-200">
+                    <td className="py-3 px-4 flex items-center gap-2 font-medium"><BsFolderFill className="text-yellow-500" />{file.name}</td>
                     <td className="py-3 px-4">{file.owner}</td>
                     <td className="py-3 px-4 flex items-center gap-1">
                       {file.collaborators.map((c, i) => (
