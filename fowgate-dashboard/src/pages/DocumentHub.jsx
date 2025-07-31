@@ -10,7 +10,11 @@ import TrashIcon from '../assets/trash.svg';
 import CreateFolderIcon from '../assets/folderadd.svg';
 import UploadFolderIcon from '../assets/folderupload.svg';
 import AddFolderIcon from '../assets/addfolder.svg';
-import ActionIcon from '../assets/actionicon.svg';
+import ShareFileIcon from '../assets/share.svg';
+import RenameFolderIcon from '../assets/rename.svg'
+import PriorityIcon from '../assets/priority.svg'
+import ViewPropIcon from '../assets/viewprop.svg'
+import TrashRedIcon from '../assets/trashred2.svg'
 
 const folders = [
   { label: 'My Drive', count: '12 items • 10.6 MB', active: true, icon: MyDriveIcon },
@@ -217,20 +221,25 @@ const DocumentHub = () => {
                     }
                   />
                   {openActionId === file.id && (
-                  <div className="absolute right-0 top-6 w-34 bg-white border border-gray-200 rounded-md shadow-md z-50 animate-fade-in action-dropdown">
-                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                  <div className="absolute right-0 top-6 w-42 bg-white border border-gray-200 rounded-md shadow-md z-50 animate-fade-in action-dropdown font-[Rubik] text-[14px] font-normal leading-[1.4] capitalize">
+                    <button className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2">
+                      <img src={ShareFileIcon} alt="Share" className="w-4 h-4" />
                       Share File
                     </button>
-                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                    <button className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2">
+                      <img src={RenameFolderIcon} alt="Share" className="w-4 h-4" />
                       Rename Folder
                     </button>
-                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                    <button className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2">
+                      <img src={PriorityIcon} alt="Share" className="w-4 h-4" />
                       Move to Priority
                     </button>
-                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                    <button className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2">
+                      <img src={ViewPropIcon} alt="Share" className="w-4 h-4" />
                       View Properties
                     </button>
-                    <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                    <button className="w-full flex items-center px-4 py-2 text-sm text-[#EB4335] hover:bg-gray-100 text-left gap-2">
+                      <img src={TrashRedIcon} alt="Share" className="w-4 h-4" />
                       Move to Trash
                     </button>
                   </div>
