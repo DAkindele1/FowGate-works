@@ -138,38 +138,43 @@ const DocumentHub = () => {
             {/* Data Rows */}
             {fileData.map((file) => (
               <div
-                key={file.id}
-                className="grid grid-cols-[220px_110px_170px_110px_1fr_69px] bg-white hover:bg-[#F3F4F6] border-b border-gray-200 ">
-                <div className="flex items-center gap-2 px-4 py-3 font-medium">
-                  <BsFolderFill className="text-yellow-500" />
-                  {file.name}
-                </div>
-                <div className="px-7 py-3 flex items-center">{file.owner}</div>
-                <div className="px-4 py-3 flex items-center gap-1">
-                    <div className="flex -space-x-2">
-                    {file.collaborators.map((c, i) => (
-                      <div
-                        key={i}
-                        className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs font-bold border border-white"
-                      >
-                        {c}
-                      </div>
-                    ))}
-                  </div>
-                  {file.extraCollaborators > 0 && (
-                    <span className="text-xs text-gray-500 pl-2">
-                      +{file.extraCollaborators} more
-                    </span>
-                  )}
-                </div>
-                <div className="px-7 py-3 text-sm flex items-center">
-                  {file.attachments} files
-                </div>
-                <div className="px-5 py-3 text-sm flex items-center">{file.size}</div>
-                <div className="flex justify-center items-center pr-5">
-                  <FiMoreVertical className="cursor-pointer text-gray-500 hover:text-gray-700" />
-                </div>
+              key={file.id}
+              className="grid grid-cols-[220px_110px_170px_110px_1fr_69px] bg-white hover:bg-[#F3F4F6] border-b border-gray-200"
+            >
+              <div className="flex items-center gap-2 px-4 py-3 font-medium text-[14px] leading-[1.6] font-[Rubik]">
+                <BsFolderFill className="text-yellow-500" />
+                {file.name}
               </div>
+              <div className="px-7 py-3 flex items-center text-[14px] font-medium leading-[1.6] font-[Rubik]">
+                {file.owner}
+              </div>
+              <div className="px-4 py-3 flex items-center gap-1 text-[14px] font-medium leading-[1.6] font-[Rubik]">
+                <div className="flex -space-x-2">
+                  {file.collaborators.map((c, i) => (
+                    <div
+                      key={i}
+                      className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs font-bold border border-white"
+                    >
+                      {c}
+                    </div>
+                  ))}
+                </div>
+                {file.extraCollaborators > 0 && (
+                  <span className="text-xs text-gray-500 pl-2">
+                    +{file.extraCollaborators} more
+                  </span>
+                )}
+              </div>
+              <div className="px-7 py-3 text-sm flex items-center text-[14px] font-medium leading-[1.6] font-[Rubik]">
+                {file.attachments} files
+              </div>
+              <div className="px-5 py-3 text-sm flex items-center text-[14px] font-medium leading-[1.6] font-[Rubik]">
+                {file.size}
+              </div>
+              <div className="flex justify-center items-center pr-5 text-[14px] font-medium leading-[1.6] font-[Rubik]">
+                <FiMoreVertical className="cursor-pointer text-gray-500 hover:text-gray-700" />
+              </div>
+            </div>
             ))}
           </div>
         </div>
