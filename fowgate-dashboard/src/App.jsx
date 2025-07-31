@@ -18,6 +18,7 @@ const handleUnavailableFeature = () => {
 };
 
 function CLOCOLLAB() {
+  const [folders, setFolders] = useState([]);
   const [selectedChat, setSelectedChat] = useState(mockChats[0]);
   const [chats, setChats] = useState(mockChats);
   const [currentPage, setCurrentPage] = useState('CLO Collaboration');
@@ -44,6 +45,15 @@ function CLOCOLLAB() {
     setChats(prev => [newChat, ...prev]);
     setSelectedChat(newChat);
   };
+
+  const handleCreateFolder = (folderName) => {
+  const newFolder = {
+    id: Date.now().toString(),
+    name: folderName,
+    createdAt: new Date().toISOString(),
+  };
+  setFolders(prev => [...prev, newFolder]);
+};
 
   const handleSendMessage = (chatId, messageText, replyingTo) => {
     const newMessage = {
@@ -168,7 +178,10 @@ const handleDeleteChat = (chatId) => {
               </>
             ) : currentPage === 'Document Hub' ? (
               <div className="flex-1 h-[872px]">
-                <DocumentHub />
+                <DocumentHub 
+                  folders={folders}
+                  onCreateFolder={handleCreateFolder}
+                />
               </div>
             ) : (
               <div className="flex-1 h-[872px]">
