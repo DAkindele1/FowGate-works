@@ -528,55 +528,60 @@ const handleMoveToTrash = () => {
               </div>
             )}
             {isViewPropertiesOpen && propertiesItem && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-              <div className="w-[460px] bg-white rounded shadow-xl overflow-hidden font-[Rubik] animate-fade-in-up">
-
-                {/* Header */}
-                <div className="bg-[#1B5FC1] px-6 py-4 flex items-center justify-between text-white">
-                  <div className="flex items-center gap-2">
-                    <img src={ViewPropIcon} alt="View" className="w-5 h-5" />
-                    <h2 className="text-lg font-semibold">Folder Properties</h2>
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+                <div className="w-[460px] bg-white rounded shadow-xl overflow-hidden font-[Rubik] animate-fade-in-up">
+                  
+                  {/* Header */}
+                  <div className="bg-[#1B5FC1] px-6 py-4 flex items-center justify-between text-white">
+                    <div className="flex items-center gap-2">
+                      <img src={ViewPropIcon} alt="View" className="w-5 h-5" />
+                      <h2 className="text-lg font-semibold">Properties</h2>
+                    </div>
+                    <button
+                      onClick={() => setIsViewPropertiesOpen(false)}
+                      className="transition hover:opacity-80"
+                      title="Close"
+                    >
+                      <img src={CancelIcon} alt="Close" className="w-5 h-5" />
+                    </button>
                   </div>
-                  <button
-                    onClick={() => setIsViewPropertiesOpen(false)}
-                    className="transition hover:opacity-80"
-                    title="Close"
-                  >
-                    <img src={CancelIcon} alt="Close" className="w-5 h-5" />
-                  </button>
-                </div>
 
-                {/* Body */}
-                <div className="p-5 text-sm text-gray-700 space-y-3">
-                    <div className="flex items-center gap-3 mb-4">
-                     <img
-                        src={selectedItem?.creatorAvatar || '/avatars/me.png'}
-                        alt={selectedItem?.owner}
-                        className="w-10 h-10 rounded-full"
+                  {/* Creator Section */}
+                  {propertiesItem?.activityLog?.[0] && (
+                    <div className="flex items-center gap-3 p-5 pb-0">
+                      <img
+                        src={propertiesItem.activityLog[0].avatar}
+                        alt={propertiesItem.activityLog[0].user}
+                        className="w-10 h-10 rounded-full object-cover"
                       />
-                      <div>
-                        <p className="text-sm font-medium text-gray-800">
-                          {selectedItem?.owner}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Created on {selectedItem?.createdAt || 'Unknown'}
-                        </p>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium text-gray-800">
+                          {propertiesItem.activityLog[0].user}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          Created on {propertiesItem.activityLog[0].timestamp}
+                        </span>
                       </div>
                     </div>
+                  )}
+
+                  {/* Body */}
+                  <div className="p-5 pt-3 text-sm text-gray-700 space-y-3">
+
+                    {/* File Info */}
                     <div className="grid grid-cols-2 gap-y-1 text-sm text-gray-700">
                       <div>Size:</div>
-                      <div>{selectedItem?.size}</div>
+                      <div>{propertiesItem?.size}</div>
                       <div>Attachments:</div>
-                      <div>{selectedItem?.attachments}</div>
+                      <div>{propertiesItem?.attachments}</div>
                     </div>
-                  <div className="mt-6 border-t pt-4">
-                    <h3 className="text-sm font-semibold text-gray-700 mb-4">Activity Log</h3>
-                    {propertiesItem.activityLog && propertiesItem.activityLog.length > 0 ? (
-                      <div className="space-y-4 max-h-56 overflow-y-auto pr-2">
-                        {propertiesItem.activityLog
-                          .slice()
-                          .reverse()
-                          .map((log, index) => (
+
+                    {/* Activity Log */}
+                    <div className="mt-6 border-t pt-4">
+                      <h3 className="text-sm font-semibold text-gray-700 mb-4">Activity Log</h3>
+                      {propertiesItem.activityLog && propertiesItem.activityLog.length > 0 ? (
+                        <div className="space-y-4 max-h-56 overflow-y-auto pr-2">
+                          {propertiesItem.activityLog.slice().reverse().map((log, index) => (
                             <div key={index} className="flex items-start justify-between gap-4">
                               <div className="flex items-center gap-3">
                                 <img
@@ -592,24 +597,25 @@ const handleMoveToTrash = () => {
                               <p className="text-sm text-gray-500 whitespace-nowrap">{log.timestamp}</p>
                             </div>
                           ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-400">No activity yet.</p>
-                    )}
-                  </div>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-400">No activity yet.</p>
+                      )}
+                    </div>
 
-                  <div className="pt-4 text-right">
-                    <button
-                      className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
-                      onClick={() => setIsViewPropertiesOpen(false)}
-                    >
-                      Close
-                    </button>
+                    {/* Footer */}
+                    <div className="pt-4 text-right">
+                      <button
+                        className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                        onClick={() => setIsViewPropertiesOpen(false)}
+                      >
+                        Close
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
           </div>
         </div>
 
