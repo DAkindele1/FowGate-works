@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { FiSearch, FiChevronDown, FiMoreVertical } from 'react-icons/fi';
 import { BsFolderFill } from 'react-icons/bs';
 import MyDriveIcon from '../assets/mydrive.svg';
@@ -15,6 +15,8 @@ import RenameFolderIcon from '../assets/rename.svg'
 import PriorityIcon from '../assets/priority.svg'
 import ViewPropIcon from '../assets/viewprop.svg'
 import TrashRedIcon from '../assets/trashred2.svg'
+import TrashIcon2 from '../assets/delete2.svg';
+import CancelIcon from '../assets/cancel.svg';
 
 const folders = [
   { label: 'My Drive', count: '12 items • 10.6 MB', active: true, icon: MyDriveIcon },
@@ -24,6 +26,7 @@ const folders = [
   { label: 'Personal Notes', count: '8 items • 12.9 MB', icon: PersonalNotesIcon },
   { label: 'Trash', count: '3 items • 5.5 MB', icon: TrashIcon, active: false },
 ];
+
 
 const initialFileData = [
   {
@@ -62,6 +65,15 @@ const DocumentHub = () => {
   const [newFolderName, setNewFolderName] = useState('');
   const [fileData, setFileData] = useState(initialFileData);
   const [openActionId, setOpenActionId] = useState(null);
+  const [isRenameFolderOpen, setIsRenameFolderOpen] = useState(false);
+  const [renameFolderName, setRenameFolderName] = useState('');
+  const [folderToRename, setFolderToRename] = useState(null);
+  const [isMoveToTrashOpen, setIsMoveToTrashOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const visibleFiles = fileData.filter(file => file.status !== 'trashed');
+  const [showTrashSuccess, setShowTrashSuccess] = useState(false);
+  const dropdownRef = useRef(null);
+  
 
   const handleCreateFolder = () => {
   if (!newFolderName.trim()) return;
@@ -76,11 +88,50 @@ const DocumentHub = () => {
     size: '0 KB',
   };
 
-  setFileData([newFolder, ...initialFileData]); // Add it to the top
+  setFileData([newFolder, ...initialFileData]);
   setNewFolderName('');
   setIsCreateFolderOpen(false);
 };
 
+const handleRenameFolder = () => {
+  if (!renameFolderName.trim()) return;
+
+  setFileData((prev) =>
+    prev.map((f) =>
+      f.id === folderToRename.id ? { ...f, name: renameFolderName.trim() } : f
+    )
+  );
+
+  setIsRenameFolderOpen(false);
+  setFolderToRename(null);
+  setRenameFolderName('');
+};
+
+const handleMoveToTrash = () => {
+  if (!selectedItem) return;
+
+  setFileData((prev) =>
+    prev.map((f) =>
+      f.id === selectedItem.id ? { ...f, status: 'trashed' } : f
+    )
+  );
+
+  setIsMoveToTrashOpen(false);
+  setSelectedItem(null);
+};
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="flex h-[844px] text-sm text-gray-800 font-medium">
@@ -144,7 +195,9 @@ const DocumentHub = () => {
                 Create New <FiChevronDown />
               </button>
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-100 rounded shadow-md z-50">
+                <div 
+                ref={dropdownRef}
+                className="absolute right-0 mt-2 w-40 bg-white border border-gray-100 rounded shadow-md z-50">
                   <button
                   onClick={() => setIsCreateFolderOpen(true)}
                   className="w-full px-4 py-2 hover:bg-gray-100 text-left flex items-center gap-2 font-[Rubik] font-normal text-[14px] leading-[1.4] capitalize">
@@ -176,6 +229,7 @@ const DocumentHub = () => {
 
             {fileData
               .filter((file) =>
+                file.status !== 'trashed' &&
                 file.name.toLowerCase().includes(search.toLowerCase())
               )
               .map((file) => (
@@ -226,8 +280,15 @@ const DocumentHub = () => {
                       <img src={ShareFileIcon} alt="Share" className="w-4 h-4" />
                       Share File
                     </button>
-                    <button className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2">
-                      <img src={RenameFolderIcon} alt="Share" className="w-4 h-4" />
+                    <button
+                      className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2"
+                      onClick={() => {
+                        setFolderToRename(file);
+                        setRenameFolderName(file.name);
+                        setIsRenameFolderOpen(true);
+                      }}
+                    >
+                      <img src={RenameFolderIcon} alt="Rename" className="w-4 h-4" />
                       Rename Folder
                     </button>
                     <button className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2">
@@ -238,7 +299,12 @@ const DocumentHub = () => {
                       <img src={ViewPropIcon} alt="Share" className="w-4 h-4" />
                       View Properties
                     </button>
-                    <button className="w-full flex items-center px-4 py-2 text-sm text-[#EB4335] hover:bg-gray-100 text-left gap-2">
+                    <button 
+                    className="w-full flex items-center px-4 py-2 text-sm text-[#EB4335] hover:bg-gray-100 text-left gap-2"
+                      onClick={() => {
+                        setSelectedItem(file);
+                        setIsMoveToTrashOpen(true);
+                      }}>
                       <img src={TrashRedIcon} alt="Share" className="w-4 h-4" />
                       Move to Trash
                     </button>
@@ -285,6 +351,127 @@ const DocumentHub = () => {
                       </button>
                     </div>
                   </div>
+                </div>
+              </div>
+            )}
+
+            {isRenameFolderOpen && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+                <div className="w-[460px] bg-white rounded shadow-xl overflow-hidden font-[Rubik] animate-fade-in-up">
+
+                  {/* Header */}
+                  <div className="bg-[#1B5FC1] px-6 py-4 flex items-center gap-2">
+                    <img src={AddFolderIcon} alt="Add" className="w-5 h-5" />
+                    <h2 className="text-white text-lg font-semibold">Rename Folder</h2>
+                  </div>
+
+                  {/* Body */}
+                  <div className="p-4">
+                    <label className="block text-sm text-gray-700 mb-1">Folder name</label>
+                    <input
+                      type="text"
+                      value={renameFolderName}
+                      onChange={(e) => setRenameFolderName(e.target.value)}
+                      placeholder="Enter new name"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                    />
+
+                    <div className="mt-6 flex justify-end gap-3">
+                      <button
+                        onClick={() => setIsRenameFolderOpen(false)}
+                        className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleRenameFolder}
+                        className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                      >
+                        Rename Folder
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {isMoveToTrashOpen && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
+                <div className="w-[400px] bg-white rounded shadow-xl overflow-hidden">
+                  
+                  {/* Header */}
+                  <div className="bg-[#EB4335] text-white flex items-center justify-between gap-2 px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      <img src={TrashIcon2} alt="Trash Icon" className="w-5 h-5" />
+                      <h2 className="text-base font-semibold">Move to Trash</h2>
+                    </div>
+                    <button
+                      onClick={() => setIsMoveToTrashOpen(false)}
+                      className="transition hover:opacity-80"
+                      title="Close"
+                    >
+                      <img src={CancelIcon} alt="Cancel" className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  {/* Body */}
+                  <div className="px-6 py-5 text-center">
+                    <p className="text-gray-700 text-sm mb-4 text-left">
+                      Are you sure you want to move <strong>{selectedItem.name}</strong> to trash? This action can be undone in the bin.
+                    </p>
+                    <div className="flex justify-end gap-3 mt-6">
+                      <button
+                        onClick={() => setIsMoveToTrashOpen(false)}
+                        className="px-4 py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleMoveToTrash(selectedItem.id);
+                          setSelectedItem(null);
+                          setShowTrashSuccess(true);
+                        }}
+                        className="px-4 py-2 rounded-md"
+                        style={{ backgroundColor: '#FDECEB', color: '#EB4335' }}
+                      >
+                        Yes, I'm sure
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {showTrashSuccess && (
+              <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center z-50">
+                <div className="bg-white rounded shadow-xl p-10 w-[440px] text-center animate-fade-in-up">
+                  
+                  {/* Success Icon */}
+                  <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
+                    <svg
+                      className="w-10 h-10 text-green-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+
+                  {/* Modal Content */}
+                  <h2 className="text-2xl font-bold text-gray-800 mb-2">Moved to Trash!</h2>
+                  <p className="text-base text-gray-500">
+                    This file has been successfully moved to trash. You can restore it anytime from the Trash folder.
+                  </p>
+
+                  {/* OK Button */}
+                  <button
+                    className="mt-8 bg-[#1B5FC1] text-white w-full py-3 rounded-md hover:bg-blue-700 transition"
+                    onClick={() => setShowTrashSuccess(false)}
+                  >
+                    Okay
+                  </button>
                 </div>
               </div>
             )}
