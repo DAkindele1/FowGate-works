@@ -37,6 +37,8 @@ const initialFileData = [
     extraCollaborators: 2,
     attachments: 3,
     size: '176 KB',
+    createdAt: 'Jul 28, 2025, 10:02 AM',
+    creatorAvatar: '/avatars/memoji.png',
     activityLog: [
       {
         user: 'Me',
@@ -60,6 +62,8 @@ const initialFileData = [
     extraCollaborators: 3,
     attachments: 3,
     size: '176 KB',
+    createdAt: 'Jul 24, 2025, 8:47 AM',
+    creatorAvatar: '/avatars/memoji.png',
     activityLog: [
       {
         user: 'Me',
@@ -83,6 +87,8 @@ const initialFileData = [
     extraCollaborators: 0,
     attachments: 3,
     size: '176 KB',
+    createdAt: 'Jul 25, 2025, 9:15 AM',
+    creatorAvatar: '/avatars/memoji.png',
     activityLog: [
       {
         user: 'Me',
@@ -542,12 +548,21 @@ const handleMoveToTrash = () => {
 
                 {/* Body */}
                 <div className="p-5 text-sm text-gray-700 space-y-3">
-                    <h2 className="text-lg font-semibold text-gray-900 mb-1">
-                      {selectedItem?.name}
-                    </h2>
-                    <p className="text-sm text-gray-600 mb-2">
-                      Created by {selectedItem?.owner}
-                    </p>
+                    <div className="flex items-center gap-3 mb-4">
+                     <img
+                        src={selectedItem?.creatorAvatar || '/avatars/me.png'}
+                        alt={selectedItem?.owner}
+                        className="w-10 h-10 rounded-full"
+                      />
+                      <div>
+                        <p className="text-sm font-medium text-gray-800">
+                          {selectedItem?.owner}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Created on {selectedItem?.createdAt || 'Unknown'}
+                        </p>
+                      </div>
+                    </div>
                     <div className="grid grid-cols-2 gap-y-1 text-sm text-gray-700">
                       <div>Size:</div>
                       <div>{selectedItem?.size}</div>
