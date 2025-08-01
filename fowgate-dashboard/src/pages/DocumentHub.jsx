@@ -542,13 +542,18 @@ const handleMoveToTrash = () => {
 
                 {/* Body */}
                 <div className="p-5 text-sm text-gray-700 space-y-3">
-                  <p><strong>Name:</strong> {propertiesItem.name}</p>
-                  <p><strong>Owner:</strong> {propertiesItem.owner}</p>
-                  <p><strong>Collaborators:</strong> {propertiesItem.collaborators.join(', ') || 'None'}</p>
-                  <p><strong>Extra Collaborators:</strong> {propertiesItem.extraCollaborators}</p>
-                  <p><strong>Attachments:</strong> {propertiesItem.attachments} files</p>
-                  <p><strong>Size:</strong> {propertiesItem.size}</p>
-                  <p><strong>Status:</strong> {propertiesItem.status === 'trashed' ? 'Trashed' : 'Active'}</p>
+                    <h2 className="text-lg font-semibold text-gray-900 mb-1">
+                      {selectedItem?.name}
+                    </h2>
+                    <p className="text-sm text-gray-600 mb-2">
+                      Created by {selectedItem?.owner}
+                    </p>
+                    <div className="grid grid-cols-2 gap-y-1 text-sm text-gray-700">
+                      <div>Size:</div>
+                      <div>{selectedItem?.size}</div>
+                      <div>Attachments:</div>
+                      <div>{selectedItem?.attachments}</div>
+                    </div>
                   <div className="mt-6 border-t pt-4">
                     <h3 className="text-sm font-semibold text-gray-700 mb-4">Activity Log</h3>
                     {propertiesItem.activityLog && propertiesItem.activityLog.length > 0 ? (
