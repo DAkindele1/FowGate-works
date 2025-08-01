@@ -37,6 +37,20 @@ const initialFileData = [
     extraCollaborators: 2,
     attachments: 3,
     size: '176 KB',
+    activityLog: [
+      {
+        user: 'Me',
+        avatar: '/avatars/memoji.png',
+        action: 'Created this folder',
+        timestamp: 'Jul 28, 2025, 10:02 AM',
+      },
+      {
+        user: 'Dave',
+        avatar: '/avatars/memoji2.png',
+        action: 'Shared with B and C',
+        timestamp: 'Jul 29, 2025, 2:30 PM',
+      },
+    ],
   },
   {
     id: 2,
@@ -46,6 +60,20 @@ const initialFileData = [
     extraCollaborators: 3,
     attachments: 3,
     size: '176 KB',
+    activityLog: [
+      {
+        user: 'Me',
+        avatar: '../avatars/memoji.png',
+        action: 'Created this file',
+        timestamp: 'Jul 24, 2025, 8:47 AM',
+      },
+      {
+        user: 'John Doe',
+        avatar: '../avatars/memoji1.png',
+        action: 'Renamed from "Proposal Draft"',
+        timestamp: 'Jul 30, 2025, 12:20 PM',
+      },
+    ],
   },
   {
     id: 3,
@@ -55,8 +83,17 @@ const initialFileData = [
     extraCollaborators: 0,
     attachments: 3,
     size: '176 KB',
+    activityLog: [
+      {
+        user: 'Me',
+        avatar: '../avatars/memoji.png',
+        action: 'Created this file',
+        timestamp: 'Jul 25, 2025, 9:15 AM',
+      },
+    ],
   },
 ];
+
 
 const DocumentHub = () => {
   const [search, setSearch] = useState('');
@@ -72,6 +109,8 @@ const DocumentHub = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const visibleFiles = fileData.filter(file => file.status !== 'trashed');
   const [showTrashSuccess, setShowTrashSuccess] = useState(false);
+  const [isViewPropertiesOpen, setIsViewPropertiesOpen] = useState(false);
+  const [propertiesItem, setPropertiesItem] = useState(null);
   const dropdownRef = useRef(null);
   
 
@@ -86,6 +125,9 @@ const DocumentHub = () => {
     extraCollaborators: 0,
     attachments: 0,
     size: '0 KB',
+    activityLog: [
+    { action: 'Created', timestamp: new Date().toLocaleString() }
+  ]
   };
 
   setFileData([newFolder, ...initialFileData]);
@@ -295,7 +337,11 @@ const handleMoveToTrash = () => {
                       <img src={PriorityIcon} alt="Share" className="w-4 h-4" />
                       Move to Priority
                     </button>
-                    <button className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2">
+                    <button className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2"
+                      onClick={() => {
+                        setPropertiesItem(file);
+                        setIsViewPropertiesOpen(true);
+                      }}>
                       <img src={ViewPropIcon} alt="Share" className="w-4 h-4" />
                       View Properties
                     </button>
@@ -475,6 +521,75 @@ const handleMoveToTrash = () => {
                 </div>
               </div>
             )}
+            {isViewPropertiesOpen && propertiesItem && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+              <div className="w-[460px] bg-white rounded shadow-xl overflow-hidden font-[Rubik] animate-fade-in-up">
+
+                {/* Header */}
+                <div className="bg-[#1B5FC1] px-6 py-4 flex items-center justify-between text-white">
+                  <div className="flex items-center gap-2">
+                    <img src={ViewPropIcon} alt="View" className="w-5 h-5" />
+                    <h2 className="text-lg font-semibold">Folder Properties</h2>
+                  </div>
+                  <button
+                    onClick={() => setIsViewPropertiesOpen(false)}
+                    className="transition hover:opacity-80"
+                    title="Close"
+                  >
+                    <img src={CancelIcon} alt="Close" className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Body */}
+                <div className="p-5 text-sm text-gray-700 space-y-3">
+                  <p><strong>Name:</strong> {propertiesItem.name}</p>
+                  <p><strong>Owner:</strong> {propertiesItem.owner}</p>
+                  <p><strong>Collaborators:</strong> {propertiesItem.collaborators.join(', ') || 'None'}</p>
+                  <p><strong>Extra Collaborators:</strong> {propertiesItem.extraCollaborators}</p>
+                  <p><strong>Attachments:</strong> {propertiesItem.attachments} files</p>
+                  <p><strong>Size:</strong> {propertiesItem.size}</p>
+                  <p><strong>Status:</strong> {propertiesItem.status === 'trashed' ? 'Trashed' : 'Active'}</p>
+                  <div className="mt-6 border-t pt-4">
+                    <h3 className="text-sm font-semibold text-gray-700 mb-4">Activity Log</h3>
+                    {propertiesItem.activityLog && propertiesItem.activityLog.length > 0 ? (
+                      <div className="space-y-4 max-h-56 overflow-y-auto pr-2">
+                        {propertiesItem.activityLog
+                          .slice()
+                          .reverse()
+                          .map((log, index) => (
+                            <div key={index} className="flex items-start justify-between gap-4">
+                              <div className="flex items-center gap-3">
+                                <img
+                                  src={log.avatar}
+                                  alt={log.user}
+                                  className="w-9 h-9 rounded-full object-cover"
+                                />
+                                <div>
+                                  <p className="text-sm font-medium text-gray-800">{log.user}</p>
+                                  <p className="text-sm text-gray-500">{log.action}</p>
+                                </div>
+                              </div>
+                              <p className="text-sm text-gray-500 whitespace-nowrap">{log.timestamp}</p>
+                            </div>
+                          ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-400">No activity yet.</p>
+                    )}
+                  </div>
+
+                  <div className="pt-4 text-right">
+                    <button
+                      className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                      onClick={() => setIsViewPropertiesOpen(false)}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           </div>
         </div>
 
