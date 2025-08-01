@@ -256,34 +256,28 @@ useEffect(() => {
   return (
     <div key={idx} className="relative flex flex-col items-center text-center group">
       {/* Confirmation Popup */}
-      {isConfirming && (
-  <div className="absolute z-50 flex flex-col items-center -top-[130px] left-1/2 -translate-x-1/2">
-    {/* MessagePop bubble background */}
-    <img
-      src={MessagePop}
-      alt="popup"
-      className="w-72 h-auto absolute top-0 left-1/2 transform -translate-x-1/2"
-    />
-
-    <div className="relative mt-4 w-60 px-4 py-3 bg-white border border-gray-200 shadow-md rounded-md text-center z-10">
-      <p className="text-sm text-[#292929] mb-3">
-        Are you sure you want to remove <span className="font-semibold">{displayName}</span>?
+{isConfirming && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-lg p-6 w-[320px] shadow-xl text-center">
+      <h2 className="text-lg font-semibold text-gray-800 mb-2">Remove Member</h2>
+      <p className="text-sm text-gray-600 mb-4">
+        Are you sure you want to remove <strong>{displayName}</strong> from the group?
       </p>
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-end gap-3">
         <button
-          className="text-sm text-gray-500 hover:underline"
           onClick={() => setConfirmingMember(null)}
+          className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
         >
-          No
+          Cancel
         </button>
         <button
-          className="text-sm text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded"
           onClick={() => {
             handleRemoveMember(member);
             setConfirmingMember(null);
           }}
+          className="px-4 py-2 bg-[#1B5FC1] text-white rounded hover:bg-[#1B5FC1]"
         >
-          Yes
+          Remove
         </button>
       </div>
     </div>
@@ -333,4 +327,3 @@ useEffect(() => {
     </div>
   );
 }
-
