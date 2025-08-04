@@ -322,46 +322,60 @@ const handleMoveToTrash = () => {
                       setOpenActionId((prevId) => (prevId === file.id ? null : file.id))
                     }
                   />
+                <div className="relative">
+                  <button onClick={() => setOpenActionId(file.id)}>
+                    <FiMoreVertical />
+                  </button>
+
                   {openActionId === file.id && (
-                  <div className="absolute right-0 top-6 w-42 bg-white border border-gray-200 rounded-md shadow-md z-50 animate-fade-in action-dropdown font-[Rubik] text-[14px] font-normal leading-[1.4] capitalize">
-                    <button className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2">
-                      <img src={ShareFileIcon} alt="Share" className="w-4 h-4" />
-                      Share File
-                    </button>
-                    <button
-                      className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2"
-                      onClick={() => {
-                        setFolderToRename(file);
-                        setRenameFolderName(file.name);
-                        setIsRenameFolderOpen(true);
-                      }}
-                    >
-                      <img src={RenameFolderIcon} alt="Rename" className="w-4 h-4" />
-                      Rename Folder
-                    </button>
-                    <button className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2">
-                      <img src={PriorityIcon} alt="Share" className="w-4 h-4" />
-                      Move to Priority
-                    </button>
-                    <button className="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-100 text-left gap-2"
-                      onClick={() => {
-                        setPropertiesItem(file);
-                        setIsViewPropertiesOpen(true);
-                      }}>
-                      <img src={ViewPropIcon} alt="Share" className="w-4 h-4" />
-                      View Properties
-                    </button>
-                    <button 
-                    className="w-full flex items-center px-4 py-2 text-sm text-[#EB4335] hover:bg-gray-100 text-left gap-2"
-                      onClick={() => {
-                        setSelectedItem(file);
-                        setIsMoveToTrashOpen(true);
-                      }}>
-                      <img src={TrashRedIcon} alt="Share" className="w-4 h-4" />
-                      Move to Trash
-                    </button>
-                  </div>
-                )}
+                    <div className="absolute right-0 top-6 w-48 bg-white border border-gray-200 rounded-md shadow-xl z-50 animate-fade-in font-[Rubik] text-sm leading-[1.4] capitalize">
+                      <button className="w-full flex items-center px-4 py-2 hover:bg-gray-100 text-left gap-2">
+                        <img src={ShareFileIcon} alt="Share" className="w-4 h-4" />
+                        Share File
+                      </button>
+
+                      <button
+                        className="w-full flex items-center px-4 py-2 hover:bg-gray-100 text-left gap-2"
+                        onClick={() => {
+                          setFolderToRename(file);
+                          setRenameFolderName(file.name);
+                          setIsRenameFolderOpen(true);
+                        }}
+                      >
+                        <img src={RenameFolderIcon} alt="Rename" className="w-4 h-4" />
+                        Rename Folder
+                      </button>
+
+                      <button className="w-full flex items-center px-4 py-2 hover:bg-gray-100 text-left gap-2">
+                        <img src={PriorityIcon} alt="Priority" className="w-4 h-4" />
+                        Move to Priority
+                      </button>
+
+                      <button
+                        className="w-full flex items-center px-4 py-2 hover:bg-gray-100 text-left gap-2"
+                        onClick={() => {
+                          setPropertiesItem(file);
+                          setIsViewPropertiesOpen(true);
+                        }}
+                      >
+                        <img src={ViewPropIcon} alt="Properties" className="w-4 h-4" />
+                        View Properties
+                      </button>
+
+                      <button
+                        className="w-full flex items-center px-4 py-2 text-[#EB4335] hover:bg-gray-100 text-left gap-2"
+                        onClick={() => {
+                          setSelectedItem(file);
+                          setIsMoveToTrashOpen(true);
+                        }}
+                      >
+                        <img src={TrashRedIcon} alt="Trash" className="w-4 h-4" />
+                        Move to Trash
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 </div>
               </div>
             ))}
