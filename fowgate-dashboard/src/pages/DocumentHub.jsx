@@ -17,6 +17,7 @@ import ViewPropIcon from '../assets/viewprop.svg'
 import TrashRedIcon from '../assets/trashred2.svg'
 import TrashIcon2 from '../assets/delete2.svg';
 import CancelIcon from '../assets/cancel.svg';
+import PropModalIcon from '../assets/propmodal.svg';
 
 const folders = [
   { label: 'My Drive', count: '12 items • 10.6 MB', active: true, icon: MyDriveIcon },
@@ -33,12 +34,14 @@ const initialFileData = [
     id: 1,
     name: 'Letters',
     owner: 'Me',
+    type: 'Folder',
     collaborators: ['A', 'B', 'C'],
     extraCollaborators: 2,
     attachments: 3,
     size: '176 KB',
     createdAt: 'Jul 28, 2025, 10:02 AM',
     creatorAvatar: '/avatars/memoji.png',
+    location: 'My Drive',
     activityLog: [
       {
         user: 'Me',
@@ -58,12 +61,14 @@ const initialFileData = [
     id: 2,
     name: 'Partnership Proposal',
     owner: 'Me',
+    type: 'Folder',
     collaborators: ['A', 'B', 'C'],
     extraCollaborators: 3,
     attachments: 3,
     size: '176 KB',
     createdAt: 'Jul 24, 2025, 8:47 AM',
     creatorAvatar: '/avatars/memoji.png',
+    location: 'My Drive',
     activityLog: [
       {
         user: 'Me',
@@ -83,12 +88,14 @@ const initialFileData = [
     id: 3,
     name: 'Momentum Roadmap',
     owner: 'Me',
+    type: 'Folder',
     collaborators: ['D'],
     extraCollaborators: 0,
     attachments: 3,
     size: '176 KB',
     createdAt: 'Jul 25, 2025, 9:15 AM',
     creatorAvatar: '/avatars/memoji.png',
+    location: 'My Drive',
     activityLog: [
       {
         user: 'Me',
@@ -132,7 +139,15 @@ const DocumentHub = () => {
     attachments: 0,
     size: '0 KB',
     activityLog: [
-    { action: 'Created', timestamp: new Date().toLocaleString() }
+        {
+      user: 'Me',
+      avatar: '../avatars/memoji.png',
+      action: 'Created this file',
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+    },
   ]
   };
 
@@ -542,56 +557,69 @@ const handleMoveToTrash = () => {
               </div>
             )}
             {isViewPropertiesOpen && propertiesItem && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-              <div className="w-[460px] bg-white rounded shadow-xl overflow-hidden font-[Rubik] animate-fade-in-up">
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+                <div className="w-[460px] h-[600px] bg-white rounded shadow-xl overflow-hidden font-[Rubik] animate-fade-in-up flex flex-col">
 
-                {/* Header */}
-                <div className="bg-[#1B5FC1] px-6 py-4 flex items-center justify-between text-white">
-                  <div className="flex items-center gap-2">
-                    <img src={ViewPropIcon} alt="View" className="w-5 h-5" />
-                    <h2 className="text-lg font-semibold">Folder Properties</h2>
+                  {/* Header */}
+                  <div className="bg-[#1B5FC1] px-6 py-4 flex items-center justify-between text-white">
+                    <div className="flex items-center gap-2">
+                      <img src={PropModalIcon} alt="View" className="w-5 h-5" />
+                      <h2 className="text-lg font-semibold">Properties</h2>
+                    </div>
+                    <button
+                      onClick={() => setIsViewPropertiesOpen(false)}
+                      className="transition hover:opacity-80"
+                      title="Close"
+                    >
+                      <img src={CancelIcon} alt="Close" className="w-5 h-5" />
+                    </button>
                   </div>
-                  <button
-                    onClick={() => setIsViewPropertiesOpen(false)}
-                    className="transition hover:opacity-80"
-                    title="Close"
-                  >
-                    <img src={CancelIcon} alt="Close" className="w-5 h-5" />
-                  </button>
-                </div>
 
-                {/* Body */}
-                <div className="p-5 text-sm text-gray-700 space-y-3">
-                    <div className="flex items-center gap-3 mb-4">
-                     <img
-                        src={selectedItem?.creatorAvatar || '/avatars/me.png'}
-                        alt={selectedItem?.owner}
-                        className="w-10 h-10 rounded-full"
-                      />
-                      <div>
-                        <p className="text-sm font-medium text-gray-800">
-                          {selectedItem?.owner}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Created on {selectedItem?.createdAt || 'Unknown'}
-                        </p>
+                  {/* Scrollable Content */}
+                  <div className="flex-1 overflow-y-auto p-5 pt-3 text-sm text-gray-700 space-y-5">
+
+                    {/* Creator Info */}
+                    {propertiesItem?.activityLog?.[0] && (
+                      <div className="flex items-center gap-3 pb-0">
+                        <img
+                          src={propertiesItem.activityLog[0].avatar}
+                          alt={propertiesItem.activityLog[0].user}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium text-gray-800">
+                            {propertiesItem.activityLog[0].user}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            Created on {propertiesItem.activityLog[0].timestamp}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* File Info */}
+                    <div className="bg-gray-100 rounded-lg px-6 py-4 flex justify-between text-sm text-gray-700">
+                      <div className="text-center">
+                        <p className="uppercase text-xs text-gray-500 tracking-wide">Type</p>
+                        <p className="font-semibold text-black mt-1">{propertiesItem?.type || 'Folder'}</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="uppercase text-xs text-gray-500 tracking-wide">Location</p>
+                        <p className="font-semibold text-black mt-1">{propertiesItem?.location || 'My Drive'}</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="uppercase text-xs text-gray-500 tracking-wide">File Size</p>
+                        <p className="font-semibold text-black mt-1">{propertiesItem?.size || '124KB'}</p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-y-1 text-sm text-gray-700">
-                      <div>Size:</div>
-                      <div>{selectedItem?.size}</div>
-                      <div>Attachments:</div>
-                      <div>{selectedItem?.attachments}</div>
-                    </div>
-                  <div className="mt-6 border-t pt-4">
-                    <h3 className="text-sm font-semibold text-gray-700 mb-4">Activity Log</h3>
-                    {propertiesItem.activityLog && propertiesItem.activityLog.length > 0 ? (
-                      <div className="space-y-4 max-h-56 overflow-y-auto pr-2">
-                        {propertiesItem.activityLog
-                          .slice()
-                          .reverse()
-                          .map((log, index) => (
-                            <div key={index} className="flex items-start justify-between gap-4">
+
+                    {/* Activity Log */}
+                    <div className="pt-2">
+                      <h3 className="text-sm font-semibold text-gray-700 mb-4">Activity Log</h3>
+                      {propertiesItem.activityLog && propertiesItem.activityLog.length > 0 ? (
+                        <div className="space-y-4 max-h-56 overflow-y-auto pr-2">
+                          {propertiesItem.activityLog.slice().reverse().map((log, index) => (
+                            <div key={index} className="flex items-start justify-between gap-4 pb-4 border-b border-gray-200">
                               <div className="flex items-center gap-3">
                                 <img
                                   src={log.avatar}
@@ -606,15 +634,17 @@ const handleMoveToTrash = () => {
                               <p className="text-sm text-gray-500 whitespace-nowrap">{log.timestamp}</p>
                             </div>
                           ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-400">No activity yet.</p>
-                    )}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-400">No activity yet.</p>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="pt-4 text-right">
+                  {/* Footer */}
+                  <div className="px-5 py-4 border-t border-gray-200 text-right">
                     <button
-                      className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                      className="px-4 py-2 rounded-md bg-[#E8EFF9] text-[#1B5FC1] hover:bg-[#E8EFF9] transition"
                       onClick={() => setIsViewPropertiesOpen(false)}
                     >
                       Close
@@ -622,8 +652,7 @@ const handleMoveToTrash = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
           </div>
         </div>
 
